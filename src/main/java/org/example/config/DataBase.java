@@ -8,17 +8,17 @@ public class DataBase {
     private static HikariDataSource dataSource;
     public static DataSource getDataSource(){
         if (dataSource == null) {
-        //   Dotenv dotenv = Dotenv.load();
+           Dotenv dotenv = Dotenv.load();
             //String host="13.219.151.36";
-            String host ="localhost";
+            String host = dotenv.get("DB_HOST");
            //dotenv.get("DB_HOST");
-            String dbName = "agrodata2";
+            String dbName = dotenv.get("DB_SCHEMA");
            //dotenv.get("DB_NAME");
             //String user="ailyn";
-            String user = "root";
+            String user = dotenv.get("DB_USER") ;
             //dotenv.get("DB_USER");
             //String pass="250319";
-            String pass = "root";
+            String pass = dotenv.get("DB_PASS");
             //dotenv.get("DB_PASS");
             String url = "jdbc:mysql://" + host + ":3306/" + dbName;
 
