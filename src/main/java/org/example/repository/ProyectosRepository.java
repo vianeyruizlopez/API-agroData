@@ -1,0 +1,219 @@
+package org.example.repository;
+
+import org.example.config.DataBase;
+import org.example.model.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ProyectosRepository {
+
+    public ProyectosRepository() {
+    }
+
+    public List<PlanCultivo> obtenerPlanCultivos() {
+        List<PlanCultivo> planCultivoList = new ArrayList<>();
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement("select * from plandecultivo \n" +
+                     "inner join solicitudasesoria on plandecultivo.idSolicitud = solicitudasesoria.idSolicitud \n" +
+                     "inner join usuario on solicitudasesoria.idAgricultor = usuario.idUsuario")) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                planCultivoList.add(mapearPlanCultivo(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return planCultivoList;
+    }
+
+    public List<CultivoPorSolicitud> obtenerCultivosPorSolicitud(int idSolicitud) {
+        List<CultivoPorSolicitud> cultivoPorSolicitudList = new ArrayList<>();
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement("select * from cultivoporsolicitud inner join catalogocultivo on cultivoporsolicitud.idCultivo = catalogocultivo.idCultivo where cultivoporsolicitud.idSolicitud = ?")) {
+            stmt.setInt(1, idSolicitud);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                cultivoPorSolicitudList.add(mapearCultivoPorSolicitud(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return cultivoPorSolicitudList;
+    }
+
+    public List<ReportePlaga> obtenerReportePlagas(int idPlan) {
+        List<ReportePlaga> reportePlagaList = new ArrayList<>();
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement("select * from reporteplaga where idPlan = ?")) {
+            stmt.setInt(1, idPlan);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                reportePlagaList.add(mapearReportePlaga(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return reportePlagaList;
+    }
+
+    public int[] contarRegistros(int idEstado, int idPlan) {
+        int[] registros = new int[2];
+        String sql = "SELECT \n" +
+                "  COUNT(*) AS totalTareas,\n" +
+                "  SUM(CASE WHEN tarea.idEstado = ? THEN 1 ELSE 0 END) AS totalTareasCompletas\n" +
+                "FROM tarea\n" +
+                "INNER JOIN registrotarea ON tarea.idTarea = registrotarea.idTarea\n" +
+                "WHERE tarea.idPlan = ?";
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idEstado);
+            stmt.setInt(2, idPlan);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    registros[0] = rs.getInt("totalTareas");
+                    registros[1] = rs.getInt("totalTareasCompletas");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return registros;
+    }
+
+    public void actualizarObjetivoYObservaciones(int idSolicitud, String objetivo, int idPlan, String observaciones) {
+        String sqlObjetivo = "UPDATE solicitudasesoria SET motivoAsesoria = ? WHERE idSolicitud = ?";
+        String sqlObservaciones = "UPDATE plandecultivo SET observaciones = ? WHERE idPlan = ? AND idSolicitud = ?";
+        Connection conn = null;
+
+        try {
+            conn = DataBase.getDataSource().getConnection();
+            conn.setAutoCommit(false);
+
+
+            try (PreparedStatement stmtObjetivo = conn.prepareStatement(sqlObjetivo)) {
+                stmtObjetivo.setString(1, objetivo);
+                stmtObjetivo.setInt(2, idSolicitud);
+                int filasObjetivo = stmtObjetivo.executeUpdate();
+                if (filasObjetivo == 0) {
+                    throw new SQLException("No se encontró la solicitud con id: " + idSolicitud);
+                }
+            }
+
+            try (PreparedStatement stmtObs = conn.prepareStatement(sqlObservaciones)) {
+                stmtObs.setString(1, observaciones);
+                stmtObs.setInt(2, idPlan);
+                stmtObs.setInt(3, idSolicitud);
+
+                int filasObs = stmtObs.executeUpdate();
+                if (filasObs == 0) {
+                    throw new SQLException("No se encontró el plan con id: " + idPlan + " y solicitud: " + idSolicitud);
+                }
+            }
+
+            conn.commit();
+        } catch (SQLException e) {
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException rollbackEx) {
+                    System.err.println("Error al hacer rollback: " + rollbackEx.getMessage());
+                }
+            }
+            throw new RuntimeException("Error al actualizar objetivo y observaciones", e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private ReportePlaga mapearReportePlaga(ResultSet rs) throws SQLException {
+        ReportePlaga reportePlaga = new ReportePlaga();
+        reportePlaga.setIdReportePlaga(rs.getInt("idReportePlaga"));
+        reportePlaga.setIdPlan(rs.getInt("idPlan"));
+
+        java.sql.Timestamp ts = rs.getTimestamp("fechaReporte");
+        if (ts != null) {
+            reportePlaga.setFechaReporte(ts.toLocalDateTime());
+        }
+
+        reportePlaga.setTipoPlaga(rs.getString("tipoPlaga"));
+        reportePlaga.setDescripcion(rs.getString("descripcion"));
+        reportePlaga.setImagen(rs.getString("imagen"));
+        reportePlaga.setIdEstado(rs.getInt("idEstado"));
+        reportePlaga.setIdTarea(rs.getInt("idTarea"));
+        return reportePlaga;
+    }
+
+    private CultivoPorSolicitud mapearCultivoPorSolicitud(ResultSet rs) throws SQLException {
+        CultivoPorSolicitud cultivoPorSolicitud = new CultivoPorSolicitud();
+        cultivoPorSolicitud.setIdSolicitud(rs.getInt("idSolicitud"));
+        cultivoPorSolicitud.setIdCultivo(rs.getInt("idCultivo"));
+        cultivoPorSolicitud.setNombreCultivo(rs.getString("nombreCultivo"));
+        return  cultivoPorSolicitud;
+    }
+
+    private PlanCultivo mapearPlanCultivo(ResultSet rs) throws SQLException {
+        PlanCultivo planCultivo = new PlanCultivo();
+        planCultivo.setIdPlan(rs.getInt("idPlan"));
+        planCultivo.setIdSolicitud(rs.getInt("idSolicitud"));
+        planCultivo.setIdUsuario(rs.getInt("idUsuario"));
+        planCultivo.setIdEstado(rs.getInt("idEstado"));
+        planCultivo.setNombre(rs.getString("nombre"));
+        planCultivo.setApellidoPaterno(rs.getString("apellidoPaterno"));
+        planCultivo.setApellidoMaterno(rs.getString("apellidoMaterno"));
+        planCultivo.setDireccionTerreno(rs.getString("direccionTerreno"));
+        planCultivo.setMotivoAsesoria(rs.getString("motivoAsesoria"));
+        planCultivo.setSuperficieTotal(rs.getFloat("superficieTotal"));
+        planCultivo.setObservaciones(rs.getString("observaciones"));
+        java.sql.Date dInicio = rs.getDate("fechaInicio");
+        if (dInicio != null) {
+            planCultivo.setFechaInicio(dInicio.toLocalDate());
+        }
+
+        java.sql.Date dFin = rs.getDate("fechaFin");
+        if (dFin != null) {
+            planCultivo.setFechaFin(dFin.toLocalDate());
+        }
+
+        int[] registros = contarRegistros(rs.getInt("idEstado"), rs.getInt("idPlan"));
+        planCultivo.setTotalTareas(registros[0]);
+        planCultivo.setTotalTareasCompletas(registros[1]);
+        float porcentajeAvance = (registros[0] > 0) ? (registros[1] * 100 / registros[0]) : 0;
+        planCultivo.setPorcentajeAvance(porcentajeAvance);
+
+        planCultivo.setCultivoPorSolicitud(obtenerCultivosPorSolicitud(rs.getInt("idSolicitud")));
+        planCultivo.setReportePlagas(obtenerReportePlagas(rs.getInt("idPlan")));
+        return planCultivo;
+    }
+    public void registrarReportePlaga(ReportePlaga reporte) throws SQLException {
+        String sql = "INSERT INTO reporteplaga (idPlan, fechaReporte, tipoPlaga, descripcion, imagen, idEstado, idTarea) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, reporte.getIdPlan());
+
+            LocalDateTime fecha = (reporte.getFechaReporte() != null) ? reporte.getFechaReporte() : LocalDateTime.now();
+            stmt.setObject(2, fecha);
+
+            stmt.setString(3, reporte.getTipoPlaga());
+            stmt.setString(4, reporte.getDescripcion());
+            stmt.setString(5, reporte.getImagen());
+            stmt.setInt(6, reporte.getIdEstado());
+            stmt.setInt(7, reporte.getIdTarea());
+
+            stmt.executeUpdate();
+        }
+    }
+}

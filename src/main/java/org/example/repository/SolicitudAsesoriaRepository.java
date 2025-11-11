@@ -1,0 +1,201 @@
+package org.example.repository;
+
+import org.example.config.DataBase;
+import org.example.model.SolicitudAsesoria;
+import org.example.model.CultivoPorSolicitud;
+
+import java.sql.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+public class SolicitudAsesoriaRepository {
+
+    public SolicitudAsesoriaRepository() {}
+
+    public SolicitudAsesoria obtenerPorId(int id) {
+        String sql = """
+            SELECT s.*, r.nombreRiego
+            FROM solicitudasesoria s
+            JOIN catalogoriego r ON s.tipoRiego = r.idRiego
+            WHERE s.idSolicitud = ?
+        """;
+
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapear(rs);
+                } else {
+                    System.out.println("No se encontró la solicitud con ID: " + id);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al obtener la solicitud por ID: " + id);
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public List<SolicitudAsesoria> obtenerTodas() {
+        List<SolicitudAsesoria> lista = new ArrayList<>();
+        String sql = """
+            SELECT s.*, r.nombreRiego
+            FROM solicitudasesoria s
+            JOIN catalogoriego r ON s.tipoRiego = r.idRiego 
+           JOIN catalogoestado e ON s.idEstado = e.idEstado
+            WHERE e.nombreEstado = 'Pendiente'
+        """;
+
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                lista.add(mapear(rs));
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al obtener todas las solicitudes de asesoría:");
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
+
+    public void agregar(SolicitudAsesoria solicitud) {
+        String sql = """
+            INSERT INTO solicitudasesoria (
+                idAgricultor,
+                fechaSolicitud,
+                usoMaquinaria,
+                nombreMaquinaria,
+                tipoRiego,
+                tienePlaga,
+                descripcionPlaga,
+                superficieTotal,
+                direccionTerreno,
+                motivoAsesoria,
+                idEstado
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """;
+
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setInt(1, solicitud.getIdAgricultor());
+
+            LocalDateTime fecha = solicitud.getFechaSolicitud() != null ? solicitud.getFechaSolicitud() : LocalDateTime.now();
+            stmt.setObject(2, fecha);
+
+            stmt.setBoolean(3, solicitud.isUsoMaquinaria());
+            stmt.setString(4, solicitud.getNombreMaquinaria());
+            stmt.setInt(5, solicitud.getTipoRiego());
+            stmt.setBoolean(6, solicitud.isTienePlaga());
+            stmt.setString(7, solicitud.getDescripcionPlaga());
+            stmt.setFloat(8, solicitud.getSuperficieTotal());
+            stmt.setString(9, solicitud.getDireccionTerreno());
+            stmt.setString(10, solicitud.getMotivoAsesoria());
+            stmt.setInt(11, solicitud.getIdEstado());
+
+            stmt.executeUpdate();
+
+            ResultSet generatedKeys = stmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                solicitud.setIdSolicitud(generatedKeys.getInt(1));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void agregarCultivosPorSolicitud(int idSolicitud, List<CultivoPorSolicitud> cultivos) {
+        String sql = "INSERT INTO cultivoporsolicitud (idSolicitud, idCultivo) VALUES (?, ?)";
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            for (CultivoPorSolicitud cultivo : cultivos) {
+                stmt.setInt(1, idSolicitud);
+                stmt.setInt(2, cultivo.getIdCultivo());
+                stmt.addBatch();
+            }
+            stmt.executeBatch();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void actualizarEstado(int id, int nuevoEstado) {
+        String sql = "UPDATE solicitudasesoria SET idEstado = ? WHERE idSolicitud = ?";
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, nuevoEstado);
+            stmt.setInt(2, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void eliminar(int id) {
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement("DELETE FROM solicitudasesoria WHERE idSolicitud = ?")) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<CultivoPorSolicitud> obtenerCultivosPorSolicitud(int idSolicitud) {
+        List<CultivoPorSolicitud> lista = new ArrayList<>();
+        String sql = """
+            SELECT cps.idSolicitud, cps.idCultivo, c.nombreCultivo
+            FROM cultivoporsolicitud cps
+            JOIN catalogocultivo c ON cps.idCultivo = c.idCultivo
+            WHERE cps.idSolicitud = ?
+        """;
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idSolicitud);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                CultivoPorSolicitud cps = new CultivoPorSolicitud();
+                cps.setIdSolicitud(rs.getInt("idSolicitud"));
+                cps.setIdCultivo(rs.getInt("idCultivo"));
+                cps.setNombreCultivo(rs.getString("nombreCultivo"));
+                lista.add(cps);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+    private SolicitudAsesoria mapear(ResultSet rs) throws SQLException {
+        SolicitudAsesoria s = new SolicitudAsesoria();
+        s.setIdSolicitud(rs.getInt("idSolicitud"));
+        s.setIdAgricultor(rs.getInt("idAgricultor"));
+
+        Timestamp ts = rs.getTimestamp("fechaSolicitud");
+        if (ts != null) {
+            s.setFechaSolicitud(ts.toLocalDateTime());
+        }
+
+        s.setUsoMaquinaria(rs.getBoolean("usoMaquinaria"));
+        s.setNombreMaquinaria(rs.getString("nombreMaquinaria"));
+        s.setTipoRiego(rs.getInt("tipoRiego"));
+        s.setNombreRiego(rs.getString("nombreRiego"));
+        s.setTienePlaga(rs.getBoolean("tienePlaga"));
+        s.setDescripcionPlaga(rs.getString("descripcionPlaga"));
+        s.setSuperficieTotal(rs.getFloat("superficieTotal"));
+        s.setDireccionTerreno(rs.getString("direccionTerreno"));
+        s.setMotivoAsesoria(rs.getString("motivoAsesoria"));
+        s.setIdEstado(rs.getInt("idEstado"));
+        return s;
+    }
+}

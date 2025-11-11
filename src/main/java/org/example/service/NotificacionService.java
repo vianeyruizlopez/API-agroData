@@ -1,0 +1,30 @@
+package org.example.service;
+
+import org.example.model.Notificacion;
+import org.example.repository.NotificacionRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class NotificacionService {
+    private NotificacionRepository notificacionRepository =  new NotificacionRepository();
+    public NotificacionService() {
+    }
+
+    public List<Notificacion> getNotificaciones() {
+        List<Notificacion> notificacionList = new ArrayList<>();
+        String filtroNotificaciones = "where nombreEstado = 'Pendiente'";
+        notificacionList.addAll(notificacionRepository.obtenerNotificacionesAsesorias(filtroNotificaciones));
+        notificacionList.addAll(notificacionRepository.obtenerNotificacionesTalleres(filtroNotificaciones));
+        notificacionList.addAll(notificacionRepository.obtenerNotificacionesTareas(filtroNotificaciones));
+        return notificacionList;
+    }
+    public List<Notificacion> getTodasNotificaciones() {
+        List<Notificacion> notificacionList = new ArrayList<>();
+        String filtroNotificaciones = "";
+        notificacionList.addAll(notificacionRepository.obtenerNotificacionesAsesorias(filtroNotificaciones));
+        notificacionList.addAll(notificacionRepository.obtenerNotificacionesTalleres(filtroNotificaciones));
+        notificacionList.addAll(notificacionRepository.obtenerNotificacionesTareas(filtroNotificaciones));
+        return notificacionList;
+    }
+}
