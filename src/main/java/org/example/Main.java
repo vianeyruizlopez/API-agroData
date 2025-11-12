@@ -5,23 +5,26 @@ import org.example.routers.*;
 
 public class Main {
     public static void main(String[] args) {
-        Javalin app = Javalin.create(config -> {
-            // Aquí puedes agregar otras configuraciones si lo necesitas
-        }).start(7000);
+        Javalin app = Javalin.create(config -> {}).start(7000);
 
-        // 🌐 Configuración CORS global
-        app.before(ctx -> {
-            ctx.header("Access-Control-Allow-Origin", "*");
-            ctx.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-            ctx.header("Access-Control-Allow-Headers", "Authorization, Content-Type");
-        });
+        // 🌐 CORS para localhost:3000, localhost:80 + JWT
+        app.before("/*", ctx -> {
+            String origin = ctx.header("Origin");
+            if (origin != null && (origin.contains("localhost") || origin.contains("127.0.0.1"))) {
+                ctx.header("Access-Control-Allow-Origin", origin);
+            } else {
+                ctx.header("Access-Control-Allow-Origin", "http://localhost");
+            }
 
-        // 🔄 Manejo explícito de preflight OPTIONS con headers
-        app.options("/*", ctx -> {
-            ctx.header("Access-Control-Allow-Origin", "*");
-            ctx.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-            ctx.header("Access-Control-Allow-Headers", "Authorization, Content-Type");
-            ctx.status(200);
+            ctx.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
+            ctx.header("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept, X-Requested-With, Cache-Control");
+            ctx.header("Access-Control-Allow-Credentials", "true");
+            ctx.header("Access-Control-Max-Age", "86400");
+
+            if ("OPTIONS".equals(ctx.method().toString())) {
+                ctx.status(204);
+                ctx.skipRemainingHandlers();
+            }
         });
 
         // 📦 Registro de rutas
@@ -38,4 +41,5 @@ public class Main {
         new RoutesUsuario().register(app);
         new RoutesTipoTerreno().register(app);
     }
+
 }
