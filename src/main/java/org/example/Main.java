@@ -5,7 +5,7 @@ import org.example.routers.*;
 
 public class Main {
     public static void main(String[] args) {
-        Javalin app = Javalin.create(config -> {}).start(7000);
+        Javalin app = Javalin.create().start("0.0.0.0", 7000);
 
         // 🌐 CORS para localhost:3000, localhost:80 + JWT
         app.before("/*", ctx -> {
