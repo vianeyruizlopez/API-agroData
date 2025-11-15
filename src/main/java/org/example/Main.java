@@ -17,7 +17,7 @@ public class Main {
             }
 
             ctx.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
-            ctx.header("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept, X-Requested-With, Cache-Control");
+            ctx.header("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept, X-Requested-With, Cache-Control, confirmado");
             ctx.header("Access-Control-Allow-Credentials", "true");
             ctx.header("Access-Control-Max-Age", "86400");
 

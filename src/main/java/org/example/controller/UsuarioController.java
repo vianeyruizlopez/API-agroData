@@ -4,7 +4,7 @@ import io.javalin.http.Context;
 import org.example.model.InformacionGeneral;
 import org.example.model.Usuario;
 import org.example.service.UsuarioService;
-import org.example.util.JwtUtil;
+import org.example.util.JwtUtil; // Importación necesaria
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.SQLException;
@@ -81,7 +81,8 @@ public class UsuarioController {
     public void editarPerfil(Context ctx) {
         try {
             int idRuta = Integer.parseInt(ctx.pathParam("id"));
-            int idToken = ctx.attribute("usuarioId") != null ? (int) ctx.attribute("usuarioId") : -1;
+            // 🚨 CORRECCIÓN 1: Usar el método seguro para extraer el ID del token
+            int idToken = JwtUtil.extraerEnteroSeguro(ctx.attribute("usuarioId")); //
 
             if (idRuta != idToken) {
                 ctx.status(403).result("No tienes permiso para editar este perfil");
@@ -91,12 +92,26 @@ public class UsuarioController {
             Usuario usuario = ctx.bodyAsClass(Usuario.class);
             usuario.setIdUsuario(idRuta);
 
+            // 1. Manejar la nueva contraseña
             if (usuario.getPassword() != null && !usuario.getPassword().isEmpty()) {
                 String hashed = BCrypt.hashpw(usuario.getPassword(), BCrypt.gensalt());
                 usuario.setPassword(hashed);
+            } else {
+                // 2. Si no hay nueva contraseña, obtener la contraseña existente de la BD
+                Optional<Usuario> usuarioExistente = service.obtenerPorId(idRuta); // Llama al service para obtener el hash actual
+
+                // Si el usuario existe, usar su contraseña existente
+                if (usuarioExistente.isPresent()) {
+                    // ASIGNAMOS el hash existente al objeto 'usuario' que será enviado al repositorio
+                    usuario.setPassword(usuarioExistente.get().getPassword());
+                } else {
+                    // Si por alguna razón no se encuentra (aunque debería estar autenticado)
+                    ctx.status(404).result("Usuario no encontrado para actualizar");
+                    return;
+                }
             }
 
-            service.editarPerfil(usuario);
+            service.editarPerfil(usuario); //
             ctx.status(200).result("Perfil actualizado con ID " + idRuta);
         } catch (IllegalArgumentException e) {
             ctx.status(400).result("Error de validación: " + e.getMessage());
@@ -124,7 +139,8 @@ public class UsuarioController {
     public void obtenerPerfil(Context ctx) {
         try {
             int idRuta = Integer.parseInt(ctx.pathParam("id"));
-            int idToken = ctx.attribute("usuarioId") != null ? (int) ctx.attribute("usuarioId") : -1;
+            // 🚨 CORRECCIÓN 2: Usar el método seguro para extraer el ID del token
+            int idToken = JwtUtil.extraerEnteroSeguro(ctx.attribute("usuarioId"));
 
             if (idRuta != idToken) {
                 ctx.status(403).result("No tienes permiso para ver este perfil");

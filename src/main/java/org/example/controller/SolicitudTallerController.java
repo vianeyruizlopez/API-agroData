@@ -124,15 +124,28 @@ public class SolicitudTallerController {
         ctx.status(201).json(solicitudTaller);
     }
 
+
     public void actualizarEstado(Context ctx) {
         int rol = obtenerRol(ctx);
+        /*  esto lo comento por que debo poder hacer una actualizacion desde el usuario Cliente
         if (rol != 1) {
             ctx.status(403).result("Acceso denegado: solo el agrónomo puede actualizar solicitudes");
             return;
         }
+        */
+
+        // sustituyo lo anterior por este codigo:
+
 
         int id = Integer.parseInt(ctx.pathParam("id"));
         int estado = Integer.parseInt(ctx.pathParam("estado"));
+        if ( estado == 4  ) {
+            service.actualizarEstadoSolicitudTaller(id, estado);
+            ctx.status(200).result("Estado actualizado correctamente a revision");
+        }else if(rol!=1){
+            ctx.status(403).result("Acceso denegado: solo el agrónomo puede actualizar solicitudes");
+            return;
+        }
         service.actualizarEstadoSolicitudTaller(id, estado);
         ctx.status(200).result("Estado actualizado correctamente");
     }

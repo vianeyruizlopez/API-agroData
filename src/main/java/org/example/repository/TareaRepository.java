@@ -50,10 +50,10 @@ public class TareaRepository {
             fechaInicio,
             fechaVencimiento,
             idEstado,
-            fechaCompletado
-        ) VALUES (?, ?, ?, ?, ?, ?)
+            fechaCompletado,
+            idUsuario
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)
         """;
-
         try (Connection conn = DataBase.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -66,6 +66,7 @@ public class TareaRepository {
             stmt.setObject(4, tarea.getFechaVencimiento());
             stmt.setInt(5, tarea.getIdEstado());
             stmt.setObject(6, tarea.getFechaCompletado());
+            stmt.setInt(7, tarea.getIdUsuario()); // <-- ID de cliente
 
             stmt.executeUpdate();
 
@@ -80,14 +81,43 @@ public class TareaRepository {
         }
     }
 
+    // --- (Método 'actualizar' para agrónomo sin cambios) ---
+    public void actualizar(Tarea tarea) {
+        String sql = """
+        UPDATE tarea SET
+            nombreTarea = ?,
+            fechaVencimiento = ?,
+            idEstado = ?,
+            idUsuario = ?
+        WHERE idTarea = ?
+        """;
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, tarea.getNombreTarea());
+            stmt.setObject(2, tarea.getFechaVencimiento());
+            stmt.setInt(3, tarea.getIdEstado());
+            stmt.setInt(4, tarea.getIdUsuario());
+            stmt.setInt(5, tarea.getIdTarea());
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void actualizarEstado(int id, int nuevoEstado) {
         String sql;
-        boolean marcarCompletado = (nuevoEstado == 3);
+        // --- ★ CORRECCIÓN ★ ---
+        // El cliente ahora enviará '2' para 'Completada'.
+        boolean marcarCompletado = (nuevoEstado == 2);
 
         if (marcarCompletado) {
             sql = "UPDATE tarea SET idEstado = ?, fechaCompletado = ? WHERE idTarea = ?";
         } else {
-            sql = "UPDATE tarea SET idEstado = ? WHERE idTarea = ?";
+            // Esto permite al agrónomo re-abrir una tarea (e.g., set a 1)
+            sql = "UPDATE tarea SET idEstado = ?, fechaCompletado = NULL WHERE idTarea = ?";
         }
 
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -109,7 +139,16 @@ public class TareaRepository {
         }
     }
 
+    // --- (Método 'eliminar' sin cambios) ---
     public void eliminar(int id) {
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmtDep = conn.prepareStatement("DELETE FROM registrotarea WHERE idTarea = ?")) {
+            stmtDep.setInt(1, id);
+            stmtDep.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         try (Connection conn = DataBase.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement("DELETE FROM tarea WHERE idTarea = ?")) {
             stmt.setInt(1, id);
@@ -119,18 +158,14 @@ public class TareaRepository {
         }
     }
 
+    // --- (Métodos 'obtenerTareasConReportePlaga' y 'registrarReportePlaga' sin cambios) ---
     public List<Tarea> obtenerTareasConReportePlaga() {
         List<Tarea> lista = new ArrayList<>();
         String sql = """
-            SELECT DISTINCT t.*
-            FROM tarea t
-            INNER JOIN (
-                SELECT idTarea FROM reportePlaga WHERE idTarea IS NOT NULL
-                UNION
-                SELECT idTarea FROM tareaReportePlaga
-            ) AS tareasConReporte ON t.idTarea = tareasConReporte.idTarea
-        """;
-
+        SELECT DISTINCT t.*
+        FROM tarea t
+        INNER JOIN tareareporteplaga trp ON t.idTarea = trp.idTarea
+    """;
         try (Connection conn = DataBase.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
@@ -144,28 +179,55 @@ public class TareaRepository {
     }
 
     public void registrarReportePlaga(ReportePlaga reporte) throws SQLException {
-        String sql = "INSERT INTO reporteplaga (idPlan, fechaReporte, tipoPlaga, descripcion, imagen, idEstado, idTarea) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DataBase.getDataSource().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String sqlReporte = """
+        INSERT INTO reporteplaga (idPlan, fechaReporte, tipoPlaga, descripcion, imagen, idEstado)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """;
 
-            stmt.setInt(1, reporte.getIdPlan());
-            stmt.setObject(2, reporte.getFechaReporte() != null ? reporte.getFechaReporte() : LocalDateTime.now());
-            stmt.setString(3, reporte.getTipoPlaga());
-            stmt.setString(4, reporte.getDescripcion());
-            stmt.setString(5, reporte.getImagen());
-            stmt.setInt(6, reporte.getIdEstado());
-            stmt.setInt(7, reporte.getIdTarea());
+        String sqlRelacion = """
+        INSERT INTO tareareporteplaga (idReportePlaga, idTarea)
+        VALUES (?, ?)
+    """;
 
-            stmt.executeUpdate();
+        try (Connection conn = DataBase.getDataSource().getConnection()) {
+            conn.setAutoCommit(false);
+
+            try (PreparedStatement stmtReporte = conn.prepareStatement(sqlReporte, Statement.RETURN_GENERATED_KEYS)) {
+                stmtReporte.setInt(1, reporte.getIdPlan());
+                stmtReporte.setObject(2, reporte.getFechaReporte() != null ? reporte.getFechaReporte() : LocalDateTime.now());
+                stmtReporte.setString(3, reporte.getTipoPlaga());
+                stmtReporte.setString(4, reporte.getDescripcion());
+                stmtReporte.setString(5, reporte.getImagen());
+                stmtReporte.setInt(6, reporte.getIdEstado());
+
+                stmtReporte.executeUpdate();
+
+                try (ResultSet generatedKeys = stmtReporte.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int idReportePlaga = generatedKeys.getInt(1);
+
+                        try (PreparedStatement stmtRelacion = conn.prepareStatement(sqlRelacion)) {
+                            stmtRelacion.setInt(1, idReportePlaga);
+                            stmtRelacion.setInt(2, reporte.getIdTarea());
+                            stmtRelacion.executeUpdate();
+                        }
+                    }
+                }
+
+                conn.commit();
+            } catch (SQLException e) {
+                conn.rollback();
+                throw new RuntimeException("Error al registrar el reporte de plaga", e);
+            }
         }
     }
-
     private Tarea mapear(ResultSet rs) throws SQLException {
         Tarea s = new Tarea();
 
         s.setIdTarea(rs.getInt("idTarea"));
         s.setIdPlan(rs.getInt("idPlan"));
         s.setNombreTarea(rs.getString("nombreTarea"));
+        s.setIdUsuario(rs.getInt("idUsuario"));
 
         Date dInicio = rs.getDate("fechaInicio");
         if (dInicio != null) {

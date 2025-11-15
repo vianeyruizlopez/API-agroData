@@ -17,8 +17,15 @@ public class NotificacionRepository {
 
     public List<Notificacion> obtenerNotificacionesAsesorias(String filtroNotificacion) {
         List<Notificacion> notificacionList = new ArrayList<>();
+
+        // Reemplazar "idUsuario" por el nombre correcto de columna en esta tabla
+        String filtroCorregido = filtroNotificacion.replace("idUsuario", "solicitudasesoria.idAgricultor");
+
         try (Connection conn = DataBase.getDataSource().getConnection();
-             PreparedStatement stmt = conn.prepareStatement("select idSolicitud, nombreEstado from solicitudasesoria inner join catalogoestado on solicitudasesoria.idEstado = catalogoestado.idEstado " + filtroNotificacion)) {
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT idSolicitud, nombreEstado FROM solicitudasesoria " +
+                             "INNER JOIN catalogoestado ON solicitudasesoria.idEstado = catalogoestado.idEstado " +
+                             filtroCorregido)) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 notificacionList.add(mapearAsesoria(rs));
@@ -31,8 +38,15 @@ public class NotificacionRepository {
 
     public List<Notificacion> obtenerNotificacionesTalleres(String filtroNotificacion) {
         List<Notificacion> notificacionList = new ArrayList<>();
+
+        // Reemplazar "idUsuario" por el nombre correcto de columna en esta tabla
+        String filtroCorregido = filtroNotificacion.replace("idUsuario", "solicitudtaller.idAgricultor");
+
         try (Connection conn = DataBase.getDataSource().getConnection();
-             PreparedStatement stmt = conn.prepareStatement("select idSolicitudTaller, nombreEstado from solicitudtaller inner join catalogoestado on solicitudtaller.idEstado = catalogoestado.idEstado " + filtroNotificacion)) {
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT idSolicitudTaller, nombreEstado FROM solicitudtaller " +
+                             "INNER JOIN catalogoestado ON solicitudtaller.idEstado = catalogoestado.idEstado " +
+                             filtroCorregido)) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 notificacionList.add(mapearTaller(rs));
@@ -45,8 +59,18 @@ public class NotificacionRepository {
 
     public List<Notificacion> obtenerNotificacionesTareas(String filtroNotificacion) {
         List<Notificacion> notificacionList = new ArrayList<>();
+
+        // Reemplazar "idUsuario" por el nombre correcto de columna en esta tabla
+        String filtroCorregido = filtroNotificacion.replace("idUsuario", "sa.idAgricultor");
+
+        String baseQuery = "SELECT t.idTarea, ce.nombreEstado " +
+                "FROM tarea t " +
+                "INNER JOIN catalogoestado ce ON t.idEstado = ce.idEstado " +
+                "INNER JOIN plandecultivo pc ON t.idPlan = pc.idPlan " +
+                "INNER JOIN solicitudasesoria sa ON pc.idSolicitud = sa.idSolicitud ";
+
         try (Connection conn = DataBase.getDataSource().getConnection();
-             PreparedStatement stmt = conn.prepareStatement("select idTarea, nombreEstado from tarea inner join catalogoestado on tarea.idEstado = catalogoestado.idEstado " + filtroNotificacion)) {
+             PreparedStatement stmt = conn.prepareStatement(baseQuery + filtroCorregido)) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 notificacionList.add(mapearTarea(rs));

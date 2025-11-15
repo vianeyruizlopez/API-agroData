@@ -14,7 +14,7 @@ public class TallerRepositoryImpl implements TallerRepository {
         String sql = """
     SELECT c.idTaller, c.nombreTaller, c.descripcion, c.idEstado, t.costo
     FROM catalogotaller c
-   inner join taller t ON c.idTaller = t.idTaller
+   inner join costotaller t ON c.idTaller = t.idTaller
 """;
 
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -51,7 +51,7 @@ public class TallerRepositoryImpl implements TallerRepository {
         String sql = """
         SELECT c.idTaller, c.nombreTaller, c.descripcion, c.idEstado, t.costo
         FROM catalogotaller c
-        INNER JOIN taller t ON c.idTaller = t.idTaller
+        INNER JOIN costotaller t ON c.idTaller = t.idTaller
         WHERE c.idTaller = ?
     """;
 
@@ -91,7 +91,7 @@ public class TallerRepositoryImpl implements TallerRepository {
     @Override
     public void agregarTaller(Taller taller) {
         String sqlCatalogo = "INSERT INTO catalogotaller (nombreTaller, descripcion, idEstado) VALUES (?, ?, ?)";
-        String sqlCosto = "INSERT INTO taller (idTaller, costo) VALUES (?, ?)";
+        String sqlCosto = "INSERT INTO costotaller (idTaller, costo) VALUES (?, ?)";
 
         try (Connection conn = DataBase.getDataSource().getConnection()) {
             conn.setAutoCommit(false);
@@ -126,7 +126,7 @@ public class TallerRepositoryImpl implements TallerRepository {
     @Override
     public void actualizarTaller(int id, Taller tallerActualizado) {
         String sqlCatalogo = "UPDATE catalogotaller SET nombreTaller = ?, descripcion = ?, idEstado = ? WHERE idTaller = ?";
-        String sqlCosto = "UPDATE taller SET costo = ? WHERE idTaller = ?";
+        String sqlCosto = "UPDATE costotaller SET costo = ? WHERE idTaller = ?";
         try (Connection conn = DataBase.getDataSource().getConnection()) {
             conn.setAutoCommit(false); // Inicia transacción
 
@@ -162,7 +162,7 @@ public class TallerRepositoryImpl implements TallerRepository {
 
     @Override
     public void eliminarTaller(int id) {
-        String sqlDeleteCosto = "DELETE FROM taller WHERE idTaller = ?";
+        String sqlDeleteCosto = "DELETE FROM costotaller WHERE idTaller = ?";
         String sqlDeleteCatalogo = "DELETE FROM catalogotaller WHERE idTaller = ?";
 
         try (Connection conn = DataBase.getDataSource().getConnection()) {

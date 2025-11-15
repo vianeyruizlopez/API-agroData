@@ -43,14 +43,14 @@ public class SolicitudAsesoriaRepository {
 
     public List<SolicitudAsesoria> obtenerTodas() {
         List<SolicitudAsesoria> lista = new ArrayList<>();
+
         String sql = """
             SELECT s.*, r.nombreRiego
             FROM solicitudasesoria s
             JOIN catalogoriego r ON s.tipoRiego = r.idRiego 
            JOIN catalogoestado e ON s.idEstado = e.idEstado
-            WHERE e.nombreEstado = 'Pendiente'
+            WHERE e.idEstado = 1
         """;
-
         try (Connection conn = DataBase.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {

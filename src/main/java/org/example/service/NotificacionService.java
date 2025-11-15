@@ -19,12 +19,17 @@ public class NotificacionService {
         notificacionList.addAll(notificacionRepository.obtenerNotificacionesTareas(filtroNotificaciones));
         return notificacionList;
     }
-    public List<Notificacion> getTodasNotificaciones() {
-        List<Notificacion> notificacionList = new ArrayList<>();
-        String filtroNotificaciones = "";
-        notificacionList.addAll(notificacionRepository.obtenerNotificacionesAsesorias(filtroNotificaciones));
-        notificacionList.addAll(notificacionRepository.obtenerNotificacionesTalleres(filtroNotificaciones));
-        notificacionList.addAll(notificacionRepository.obtenerNotificacionesTareas(filtroNotificaciones));
-        return notificacionList;
+    public List<Notificacion> getTodasNotificaciones(int usuarioId) {
+        String filtro = "WHERE idUsuario = " + usuarioId;
+
+        List<Notificacion> asesoria = notificacionRepository.obtenerNotificacionesAsesorias(filtro);
+        List<Notificacion> taller = notificacionRepository.obtenerNotificacionesTalleres(filtro);
+        List<Notificacion> tarea = notificacionRepository.obtenerNotificacionesTareas(filtro);
+
+        List<Notificacion> todas = new ArrayList<>();
+        todas.addAll(asesoria);
+        todas.addAll(taller);
+        todas.addAll(tarea);
+        return todas;
     }
-}
+} 

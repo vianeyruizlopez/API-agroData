@@ -20,6 +20,7 @@ public class RoutesSolicitudTaller {
     public void register(Javalin app) {
         // Middleware para validar token
         Handler validarToken = ctx -> {
+
             System.out.println("Middleware ejecutado para: " + ctx.path());
 
             String authHeader = ctx.header("Authorization");
@@ -59,12 +60,55 @@ public class RoutesSolicitudTaller {
             System.out.println("Rol seteado en ctx.attribute: " + rol);
         };
 
+        // --- INICIO DE LA CORRECCIÓN ---
+
         // Middleware aplicado a TODAS las rutas que requieren autenticación
-        app.before("/solicitudtaller", validarToken); // ← ✅ necesario para POST directo
-        app.before("/solicitudtaller/*", validarToken);
-        app.before("/getTallerForStatus/*", validarToken);
-        app.before("/solicitudesTallerAsesoria", validarToken);
-        app.before("/solicitudtaller/misolicitudes", validarToken);
+        app.before("/solicitudtaller", ctx -> {
+            if (ctx.method().equals("OPTIONS")) {
+                ctx.status(200); // Responde OK al preflight
+                return;          // No valides el token
+            }
+            validarToken.handle(ctx); // Valida el token para otros métodos (POST, GET, etc.)
+        });
+
+        app.before("/solicitudtaller/*", ctx -> {
+            if (ctx.method().equals("OPTIONS")) {
+                ctx.status(200);
+                return;
+            }
+            validarToken.handle(ctx);
+        });
+
+        app.before("/getTallerForStatus/*", ctx -> {
+            if (ctx.method().equals("OPTIONS")) {
+                ctx.status(200);
+                return;
+            }
+            validarToken.handle(ctx);
+        });
+
+        app.before("/solicitudesTallerAsesoria", ctx -> {
+            if (ctx.method().equals("OPTIONS")) {
+                ctx.status(200);
+                return;
+            }
+            validarToken.handle(ctx);
+        });
+
+        // CORRECCIÓN: El path es '/solicitudtaller/misolicitudes'
+        app.before("/solicitudtaller/misolicitudes", ctx -> {
+            if (ctx.method().equals("OPTIONS")) {
+                ctx.status(200);
+                return;
+            }
+            validarToken.handle(ctx);
+        });
+
+        // --- FIN DE LA CORRECCIÓN ---
+
+
+        // Ruta protegida - Usuario ve sus propias solicitudes
+        app.get("/solicitudtaller/misolicitudes", controller::obtenerPorUsuario);
 
         // Rutas protegidas - Solo agrónomo (rol 1)
         app.get("/solicitudtaller/{id}", controller::obtenerPorId);
@@ -79,8 +123,7 @@ public class RoutesSolicitudTaller {
         // Ruta protegida - Solo agricultor (rol 2)
         app.post("/solicitudtaller", controller::registrar);
 
-        // Ruta protegida - Usuario ve sus propias solicitudes
-        app.get("/solicitudtaller/misolicitudes", controller::obtenerPorUsuario);
+
     }
 
     // Método auxiliar para trazabilidad de tipos

@@ -60,14 +60,17 @@ public class NotificacionController {
     // Solo agricultor (rol 2) puede ver sus notificaciones
     public void obtenerTodasNotificaciones(Context ctx) {
         int rol = obtenerRol(ctx);
+        int usuarioId = ctx.attribute("usuarioId");
+
         System.out.println("Rol recibido en controlador (agricultor): " + rol);
+        System.out.println("Usuario ID recibido en controlador: " + usuarioId);
 
         if (rol != 2) {
             ctx.status(403).result("Acceso denegado: solo el agricultor puede ver sus notificaciones");
             return;
         }
 
-        List<Notificacion> notificaciones = notificacionService.getTodasNotificaciones();
+        List<Notificacion> notificaciones = notificacionService.getTodasNotificaciones(usuarioId);
         ctx.json(notificaciones);
     }
 }

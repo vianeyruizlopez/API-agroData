@@ -11,6 +11,7 @@ public class ReporteDesempeño {
     int tareasCompletadas;
     int tareasAceptadas;
     int tareasPendientes;
+    int tareasAtrasadas; // <-- ★ NUEVO CAMPO ★
     float porcentageCompletadas;
 
     public ReporteDesempeño() {
@@ -80,6 +81,16 @@ public class ReporteDesempeño {
         this.tareasPendientes = tareasPendientes;
     }
 
+    // --- ★ GETTER Y SETTER PARA 'tareasAtrasadas' ★ ---
+    public int getTareasAtrasadas() {
+        return tareasAtrasadas;
+    }
+
+    public void setTareasAtrasadas(int tareasAtrasadas) {
+        this.tareasAtrasadas = tareasAtrasadas;
+    }
+    // --- ★ FIN DE GETTER Y SETTER ★ ---
+
     public float getPorcentageCompletadas() {
         return porcentageCompletadas;
     }
@@ -99,6 +110,7 @@ public class ReporteDesempeño {
                 ", tareasCompletadas=" + tareasCompletadas +
                 ", tareasAceptadas=" + tareasAceptadas +
                 ", tareasPendientes=" + tareasPendientes +
+                ", tareasAtrasadas=" + tareasAtrasadas + // <-- ★ AÑADIDO ★
                 ", porcentageCompletadas=" + porcentageCompletadas +
                 '}';
     }

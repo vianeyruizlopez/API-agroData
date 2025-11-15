@@ -23,6 +23,12 @@ public class TareaService {
         tareaRepository.actualizarEstado(idTarea, nuevoEstado);
     }
 
+    // --- NUEVO MÉTODO PARA EDICIÓN COMPLETA ---
+    public void actualizarTareaCompleta(Tarea tarea) {
+        // Aquí se podrían añadir validaciones de negocio si fueran necesarias
+        tareaRepository.actualizar(tarea);
+    }
+
     public void eliminarTarea(int idTarea) {
         tareaRepository.eliminar(idTarea);
     }

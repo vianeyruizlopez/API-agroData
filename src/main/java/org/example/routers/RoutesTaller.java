@@ -18,7 +18,6 @@ public class RoutesTaller {
         TallerService service = new TallerServiceImpl(new TallerRepositoryImpl());
         this.controller = new TallerController(service);
     }
-
     public void register(Javalin app) {
         // Middleware para validar token y extraer atributos
         Handler validarToken = ctx -> {

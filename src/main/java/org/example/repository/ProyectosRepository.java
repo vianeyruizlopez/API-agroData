@@ -216,4 +216,29 @@ public class ProyectosRepository {
             stmt.executeUpdate();
         }
     }
-}
+
+        public void crearPlanCultivoDesdeSolicitud(int idSolicitud) {
+            // Este plan se crea con valores mínimos.
+            // Se asume que el idEstado 1 es 'Pendiente' o 'Activo' para el plan.
+            // La fecha de inicio es hoy (CURDATE()).
+            String sql = "INSERT INTO plandecultivo (idSolicitud, idEstado, fechaInicio, observaciones) VALUES (?, ?, CURDATE(), ?)";
+
+            try (Connection conn = DataBase.getDataSource().getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                stmt.setInt(1, idSolicitud);
+                // Asumimos estado 1 (p.ej. "Activo" o "Pendiente de Llenar") para el NUEVO plan
+                stmt.setInt(2, 1);
+                stmt.setString(3, "Plan generado automáticamente. Por favor, complete los detalles.");
+
+                stmt.executeUpdate();
+                System.out.println("✅ Plan de cultivo generado automáticamente para la solicitud: " + idSolicitud);
+
+            } catch (SQLException e) {
+                System.err.println("❌ Error al crear plan de cultivo automático:");
+                e.printStackTrace();
+                // Relanzamos la excepción para que el Service se entere
+                throw new RuntimeException("Error al crear el plan de cultivo", e);
+            }
+        }
+    }

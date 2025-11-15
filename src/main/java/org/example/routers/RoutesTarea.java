@@ -44,10 +44,9 @@ public class RoutesTarea {
 
         // Proteger rutas con token
         app.before("/tarea", validarToken);
-        app.before("/tarea/{idTarea}", validarToken);
+        app.before("/tarea/*", validarToken); // Captura /tarea/ y /tarea/id y /tarea/id/estado
         app.before("/tarea/conreporteplaga", validarToken);
         app.before("/reporteplaga", validarToken);
-        app.before("/tarea/{id}", validarToken); // para PATCH y DELETE
 
         // Rutas
         app.get("/tarea/conreporteplaga", controller::obtenerConReportePlaga);
@@ -55,6 +54,7 @@ public class RoutesTarea {
         app.get("/tarea/{idTarea}", controller::obtenerPorId);
         app.get("/tarea", controller::obtenerTodas);
         app.post("/tarea", controller::registrar);
+        app.put("/tarea/{idTarea}", controller::actualizarCompleta); // <-- NUEVA RUTA PUT
         app.patch("/tarea/{id}/{estado}", controller::actualizarEstado);
         app.delete("/tarea/{id}", controller::eliminar);
     }
