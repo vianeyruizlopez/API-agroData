@@ -105,6 +105,7 @@ public class UsuarioRepository {
                 "INNER JOIN solicitudasesoria sa ON u.idUsuario = sa.idAgricultor " +
                 "INNER JOIN cultivoporsolicitud cps ON sa.idSolicitud = cps.idSolicitud " +
                 "INNER JOIN catalogocultivo cc ON cps.idCultivo = cc.idCultivo " +
+                "WHERE sa.idEstado = 2 " +
                 "GROUP BY u.idUsuario, u.nombre, u.apellidoPaterno, u.apellidoMaterno, u.correo, u.telefono";
 
         try (Connection conn = DataBase.getDataSource().getConnection();
