@@ -1,3 +1,4 @@
+// example/model/Tarea.java
 package org.example.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -17,8 +18,13 @@ public class Tarea {
 
     private int idEstado;
 
+    // --- ★ ESTE CAMPO ES EL IMPORTANTE ★ ---
+    private int idReportePlaga;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaCompletado;
+
+    // --- Getters y Setters ---
 
     public int getIdTarea() {
         return idTarea;
@@ -42,6 +48,14 @@ public class Tarea {
 
     public void setNombreTarea(String nombreTarea) {
         this.nombreTarea = nombreTarea;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public LocalDate getFechaInicio() {
@@ -75,11 +89,13 @@ public class Tarea {
     public void setFechaCompletado(LocalDate fechaCompletado) {
         this.fechaCompletado = fechaCompletado;
     }
-    public int getIdUsuario() {
-        return idUsuario;
+
+    // --- ★ GETTER Y SETTER PARA EL CAMPO IMPORTANTE ★ ---
+    public int getIdReportePlaga() {
+        return idReportePlaga;
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setIdReportePlaga(int idReportePlaga) {
+        this.idReportePlaga = idReportePlaga;
     }
 }

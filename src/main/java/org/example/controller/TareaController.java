@@ -70,6 +70,8 @@ public class TareaController {
         // 3. Obtener la tarea del body (JSON)
         Tarea tarea = ctx.bodyAsClass(Tarea.class);
 
+        System.out.println(">>> [DEBUG] Tarea recibida en Controller, idReportePlaga: " + tarea.getIdReportePlaga());
+
         // 4. (¡ESTA ES LA CORRECCIÓN!)
         // Se elimina la línea que sobrescribía el ID del cliente con el ID del agrónomo.
         // tarea.setIdUsuario(usuarioId); // <-- LÍNEA ORIGINAL ELIMINADA
