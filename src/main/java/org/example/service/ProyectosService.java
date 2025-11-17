@@ -11,6 +11,10 @@ public class ProyectosService {
     public ProyectosService() {
     }
 
+    public void actualizarEstadoPlan(int idPlan, int nuevoEstado) {
+        proyectosRepository.actualizarEstadoPlan(idPlan, nuevoEstado);
+    }
+
     public List<PlanCultivo> obtenerPlanCultivos(){
         return proyectosRepository.obtenerPlanCultivos();
     }

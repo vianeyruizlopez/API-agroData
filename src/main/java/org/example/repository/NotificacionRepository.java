@@ -63,7 +63,7 @@ public class NotificacionRepository {
         // Reemplazar "idUsuario" por el nombre correcto de columna en esta tabla
         String filtroCorregido = filtroNotificacion.replace("idUsuario", "sa.idAgricultor");
 
-        String baseQuery = "SELECT t.idTarea, ce.nombreEstado " +
+        String baseQuery = "SELECT t.idTarea, ce.nombreEstado,pc.idPlan " +
                 "FROM tarea t " +
                 "INNER JOIN catalogoestado ce ON t.idEstado = ce.idEstado " +
                 "INNER JOIN plandecultivo pc ON t.idPlan = pc.idPlan " +
@@ -102,6 +102,8 @@ public class NotificacionRepository {
         notificacion.setIdNotificacion(rs.getInt("idTarea"));
         notificacion.setNombreEstado(rs.getString("nombreEstado"));
         notificacion.setTipoNotificacion("tarea");
+
+        notificacion.setMensajeAdicional(String.valueOf(rs.getInt("idPlan")));
         return notificacion;
     }
 }

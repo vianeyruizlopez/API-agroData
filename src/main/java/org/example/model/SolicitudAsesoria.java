@@ -7,6 +7,7 @@ import java.util.List;
 public class SolicitudAsesoria {
     private int idSolicitud;
     private int idAgricultor;
+    private String nombreAgricultor;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime fechaSolicitud;
@@ -22,6 +23,10 @@ public class SolicitudAsesoria {
     private String motivoAsesoria;
     private int idEstado;
     private List<CultivoPorSolicitud> cultivos;
+
+    public String getNombreAgricultor() { return nombreAgricultor; }
+
+    public void setNombreAgricultor(String nombreAgricultor) { this.nombreAgricultor = nombreAgricultor; }
 
     public SolicitudAsesoria() {}
 

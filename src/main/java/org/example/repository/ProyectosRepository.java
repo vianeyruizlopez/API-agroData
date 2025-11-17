@@ -32,6 +32,26 @@ public class ProyectosRepository {
         return planCultivoList;
     }
 
+    public void actualizarEstadoPlan(int idPlan, int nuevoEstado) {
+        String sql = "UPDATE plandecultivo SET idEstado = ? WHERE idPlan = ?";
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, nuevoEstado);
+            stmt.setInt(2, idPlan);
+
+            int filas = stmt.executeUpdate();
+            if (filas == 0) {
+                throw new SQLException("No se encontró el plan con ID: " + idPlan);
+            }
+            System.out.println("✅ Estado del Plan " + idPlan + " actualizado a " + nuevoEstado);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al actualizar estado del plan", e);
+        }
+    }
+
     public List<CultivoPorSolicitud> obtenerCultivosPorSolicitud(int idSolicitud) {
         List<CultivoPorSolicitud> cultivoPorSolicitudList = new ArrayList<>();
         try (Connection conn = DataBase.getDataSource().getConnection();

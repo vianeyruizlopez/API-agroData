@@ -77,8 +77,12 @@ public class RoutesProyectos {
         // Middleware para GET (ambos roles)
         app.before("/obtenerPlanCultivos", validarToken);
 
+        app.before("/planes/{idPlan}/estado/{idEstado}", soloAgronomo);
+
         // Middleware para PUT (solo agrónomo)
         app.before("/planes/{idSolicitud}/{idPlan}", soloAgronomo);
+
+        app.patch("/planes/{idPlan}/estado/{idEstado}", controller::actualizarEstado);
 
         // Rutas protegidas
         app.get("/obtenerPlanCultivos", controller::obtenerPlanCultivos);

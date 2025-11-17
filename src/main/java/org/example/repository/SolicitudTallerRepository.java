@@ -33,9 +33,10 @@ public class SolicitudTallerRepository {
     public List<SolicitudTaller> obtenerTodas() {
         List<SolicitudTaller> lista = new ArrayList<>();
         String sql = """
-            SELECT s.*
+            SELECT s.*, CONCAT(u.nombre, ' ', u.apellidoPaterno, ' ', u.apellidoMaterno) AS nombreCompleto
             FROM solicitudtaller s
             JOIN catalogoestado e ON s.idEstado = e.idEstado
+            JOIN usuario u ON s.idAgricultor = u.idUsuario
             WHERE e.nombreEstado = 'Pendiente'
         """;
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -97,21 +98,23 @@ public class SolicitudTallerRepository {
     }
     public List<SolicitudTaller> obtenerSolicitudesPorUsuario(int userId) {
         List<SolicitudTaller> lista = new ArrayList<>();
-        // El campo en la BD debe ser 'idAgricultor' (según tu INSERT statement)
-        String sql = "SELECT * FROM solicitudtaller WHERE idAgricultor = ?";
+        // Subconsulta para obtener el nombre del agrónomo (usuario rol 1)
+        String sql = """
+            SELECT s.*, 
+                   (SELECT CONCAT(nombre, ' ', apellidoPaterno) FROM usuario WHERE rol = 1 LIMIT 1) as nombreAgronomo
+            FROM solicitudtaller s
+            WHERE s.idAgricultor = ?
+        """;
 
         try (Connection conn = DataBase.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
             stmt.setInt(1, userId);
-
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     lista.add(mapear(rs));
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error al obtener solicitudes por usuario (ID: " + userId + "): " + e.getMessage());
             e.printStackTrace();
         }
         return lista;
@@ -119,33 +122,36 @@ public class SolicitudTallerRepository {
 
     private SolicitudTaller mapear(ResultSet rs) throws SQLException {
         SolicitudTaller s = new SolicitudTaller();
-
         s.setIdSolicitudTaller(rs.getInt("idSolicitudTaller"));
         s.setIdAgricultor(rs.getInt("idAgricultor"));
         s.setIdTaller(rs.getInt("idTaller"));
 
+        // Mapear nombre del agricultor si viene en la consulta
+        try {
+            s.setNombreAgricultor(rs.getString("nombreCompleto"));
+        } catch (SQLException e) { /* ignorar si no está */ }
+
+        // Mapear nombre del agrónomo si viene en la consulta
+        try {
+            String agro = rs.getString("nombreAgronomo");
+            s.setNombreAgronomo(agro);
+            s.setImpartio(agro); // Campo auxiliar para compatibilidad
+        } catch (SQLException e) { /* ignorar */ }
+
         Timestamp tsSolicitud = rs.getTimestamp("fechaSolicitud");
-        if (tsSolicitud != null) {
-            s.setFechaSolicitud(tsSolicitud.toLocalDateTime());
-        }
-
+        if (tsSolicitud != null) s.setFechaSolicitud(tsSolicitud.toLocalDateTime());
         Date dAplicar = rs.getDate("fechaAplicarTaller");
-        if (dAplicar != null) {
-            s.setFechaAplicarTaller(dAplicar.toLocalDate());
-        }
-
+        if (dAplicar != null) s.setFechaAplicarTaller(dAplicar.toLocalDate());
         s.setDireccion(rs.getString("direccion"));
         s.setComentario(rs.getString("comentario"));
         s.setIdEstado(rs.getInt("idEstado"));
-        s.setEstadoPagoImagen(rs.getString("estadoPagoImagen")); // ← cambiado de Blob a String
-
+        s.setEstadoPagoImagen(rs.getString("estadoPagoImagen"));
         Date dFin = rs.getDate("fechaFin");
-        if (dFin != null) {
-            s.setFechaFin(dFin.toLocalDate());
-        }
+        if (dFin != null) s.setFechaFin(dFin.toLocalDate());
 
         return s;
     }
+
     public void eliminar(int id) {
         try (Connection conn = DataBase.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement("DELETE FROM solicitudtaller WHERE idSolicitudTaller = ?")) {

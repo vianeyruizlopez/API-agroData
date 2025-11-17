@@ -28,6 +28,23 @@ public class ProyectosController {
         ctx.json(planCultivosList);
     }
 
+    public void actualizarEstado(Context ctx) {
+        // Validación de rol (Solo Agrónomo)
+        Object rolAttr = ctx.attribute("rol");
+        int rol = extraerEnteroSeguro(rolAttr);
+
+        if (rol != 1) {
+            ctx.status(403).result("Acceso denegado");
+            return;
+        }
+
+        int idPlan = Integer.parseInt(ctx.pathParam("idPlan"));
+        int nuevoEstado = Integer.parseInt(ctx.pathParam("idEstado"));
+
+        proyectosService.actualizarEstadoPlan(idPlan, nuevoEstado);
+        ctx.status(200).result("Estado del proyecto actualizado");
+    }
+
     public void actualizarObjetivoObservacion(Context ctx) throws Exception {
         Object rolAttr = ctx.attribute("rol");
         int rol = extraerEnteroSeguro(rolAttr);

@@ -15,9 +15,10 @@ public class SolicitudAsesoriaRepository {
 
     public SolicitudAsesoria obtenerPorId(int id) {
         String sql = """
-            SELECT s.*, r.nombreRiego
+            SELECT s.*, r.nombreRiego, CONCAT(u.nombre, ' ', u.apellidoPaterno, ' ', u.apellidoMaterno) AS nombreCompleto
             FROM solicitudasesoria s
             JOIN catalogoriego r ON s.tipoRiego = r.idRiego
+            JOIN usuario u ON s.idAgricultor = u.idUsuario
             WHERE s.idSolicitud = ?
         """;
 
@@ -44,11 +45,13 @@ public class SolicitudAsesoriaRepository {
     public List<SolicitudAsesoria> obtenerTodas() {
         List<SolicitudAsesoria> lista = new ArrayList<>();
 
+        // --- ★ MODIFICACIÓN: JOIN con usuario para obtener nombreCompleto ★ ---
         String sql = """
-            SELECT s.*, r.nombreRiego
+            SELECT s.*, r.nombreRiego, CONCAT(u.nombre, ' ', u.apellidoPaterno, ' ', u.apellidoMaterno) AS nombreCompleto
             FROM solicitudasesoria s
             JOIN catalogoriego r ON s.tipoRiego = r.idRiego 
-           JOIN catalogoestado e ON s.idEstado = e.idEstado
+            JOIN catalogoestado e ON s.idEstado = e.idEstado
+            JOIN usuario u ON s.idAgricultor = u.idUsuario
             WHERE e.idEstado = 1
         """;
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -56,7 +59,13 @@ public class SolicitudAsesoriaRepository {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                lista.add(mapear(rs));
+                SolicitudAsesoria solicitud = mapear(rs);
+
+                // --- ★ MODIFICACIÓN: Cargar cultivos para evitar N/A ★ ---
+                List<CultivoPorSolicitud> cultivos = obtenerCultivosPorSolicitud(solicitud.getIdSolicitud());
+                solicitud.setCultivos(cultivos);
+
+                lista.add(solicitud);
             }
 
         } catch (SQLException e) {
@@ -180,6 +189,13 @@ public class SolicitudAsesoriaRepository {
         SolicitudAsesoria s = new SolicitudAsesoria();
         s.setIdSolicitud(rs.getInt("idSolicitud"));
         s.setIdAgricultor(rs.getInt("idAgricultor"));
+
+        try {
+            s.setNombreAgricultor(rs.getString("nombreCompleto"));
+        } catch (SQLException e) {
+            // Si la columna no existe (casos raros), lo ignoramos o ponemos default
+            s.setNombreAgricultor("Desconocido");
+        }
 
         Timestamp ts = rs.getTimestamp("fechaSolicitud");
         if (ts != null) {

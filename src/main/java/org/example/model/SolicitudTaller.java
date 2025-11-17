@@ -7,7 +7,13 @@ import java.time.LocalDateTime;
 public class SolicitudTaller {
     private int idSolicitudTaller;
     private int idAgricultor;
+    private String nombreAgricultor;
     private int idTaller;
+
+    // --- ★ CAMPOS NUEVOS QUE FALTABAN ★ ---
+    private String nombreAgronomo;
+    private String impartio;
+    // -------------------------------------
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime fechaSolicitud;
@@ -18,88 +24,53 @@ public class SolicitudTaller {
     private String direccion;
     private String comentario;
     private int idEstado;
-    private String estadoPagoImagen; // ← cambiado de Blob a String
+    private String estadoPagoImagen;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaFin;
 
-    public int getIdSolicitudTaller() {
-        return idSolicitudTaller;
-    }
+    public SolicitudTaller() {}
 
-    public void setIdSolicitudTaller(int idSolicitudTaller) {
-        this.idSolicitudTaller = idSolicitudTaller;
-    }
+    // --- Getters y Setters ---
 
-    public int getIdAgricultor() {
-        return idAgricultor;
-    }
+    public int getIdSolicitudTaller() { return idSolicitudTaller; }
+    public void setIdSolicitudTaller(int idSolicitudTaller) { this.idSolicitudTaller = idSolicitudTaller; }
 
-    public void setIdAgricultor(int idAgricultor) {
-        this.idAgricultor = idAgricultor;
-    }
+    public int getIdAgricultor() { return idAgricultor; }
+    public void setIdAgricultor(int idAgricultor) { this.idAgricultor = idAgricultor; }
 
-    public int getIdTaller() {
-        return idTaller;
-    }
+    public String getNombreAgricultor() { return nombreAgricultor; }
+    public void setNombreAgricultor(String nombreAgricultor) { this.nombreAgricultor = nombreAgricultor; }
 
-    public void setIdTaller(int idTaller) {
-        this.idTaller = idTaller;
-    }
+    // --- ★ SETTERS QUE FALTABAN (Para corregir el error) ★ ---
+    public String getNombreAgronomo() { return nombreAgronomo; }
+    public void setNombreAgronomo(String nombreAgronomo) { this.nombreAgronomo = nombreAgronomo; }
 
-    public LocalDateTime getFechaSolicitud() {
-        return fechaSolicitud;
-    }
+    public String getImpartio() { return impartio; }
+    public void setImpartio(String impartio) { this.impartio = impartio; }
+    // ---------------------------------------------------------
 
-    public void setFechaSolicitud(LocalDateTime fechaSolicitud) {
-        this.fechaSolicitud = fechaSolicitud;
-    }
+    public int getIdTaller() { return idTaller; }
+    public void setIdTaller(int idTaller) { this.idTaller = idTaller; }
 
-    public LocalDate getFechaAplicarTaller() {
-        return fechaAplicarTaller;
-    }
+    public LocalDateTime getFechaSolicitud() { return fechaSolicitud; }
+    public void setFechaSolicitud(LocalDateTime fechaSolicitud) { this.fechaSolicitud = fechaSolicitud; }
 
-    public void setFechaAplicarTaller(LocalDate fechaAplicarTaller) {
-        this.fechaAplicarTaller = fechaAplicarTaller;
-    }
+    public LocalDate getFechaAplicarTaller() { return fechaAplicarTaller; }
+    public void setFechaAplicarTaller(LocalDate fechaAplicarTaller) { this.fechaAplicarTaller = fechaAplicarTaller; }
 
-    public String getDireccion() {
-        return direccion;
-    }
+    public String getDireccion() { return direccion; }
+    public void setDireccion(String direccion) { this.direccion = direccion; }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
+    public String getComentario() { return comentario; }
+    public void setComentario(String comentario) { this.comentario = comentario; }
 
-    public String getComentario() {
-        return comentario;
-    }
+    public int getIdEstado() { return idEstado; }
+    public void setIdEstado(int idEstado) { this.idEstado = idEstado; }
 
-    public void setComentario(String comentario) {
-        this.comentario = comentario;
-    }
+    public String getEstadoPagoImagen() { return estadoPagoImagen; }
+    public void setEstadoPagoImagen(String estadoPagoImagen) { this.estadoPagoImagen = estadoPagoImagen; }
 
-    public int getIdEstado() {
-        return idEstado;
-    }
-
-    public void setIdEstado(int idEstado) {
-        this.idEstado = idEstado;
-    }
-
-    public String getEstadoPagoImagen() {
-        return estadoPagoImagen;
-    }
-
-    public void setEstadoPagoImagen(String estadoPagoImagen) {
-        this.estadoPagoImagen = estadoPagoImagen;
-    }
-
-    public LocalDate getFechaFin() {
-        return fechaFin;
-    }
-
-    public void setFechaFin(LocalDate fechaFin) {
-        this.fechaFin = fechaFin;
-    }
+    public LocalDate getFechaFin() { return fechaFin; }
+    public void setFechaFin(LocalDate fechaFin) { this.fechaFin = fechaFin; }
 }

@@ -135,6 +135,7 @@ public class TareaRepository {
     public void actualizar(Tarea tarea) {
         String sql = """
         UPDATE tarea SET
+            fechaInicio = ?, 
             nombreTarea = ?,
             fechaVencimiento = ?,
             idEstado = ?,
@@ -144,11 +145,14 @@ public class TareaRepository {
         try (Connection conn = DataBase.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, tarea.getNombreTarea());
-            stmt.setObject(2, tarea.getFechaVencimiento());
-            stmt.setInt(3, tarea.getIdEstado());
-            stmt.setInt(4, tarea.getIdUsuario());
-            stmt.setInt(5, tarea.getIdTarea());
+            // --- ★ MODIFICACIÓN: Se añade fechaInicio ★ ---
+            stmt.setObject(1, tarea.getFechaInicio());
+            stmt.setString(2, tarea.getNombreTarea());
+            stmt.setObject(3, tarea.getFechaVencimiento());
+            stmt.setInt(4, tarea.getIdEstado());
+            stmt.setInt(5, tarea.getIdUsuario());
+            stmt.setInt(6, tarea.getIdTarea());
+            // --- ★ FIN DE MODIFICACIÓN ★ ---
 
             stmt.executeUpdate();
 
