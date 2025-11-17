@@ -37,7 +37,7 @@ public class SolicitudTallerRepository {
             FROM solicitudtaller s
             JOIN catalogoestado e ON s.idEstado = e.idEstado
             JOIN usuario u ON s.idAgricultor = u.idUsuario
-            WHERE e.nombreEstado = 'Pendiente'
+            WHERE e.nombreEstado != 5 
         """;
         try (Connection conn = DataBase.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -161,6 +161,22 @@ public class SolicitudTallerRepository {
             e.printStackTrace();
         }
     }
+
+    public void actualizarImagenPago(int id, String imagen, int nuevoEstado) {
+        String sql = "UPDATE solicitudtaller SET estadoPagoImagen = ?, idEstado = ? WHERE idSolicitudTaller = ?";
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, imagen);
+            stmt.setInt(2, nuevoEstado);
+            stmt.setInt(3, id);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void actualizarEstado(int id, int nuevoEstado) {
         String sql = "UPDATE solicitudtaller SET idEstado = ? WHERE idSolicitudTaller = ?";
         try (Connection conn = DataBase.getDataSource().getConnection();

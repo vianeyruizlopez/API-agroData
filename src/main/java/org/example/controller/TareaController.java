@@ -51,9 +51,8 @@ public class TareaController {
     }
 
     public void registrar(Context ctx) {
-        // int usuarioId = ctx.attribute("usuarioId"); // <-- YA NO USAMOS ESTO para asignar
-        int rol = ctx.attribute("rol"); // <-- SÍ lo usamos para verificar permisos
 
+        int rol = ctx.attribute("rol");
         // 1. Validar que quien llama es un Agrónomo (rol 1)
         if (rol != 1) {
             ctx.status(403).result("Acceso denegado: solo agrónomos pueden agregar tareas");
@@ -72,32 +71,21 @@ public class TareaController {
 
         System.out.println(">>> [DEBUG] Tarea recibida en Controller, idReportePlaga: " + tarea.getIdReportePlaga());
 
-        // 4. (¡ESTA ES LA CORRECCIÓN!)
-        // Se elimina la línea que sobrescribía el ID del cliente con el ID del agrónomo.
-        // tarea.setIdUsuario(usuarioId); // <-- LÍNEA ORIGINAL ELIMINADA
-
-        // 5. (NUEVA VALIDACIÓN)
-        // Nos aseguramos de que el frontend (JS) SÍ haya enviado un idUsuario (el del cliente).
         if (tarea.getIdUsuario() <= 0) {
             ctx.status(400).result("El 'idUsuario' (del cliente) es obligatorio en el JSON de la tarea");
             return;
         }
 
-        // 6. Validar el resto del objeto Tarea
         String error = SolicitudTareaValidator.validar(tarea);
         if (error != null) {
             ctx.status(400).result(error);
             return;
         }
 
-        // 7. Guardar la tarea
-        // El objeto 'tarea' ahora contiene el idUsuario correcto (del cliente)
-        // que venía en el JSON enviado por proyecto-detalle.js.
         service.agregarTarea(tarea);
         ctx.status(201).json(tarea);
     }
 
-    // --- NUEVO MÉTODO PARA EDICIÓN (AGRÓNOMO) ---
     public void actualizarCompleta(Context ctx) {
         int rol = ctx.attribute("rol");
         if (rol != 1) {
@@ -135,9 +123,6 @@ public class TareaController {
         int id = Integer.parseInt(ctx.pathParam("id"));
         int estado = Integer.parseInt(ctx.pathParam("estado"));
 
-        // Lógica de permisos (opcional): quién puede actualizar estado
-        // Por ahora, se asume que el cliente lo hace (al subir evidencia)
-        // y el agrónomo (al revisar)
 
         service.actualizarTarea(id, estado);
         ctx.status(200).result("Estado actualizado correctamente");

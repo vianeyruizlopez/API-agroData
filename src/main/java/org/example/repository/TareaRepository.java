@@ -16,7 +16,7 @@ public class TareaRepository {
     public TareaRepository() {}
 
     public Tarea obtenerPorId(int idTarea) {
-        // ... (código sin cambios)
+
         try (Connection conn = DataBase.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT * FROM tarea WHERE idTarea = ?")) {
             stmt.setInt(1, idTarea);
@@ -31,7 +31,7 @@ public class TareaRepository {
     }
 
     public List<Tarea> obtenerTodas() {
-        // ... (código sin cambios)
+
         List<Tarea> lista = new ArrayList<>();
         try (Connection conn = DataBase.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT * FROM tarea")) {
@@ -45,7 +45,6 @@ public class TareaRepository {
         return lista;
     }
 
-    // --- ★ ESTE ES EL MÉTODO CON LA LÓGICA TRANSACCIONAL ★ ---
     public void agregar(Tarea tarea) {
         String sqlTarea = """
         INSERT INTO tarea (
@@ -71,7 +70,6 @@ public class TareaRepository {
 
             int newIdTarea = -1;
 
-            // 1. Insertar la Tarea principal
             try (PreparedStatement stmtTarea = conn.prepareStatement(sqlTarea, Statement.RETURN_GENERATED_KEYS)) {
                 stmtTarea.setInt(1, tarea.getIdPlan());
                 stmtTarea.setString(2, tarea.getNombreTarea());
@@ -93,8 +91,6 @@ public class TareaRepository {
                 }
             }
 
-            // 2. Si se proporcionó un idReportePlaga, crear el vínculo
-            // ESTA ES LA LÍNEA QUE ESTÁ FALLANDO
             if (tarea.getIdReportePlaga() > 0 && newIdTarea > 0) {
                 System.out.println(">>> [DEBUG] Vinculando tarea " + newIdTarea + " con reporte " + tarea.getIdReportePlaga());
                 try (PreparedStatement stmtRelacion = conn.prepareStatement(sqlRelacion)) {
@@ -103,7 +99,6 @@ public class TareaRepository {
                     stmtRelacion.executeUpdate();
                 }
             } else {
-                // VERÁS ESTE MENSAJE SI EL ID LLEGA COMO 0
                 System.out.println(">>> [DEBUG] Tarea " + newIdTarea + " creada sin vínculo a reporte (idReportePlaga=" + tarea.getIdReportePlaga() + ")");
             }
 
@@ -131,7 +126,6 @@ public class TareaRepository {
         }
     }
 
-    // ... (El resto de TareaRepository.java: actualizar, actualizarEstado, eliminar, etc. sin cambios) ...
     public void actualizar(Tarea tarea) {
         String sql = """
         UPDATE tarea SET
@@ -145,14 +139,12 @@ public class TareaRepository {
         try (Connection conn = DataBase.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            // --- ★ MODIFICACIÓN: Se añade fechaInicio ★ ---
             stmt.setObject(1, tarea.getFechaInicio());
             stmt.setString(2, tarea.getNombreTarea());
             stmt.setObject(3, tarea.getFechaVencimiento());
             stmt.setInt(4, tarea.getIdEstado());
             stmt.setInt(5, tarea.getIdUsuario());
             stmt.setInt(6, tarea.getIdTarea());
-            // --- ★ FIN DE MODIFICACIÓN ★ ---
 
             stmt.executeUpdate();
 

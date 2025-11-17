@@ -136,7 +136,6 @@ public class SolicitudTallerController {
 
         // sustituyo lo anterior por este codigo:
 
-
         int id = Integer.parseInt(ctx.pathParam("id"));
         int estado = Integer.parseInt(ctx.pathParam("estado"));
         if ( estado == 4  ) {
@@ -149,6 +148,28 @@ public class SolicitudTallerController {
         service.actualizarEstadoSolicitudTaller(id, estado);
         ctx.status(200).result("Estado actualizado correctamente");
     }
+
+    public void subirComprobante(Context ctx) {
+        int rol = obtenerRol(ctx);
+        if (rol != 2) {
+            ctx.status(403).result("Solo el agricultor puede subir comprobantes");
+            return;
+        }
+
+        int id = Integer.parseInt(ctx.pathParam("id"));
+        // Esperamos un JSON { "imagen": "base64..." }
+        Map body = ctx.bodyAsClass(Map.class);
+        String imagen = (String) body.get("imagen");
+
+        if (imagen == null || imagen.isEmpty()) {
+            ctx.status(400).result("La imagen es obligatoria");
+            return;
+        }
+
+        service.subirComprobante(id, imagen);
+        ctx.status(200).result("Comprobante subido y solicitud en revisión");
+    }
+
 
     public void eliminar(Context ctx) {
         int rol = obtenerRol(ctx);

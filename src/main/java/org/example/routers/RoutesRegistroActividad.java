@@ -51,13 +51,10 @@ public class RoutesRegistroActividad {
             System.out.println("→ rol seteado: " + rol);
         };
 
-        // Protege ambas rutas
         app.before("/registroactividades/", validarToken);
 
-        // GET → ambos roles
         app.get("/registroactividades/", controller::obtenerRegistros);
 
-        // POST → solo agricultor (rol 2)
         app.post("/registroactividades/", controller::agregarRegistros);
     }
 }

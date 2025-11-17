@@ -23,9 +23,8 @@ public class TareaService {
         tareaRepository.actualizarEstado(idTarea, nuevoEstado);
     }
 
-    // --- NUEVO MÉTODO PARA EDICIÓN COMPLETA ---
+    // --- Metodo para edicion completa ---
     public void actualizarTareaCompleta(Tarea tarea) {
-        // Aquí se podrían añadir validaciones de negocio si fueran necesarias
         tareaRepository.actualizar(tarea);
     }
 
@@ -49,7 +48,6 @@ public class TareaService {
         }
     }
 
-    // ✅ Filtrado por usuario en memoria (sin SQL)
     public List<Tarea> obtenerTareasPorUsuario(int idUsuario) {
         List<Tarea> todas = tareaRepository.obtenerTodas();
         List<Tarea> propias = new ArrayList<>();
