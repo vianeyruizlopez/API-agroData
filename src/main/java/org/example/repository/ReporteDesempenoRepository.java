@@ -1,7 +1,7 @@
 package org.example.repository;
 
 import org.example.config.DataBase;
-import org.example.model.ReporteDesempeño;
+import org.example.model.ReporteDesempeno;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,13 +9,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-public class ReporteDesempeñoRepository {
+public class ReporteDesempenoRepository {
 
-    public ReporteDesempeñoRepository() {}
+    public ReporteDesempenoRepository() {}
 
-    public ReporteDesempeño obtenerReporteDesempeñoPorIdPlan(int idPlan) {
+    public ReporteDesempeno obtenerReporteDesempeñoPorIdPlan(int idPlan) {
         System.out.println("→ Buscando reporte de desempeño para idPlan: " + idPlan);
-        ReporteDesempeño reporteDesempeño = null;
+        ReporteDesempeno reporteDesempeno = null;
 
         // --- ★ CORRECCIÓN SQL ★ ---
         // Se actualiza la consulta para usar IDs de estado (1=Pendiente, 2=Completada)
@@ -54,8 +54,8 @@ public class ReporteDesempeñoRepository {
             ResultSet rs1 = stmt1.executeQuery();
 
             if (rs1.next()) {
-                reporteDesempeño = mapearReporteDesempeño(rs1); // Mapear los nuevos campos
-                System.out.println("→ Reporte calculado: " + reporteDesempeño);
+                reporteDesempeno = mapearReporteDesempeño(rs1); // Mapear los nuevos campos
+                System.out.println("→ Reporte calculado: " + reporteDesempeno);
             } else {
                 System.out.println("⚠️ No se encontró desempeño para idPlan: " + idPlan);
                 return null;
@@ -65,17 +65,17 @@ public class ReporteDesempeñoRepository {
             ResultSet rs2 = stmt2.executeQuery();
 
             if (rs2.next()) {
-                reporteDesempeño.setIdReporte(rs2.getInt("idReporte"));
-                reporteDesempeño.setIdPlan(idPlan);
-                reporteDesempeño.setFechaGeneracion(rs2.getTimestamp("fechaGeneracion").toLocalDateTime());
-                reporteDesempeño.setObservaciones(rs2.getString("observaciones"));
+                reporteDesempeno.setIdReporte(rs2.getInt("idReporte"));
+                reporteDesempeno.setIdPlan(idPlan);
+                reporteDesempeno.setFechaGeneracion(rs2.getTimestamp("fechaGeneracion").toLocalDateTime());
+                reporteDesempeno.setObservaciones(rs2.getString("observaciones"));
                 System.out.println("→ Datos registrados complementados");
             } else {
                 System.out.println("⚠️ No hay reporte registrado para idPlan: " + idPlan);
-                reporteDesempeño.setIdReporte(0);
-                reporteDesempeño.setIdPlan(idPlan);
-                reporteDesempeño.setFechaGeneracion(null);
-                reporteDesempeño.setObservaciones(null);
+                reporteDesempeno.setIdReporte(0);
+                reporteDesempeno.setIdPlan(idPlan);
+                reporteDesempeno.setFechaGeneracion(null);
+                reporteDesempeno.setObservaciones(null);
             }
 
         } catch (SQLException e) {
@@ -83,7 +83,7 @@ public class ReporteDesempeñoRepository {
             e.printStackTrace();
         }
 
-        return reporteDesempeño;
+        return reporteDesempeno;
     }
 
     // --- (Método 'registrarReporteDesempeño' sin cambios) ---
@@ -107,8 +107,8 @@ public class ReporteDesempeñoRepository {
     }
 
 
-    private ReporteDesempeño mapearReporteDesempeño(ResultSet rs) throws SQLException {
-        ReporteDesempeño reporte = new ReporteDesempeño();
+    private ReporteDesempeno mapearReporteDesempeño(ResultSet rs) throws SQLException {
+        ReporteDesempeno reporte = new ReporteDesempeno();
         reporte.setTotalTareas(rs.getInt("totalTareas"));
         reporte.setTareasCompletadas(rs.getInt("tareasCompletadas"));
         reporte.setTareasAceptadas(rs.getInt("tareasAceptadas")); // Se mapea (será 0)

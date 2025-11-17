@@ -19,7 +19,7 @@ public class Main {
             //"https://www.agrodata.com"
     ));
 
-    // 🎯 Patrones para dominios AWS automáticos
+    // 🎯 -Patrones para dominios AWS automáticos
     private static final Pattern[] AWS_PATTERNS = {
             Pattern.compile("https://.*\\.elasticbeanstalk\\.com"),
             Pattern.compile("https://.*\\.cloudfront\\.net"),

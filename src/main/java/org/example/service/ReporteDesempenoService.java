@@ -1,19 +1,19 @@
 package org.example.service;
 
-import org.example.model.ReporteDesempeño;
-import org.example.repository.ReporteDesempeñoRepository;
+import org.example.model.ReporteDesempeno;
+import org.example.repository.ReporteDesempenoRepository;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-public class ReporteDesempeñoService {
+public class ReporteDesempenoService {
 
-    private ReporteDesempeñoRepository repository = new ReporteDesempeñoRepository();
+    private ReporteDesempenoRepository repository = new ReporteDesempenoRepository();
 
-    public ReporteDesempeñoService() {
+    public ReporteDesempenoService() {
     }
 
-    public ReporteDesempeño obtenerReporteDesempeñoPorIdPlan(int idPlan) throws SQLException {
+    public ReporteDesempeno obtenerReporteDesempeñoPorIdPlan(int idPlan) throws SQLException {
         return repository.obtenerReporteDesempeñoPorIdPlan(idPlan);
     }
 

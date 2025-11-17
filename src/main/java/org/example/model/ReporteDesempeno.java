@@ -2,7 +2,7 @@ package org.example.model;
 
 import java.time.LocalDateTime;
 
-public class ReporteDesempeño {
+public class ReporteDesempeno {
     int idReporte;
     int idPlan;
     LocalDateTime fechaGeneracion;
@@ -14,7 +14,7 @@ public class ReporteDesempeño {
     int tareasAtrasadas; // <-- ★ NUEVO CAMPO ★
     float porcentageCompletadas;
 
-    public ReporteDesempeño() {
+    public ReporteDesempeno() {
     }
 
     public int getIdReporte() {
@@ -101,7 +101,7 @@ public class ReporteDesempeño {
 
     @Override
     public String toString() {
-        return "ReporteDesempeño{" +
+        return "ReporteDesempeno{" +
                 "idReporte=" + idReporte +
                 ", idPlan=" + idPlan +
                 ", fechaGeneracion=" + fechaGeneracion +

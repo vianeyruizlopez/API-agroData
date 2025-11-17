@@ -6,14 +6,14 @@ import io.javalin.http.UnauthorizedResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import org.example.controller.ReporteDesempenoController;
-import org.example.service.ReporteDesempeñoService;
+import org.example.service.ReporteDesempenoService;
 import org.example.util.JwtUtil;
 
 public class RoutesReporteDesempeno {
     private final ReporteDesempenoController controller;
 
     public RoutesReporteDesempeno() {
-        ReporteDesempeñoService service = new ReporteDesempeñoService();
+        ReporteDesempenoService service = new ReporteDesempenoService();
         this.controller = new ReporteDesempenoController(service);
     }
 

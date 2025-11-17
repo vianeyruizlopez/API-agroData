@@ -1,15 +1,15 @@
 package org.example.controller;
 
 import io.javalin.http.Context;
-import org.example.model.ReporteDesempeño;
-import org.example.service.ReporteDesempeñoService;
+import org.example.model.ReporteDesempeno;
+import org.example.service.ReporteDesempenoService;
 
 import java.sql.SQLException;
 
 public class ReporteDesempenoController {
-    private final ReporteDesempeñoService service;
+    private final ReporteDesempenoService service;
 
-    public ReporteDesempenoController(ReporteDesempeñoService service) {
+    public ReporteDesempenoController(ReporteDesempenoService service) {
         this.service = service;
     }
 
@@ -29,7 +29,7 @@ public class ReporteDesempenoController {
             }
 
             int idPlan = Integer.parseInt(ctx.pathParam("idPlan"));
-            ReporteDesempeño reporte = service.obtenerReporteDesempeñoPorIdPlan(idPlan);
+            ReporteDesempeno reporte = service.obtenerReporteDesempeñoPorIdPlan(idPlan);
             ctx.status(200).json(reporte);
         } catch (SQLException e) {
             ctx.status(500).result("Error al obtener el reporte de desempeño: " + e.getMessage());
@@ -53,7 +53,7 @@ public class ReporteDesempenoController {
                 return;
             }
 
-            ReporteDesempeño reporte = ctx.bodyAsClass(ReporteDesempeño.class);
+            ReporteDesempeno reporte = ctx.bodyAsClass(ReporteDesempeno.class);
             service.registrarReporteDesempeño(
                     reporte.getIdPlan(),
                     reporte.getFechaGeneracion(),
