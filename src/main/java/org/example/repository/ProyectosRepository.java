@@ -172,7 +172,7 @@ public class ProyectosRepository {
         reportePlaga.setDescripcion(rs.getString("descripcion"));
         reportePlaga.setImagen(rs.getString("imagen"));
         reportePlaga.setIdEstado(rs.getInt("idEstado"));
-        reportePlaga.setIdTarea(rs.getInt("idTarea"));
+        //reportePlaga.setIdTarea(rs.getInt("idTarea"));
         return reportePlaga;
     }
 
