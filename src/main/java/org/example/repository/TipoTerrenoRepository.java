@@ -14,7 +14,7 @@ public class TipoTerrenoRepository {
     public List<TipoTerreno> obtener() {
         List<TipoTerreno> tipoTerreno = new ArrayList<>();
 
-        String sql = "SELECT * FROM catalogoRiego;";
+        String sql = "SELECT * FROM catalogoriego;";
 
         try (Connection conn = DataBase.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -34,7 +34,7 @@ public class TipoTerrenoRepository {
         return tipoTerreno;
     }
     public TipoTerreno obtenerPorId(int id) {
-        String sql = "SELECT * FROM catalogoRiego WHERE idRiego = ?;";
+        String sql = "SELECT * FROM catalogoriego WHERE idRiego = ?;";
         TipoTerreno terreno = null;
 
         try (Connection conn = DataBase.getDataSource().getConnection();

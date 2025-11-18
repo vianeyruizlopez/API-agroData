@@ -14,7 +14,7 @@ public class CatalogoCultivoRepository {
     public List<catalogoCultivo> obtener() {
         List<catalogoCultivo> cultivos = new ArrayList<>();
 
-        String sql = "SELECT * FROM catalogoCultivo;";
+        String sql = "SELECT * FROM catalogocultivo;";
 
         try (Connection conn = DataBase.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -34,7 +34,7 @@ public class CatalogoCultivoRepository {
         return cultivos;
     }
     public catalogoCultivo obtenerPorId(int id) {
-        String sql = "SELECT * FROM catalogoCultivo WHERE idCultivo = ?;";
+        String sql = "SELECT * FROM catalogocultivo WHERE idCultivo = ?;";
         catalogoCultivo cultivo = null;
 
         try (Connection conn = DataBase.getDataSource().getConnection();

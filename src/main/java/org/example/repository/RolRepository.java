@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class RolRepository {
     public Rol obtenerPorId(int idRol) {
         Rol rol = null;
-        String sql = "SELECT * FROM catalogoRol WHERE idRol = ?";
+        String sql = "SELECT * FROM catalogorol WHERE idRol = ?";
 
         try (Connection conn = DataBase.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
