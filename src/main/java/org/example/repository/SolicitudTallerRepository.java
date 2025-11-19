@@ -191,7 +191,11 @@ public class SolicitudTallerRepository {
 
     public List<SolicitudTaller> obtenerTalleresPorStatus(int idEstado) {
         List<SolicitudTaller> lista = new ArrayList<>();
-        String sql = "SELECT * FROM solicitudtaller WHERE idEstado = ?";
+        String sql = """
+            SELECT s.*, CONCAT(u.nombre, ' ', u.apellidoPaterno, ' ', u.apellidoMaterno) AS nombreCompleto
+            FROM solicitudtaller s
+            JOIN usuario u ON s.idAgricultor = u.idUsuario
+            WHERE s.idEstado = ?""";
 
         try (Connection conn = DataBase.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
