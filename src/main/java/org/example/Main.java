@@ -14,7 +14,12 @@ public class Main {
             // Producción personalizada 🌐
             "http://13.219.151.36",
             "https://3.223.91.98",
-            "http://3.223.91.98"
+            "http://3.223.91.98",
+            "http://agrodata.servehalflife.com",
+            "http://www.agrodata.servehalflife.com",
+            "https://agrodata.servehalflife.com",
+            "https://www.agrodata.servehalflife.com"
+
             //"https://agrodata.com",
             //"https://www.agrodata.com"
     ));

@@ -33,10 +33,14 @@ public class SolicitudTallerRepository {
     public List<SolicitudTaller> obtenerTodas() {
         List<SolicitudTaller> lista = new ArrayList<>();
         String sql = """
-            SELECT s.*, CONCAT(u.nombre, ' ', u.apellidoPaterno, ' ', u.apellidoMaterno) AS nombreCompleto
+            SELECT 
+                s.*,
+                CONCAT(u.nombre, ' ', u.apellidoPaterno, ' ', u.apellidoMaterno) AS nombreCompleto,
+                ct.nombreTaller
             FROM solicitudtaller s
             JOIN catalogoestado e ON s.idEstado = e.idEstado
             JOIN usuario u ON s.idAgricultor = u.idUsuario
+            JOIN catalogotaller ct ON s.idTaller  = ct.idTaller
             WHERE e.nombreEstado != 5 
         """;
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -137,6 +141,10 @@ public class SolicitudTallerRepository {
             s.setNombreAgronomo(agro);
             s.setImpartio(agro); // Campo auxiliar para compatibilidad
         } catch (SQLException e) { /* ignorar */ }
+
+        try {
+            s.setNombreTaller(rs.getString("nombreTaller"));
+        } catch (SQLException e) { /* ignorar si no está */ }
 
         Timestamp tsSolicitud = rs.getTimestamp("fechaSolicitud");
         if (tsSolicitud != null) s.setFechaSolicitud(tsSolicitud.toLocalDateTime());

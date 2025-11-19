@@ -9,6 +9,7 @@ public class SolicitudTaller {
     private int idAgricultor;
     private String nombreAgricultor;
     private int idTaller;
+    private String nombreTaller;
 
     // --- ★ CAMPOS NUEVOS QUE FALTABAN ★ ---
     private String nombreAgronomo;
@@ -32,6 +33,14 @@ public class SolicitudTaller {
     public SolicitudTaller() {}
 
     // --- Getters y Setters ---
+
+    public String getNombreTaller() {
+        return nombreTaller;
+    }
+
+    public void setNombreTaller(String nombreTaller) {
+        this.nombreTaller = nombreTaller;
+    }
 
     public int getIdSolicitudTaller() { return idSolicitudTaller; }
     public void setIdSolicitudTaller(int idSolicitudTaller) { this.idSolicitudTaller = idSolicitudTaller; }
