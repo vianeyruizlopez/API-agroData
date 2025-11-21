@@ -3,8 +3,9 @@ package org.example.controller;
 import io.javalin.http.Context;
 import org.example.model.InformacionGeneral;
 import org.example.model.Usuario;
+import org.example.model.administrarCliente;
 import org.example.service.UsuarioService;
-import org.example.util.JwtUtil; // Importación necesaria
+import org.example.util.JwtUtil;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.SQLException;
@@ -81,7 +82,6 @@ public class UsuarioController {
     public void editarPerfil(Context ctx) {
         try {
             int idRuta = Integer.parseInt(ctx.pathParam("id"));
-            // 🚨 CORRECCIÓN 1: Usar el método seguro para extraer el ID del token
             int idToken = JwtUtil.extraerEnteroSeguro(ctx.attribute("usuarioId")); //
 
             if (idRuta != idToken) {
@@ -139,7 +139,6 @@ public class UsuarioController {
     public void obtenerPerfil(Context ctx) {
         try {
             int idRuta = Integer.parseInt(ctx.pathParam("id"));
-            // 🚨 CORRECCIÓN 2: Usar el método seguro para extraer el ID del token
             int idToken = JwtUtil.extraerEnteroSeguro(ctx.attribute("usuarioId"));
 
             if (idRuta != idToken) {
@@ -186,6 +185,83 @@ public class UsuarioController {
             ctx.status(500).result("Error de base de datos: " + e.getMessage());
         } catch (Exception e) {
             System.out.println("Error inesperado: " + e.getMessage());
+            ctx.status(500).result("Error interno: " + e.getMessage());
+        }
+    }
+    public void verTodosClientes(Context ctx) {
+        try {
+            Object rawRol = ctx.attribute("rol");
+            String tipoRol = rawRol != null ? rawRol.getClass().getSimpleName() : "null";
+            System.out.println("ROL recibido en controlador (raw): " + rawRol + " (tipo: " + tipoRol + ")");
+
+            int rol = JwtUtil.extraerEnteroSeguro(rawRol);
+            System.out.println("ROL convertido en controlador: " + rol);
+
+            if (rol != 1) {
+                ctx.status(403).result("Acceso denegado: solo el agrónomo puede ver todas las solicitudes");
+                return;
+            }
+
+            List<administrarCliente> verTodosClientesList = service.verTodosClientes();
+            ctx.json(verTodosClientesList);
+
+        } catch (SQLException e) {
+            ctx.status(500).result("Error de base de datos: " + e.getMessage());
+        } catch (Exception e) {
+            ctx.status(500).result("Error interno: " + e.getMessage());
+        }
+    }
+    public void eliminarClientes(Context ctx) {
+        int usuarioId = extraerUsuarioId(ctx);
+        int rol = extraerRol(ctx);
+        System.out.println("→ Entrando a eliminar | usuarioId: " + usuarioId + ", rol: " + rol);
+
+        if (rol != 1) {
+            ctx.status(403).result("Acceso denegado: solo agrónomo puede eliminar clientes");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(ctx.pathParam("id"));
+            service.eliminarClientes(id);
+            ctx.json(Map.of("mensaje", "Cliente eliminado", "id", id));
+        } catch (IllegalArgumentException e) {
+            ctx.status(404).result(e.getMessage());
+        } catch (SQLException e) {
+            ctx.status(500).result("Error de base de datos: " + e.getMessage());
+        } catch (Exception e) {
+            ctx.status(500).result("Error interno: " + e.getMessage());
+        }
+    }
+    private int extraerUsuarioId(Context ctx) {
+        Object rawId = ctx.attribute("usuarioId"); // atributo que guardaste en el middleware
+        return JwtUtil.extraerEnteroSeguro(rawId);
+    }
+
+    private int extraerRol(Context ctx) {
+        Object rawRol = ctx.attribute("rol"); // atributo que guardaste en el middleware
+        return JwtUtil.extraerEnteroSeguro(rawRol);
+    }
+    public void editarClientes(Context ctx) {
+        int usuarioId = extraerUsuarioId(ctx);
+        int rol = extraerRol(ctx);
+        System.out.println("→ Entrando a actualizar | usuarioId: " + usuarioId + ", rol: " + rol);
+
+        if (rol != 1) {
+            ctx.status(403).result("Acceso denegado: solo agrónomo puede editar clientes");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(ctx.pathParam("id"));
+            administrarCliente editarClientes = ctx.bodyAsClass(administrarCliente.class);
+            service.editarClientes(id, editarClientes);
+            ctx.status(200).json(editarClientes);
+        } catch (IllegalArgumentException e) {
+            ctx.status(404).result(e.getMessage());
+        } catch (SQLException e) {
+            ctx.status(500).result("Error de base de datos: " + e.getMessage());
+        } catch (Exception e) {
             ctx.status(500).result("Error interno: " + e.getMessage());
         }
     }

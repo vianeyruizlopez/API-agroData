@@ -3,6 +3,7 @@ package org.example.repository;
 import org.example.config.DataBase;
 import org.example.model.InformacionGeneral;
 import org.example.model.Usuario;
+import org.example.model.administrarCliente;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -144,5 +145,57 @@ public class UsuarioRepository {
         info.setSuperficieTotal(rs.getFloat("superficieTotal"));
         info.setCultivos(rs.getString("cultivos"));
         return info;
+    }
+    public List<administrarCliente> verTodosClientes() throws SQLException {
+        List<administrarCliente> clientes = new ArrayList<>();
+        String sql = "SELECT idUsuario, imagenPerfil, nombre, apellidoPaterno, apellidoMaterno, telefono, correo FROM usuario";
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                clientes.add(mapearClientePublico(rs));
+            }
+        }
+        System.out.println(clientes);
+        System.out.println(sql);
+        return clientes;
+    }
+    private administrarCliente mapearClientePublico(ResultSet rs) throws SQLException {
+        administrarCliente u = new administrarCliente();
+        u.setIdUsuario(rs.getInt("idUsuario"));
+        u.setNombre(rs.getString("nombre"));
+        u.setApellidoPaterno(rs.getString("apellidoPaterno"));
+        u.setApellidoMaterno(rs.getString("apellidoMaterno"));
+        u.setTelefono(rs.getString("telefono"));
+        u.setCorreo(rs.getString("correo"));
+        u.setImagenPerfil(rs.getString("imagenPerfil"));
+        return u;
+    }
+    public boolean eliminarClientePorId(int id) throws SQLException {
+        String sql = "DELETE FROM usuario WHERE idUsuario = ?";
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            int filas = stmt.executeUpdate();
+            return filas > 0;
+        }
+    }
+    public void editarClientes(administrarCliente usuario) throws SQLException {
+        String sql = "UPDATE usuario SET nombre=?, apellidoPaterno=?, apellidoMaterno=?, imagenPerfil=?, telefono=?, correo=? WHERE idUsuario=?";
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, usuario.getNombre());
+            stmt.setString(2, usuario.getApellidoPaterno());
+            stmt.setString(3, usuario.getApellidoMaterno());
+            stmt.setString(4, usuario.getImagenPerfil());
+            stmt.setString(5, usuario.getTelefono());
+            stmt.setString(6, usuario.getCorreo());
+            stmt.setInt(7, usuario.getIdUsuario());
+
+            int filas = stmt.executeUpdate();
+            if (filas == 0) {
+                throw new IllegalArgumentException("No se encontró el usuario con ID " + usuario.getIdUsuario());
+            }
+        }
     }
 }

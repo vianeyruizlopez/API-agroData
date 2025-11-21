@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class Main {
 
-    // 🛡 Configuración de CORS profesional
+
     private static final Set<String> ALLOWED_ORIGINS = new HashSet<>(Arrays.asList(
             // Producción personalizada 🌐
             "http://13.219.151.36",
@@ -24,7 +24,7 @@ public class Main {
             //"https://www.agrodata.com"
     ));
 
-    // 🎯 -Patrones para dominios AWS automáticos
+
     private static final Pattern[] AWS_PATTERNS = {
             Pattern.compile("https://.*\\.elasticbeanstalk\\.com"),
             Pattern.compile("https://.*\\.cloudfront\\.net"),
@@ -36,7 +36,7 @@ public class Main {
             Pattern.compile("https://.*\\.netlify\\.app")
     };
 
-    // 🏠 Patrones para desarrollo local - CUALQUIER PUERTO
+
     private static final Pattern[] LOCAL_PATTERNS = {
             Pattern.compile("http://localhost(:\\d+)?"),
             Pattern.compile("http://127\\.0\\.0\\.1(:\\d+)?"),
@@ -47,12 +47,12 @@ public class Main {
     public static void main(String[] args) {
         Javalin app = Javalin.create().start("0.0.0.0", 7000);
 
-        // 🌐 CORS Profesional Multi-Ambiente
+
         app.before("/*", ctx -> {
             String origin = ctx.header("Origin");
             String allowedOrigin = determineAllowedOrigin(origin);
 
-            // Headers CORS optimizados 🎯
+
             ctx.header("Access-Control-Allow-Origin", allowedOrigin);
             ctx.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
             ctx.header("Access-Control-Allow-Headers",
@@ -68,8 +68,8 @@ public class Main {
         });
 
         registerRoutes(app);
-        System.out.println("🚀 AgroData API iniciada en puerto 7000");
-        System.out.println("🌐 CORS configurado para AWS y desarrollo local (cualquier puerto)");
+        System.out.println(" AgroData API iniciada en puerto 7000");
+        System.out.println(" CORS configurado para AWS y desarrollo local (cualquier puerto)");
     }
 
     private static String determineAllowedOrigin(String origin) {
@@ -77,26 +77,23 @@ public class Main {
             return getDefaultOrigin();
         }
 
-        // 1️⃣ Verificar desarrollo local - CUALQUIER PUERTO 🏠
+
         for (Pattern pattern : LOCAL_PATTERNS) {
             if (pattern.matcher(origin).matches()) {
-                return origin; // ✅ Permite cualquier puerto local
+                return origin;
             }
         }
 
-        // 2️⃣ Verificar lista exacta de producción
         if (ALLOWED_ORIGINS.contains(origin)) {
             return origin;
         }
 
-        // 3️⃣ Verificar patrones AWS
         for (Pattern pattern : AWS_PATTERNS) {
             if (pattern.matcher(origin).matches()) {
                 return origin;
             }
         }
 
-        // 4️⃣ Variables de entorno dinámicas 🌍
         String envOrigins = System.getenv("ALLOWED_ORIGINS");
         if (envOrigins != null) {
             String[] origins = envOrigins.split(",");
@@ -107,7 +104,6 @@ public class Main {
             }
         }
 
-        // 5️⃣ Fallback seguro
         return getDefaultOrigin();
     }
 

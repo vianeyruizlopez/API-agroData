@@ -54,9 +54,16 @@ public class RoutesUsuario {
         // Rutas protegidas
         app.before("/perfil/*", requireToken);
         app.before("/informacionGeneral", requireToken);
+        app.before("/administrarClientes", requireToken);
+        app.before("/administrarClientes/*", requireToken);
+
 
         app.put("/perfil/{id}", controller::editarPerfil);
         app.get("/perfil/{id}", controller::obtenerPerfil);
         app.get("/informacionGeneral", controller::obtenerInformacionGeneral);
+        app.get("/administrarClientes", controller::verTodosClientes);
+        app.delete("/administrarClientes/{id}", controller::eliminarClientes);
+        app.put("/administrarClientes/{id}", controller::editarClientes);
+
     }
 }

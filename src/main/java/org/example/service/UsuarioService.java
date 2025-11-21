@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.model.InformacionGeneral;
 import org.example.model.Usuario;
+import org.example.model.administrarCliente;
 import org.example.repository.UsuarioRepository;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -50,5 +51,18 @@ public class UsuarioService {
 
     public List<InformacionGeneral> obtenerInformacionGeneral() throws SQLException {
         return repository.obtenerInformacionGeneral();
+    }
+    public List<administrarCliente> verTodosClientes() throws SQLException {
+        return repository.verTodosClientes();
+    }
+    public void eliminarClientes(int id) throws SQLException {
+        boolean eliminado = repository.eliminarClientePorId(id);
+        if (!eliminado) {
+            throw new IllegalArgumentException("No existe un cliente con ID " + id);
+        }
+    }
+    public void editarClientes(int id, administrarCliente usuario) throws SQLException {
+        usuario.setIdUsuario(id);
+        repository.editarClientes(usuario);
     }
 }
