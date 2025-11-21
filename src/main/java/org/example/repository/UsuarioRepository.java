@@ -148,7 +148,7 @@ public class UsuarioRepository {
     }
     public List<administrarCliente> verTodosClientes() throws SQLException {
         List<administrarCliente> clientes = new ArrayList<>();
-        String sql = "SELECT idUsuario, imagenPerfil, nombre, apellidoPaterno, apellidoMaterno, telefono, correo FROM usuario";
+        String sql = "SELECT idUsuario, imagenPerfil, nombre, apellidoPaterno, apellidoMaterno, telefono, correo FROM usuario WHERE rol = 2";
         try (Connection conn = DataBase.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
@@ -172,7 +172,7 @@ public class UsuarioRepository {
         return u;
     }
     public boolean eliminarClientePorId(int id) throws SQLException {
-        String sql = "DELETE FROM usuario WHERE idUsuario = ?";
+        String sql = "DELETE FROM usuario WHERE rol = 2 and idUsuario = ?";
         try (Connection conn = DataBase.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
