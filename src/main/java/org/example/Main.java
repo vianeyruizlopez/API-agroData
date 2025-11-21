@@ -20,8 +20,6 @@ public class Main {
             "https://agrodata.servehalflife.com",
             "https://www.agrodata.servehalflife.com"
 
-            //"https://agrodata.com",
-            //"https://www.agrodata.com"
     ));
 
 
