@@ -14,7 +14,7 @@ public class TallerRepositoryImpl implements TallerRepository {
         String sql = """
     SELECT c.idTaller, c.nombreTaller, c.descripcion, c.idEstado, t.costo
     FROM catalogotaller c
-   inner join costotaller t ON c.idTaller = t.idTaller
+   inner join costotaller t ON c.idTaller = t.idTaller WHERE c.activo=1
 """;
 
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -162,20 +162,20 @@ public class TallerRepositoryImpl implements TallerRepository {
 
     @Override
     public void eliminarTaller(int id) {
-        String sqlDeleteCosto = "DELETE FROM costotaller WHERE idTaller = ?";
-        String sqlDeleteCatalogo = "DELETE FROM catalogotaller WHERE idTaller = ?";
+        String sqlDeleteCosto = "UPDATE catalogotaller set activo=0 WHERE idTaller = ?";
+       // String sqlDeleteCatalogo = "DELETE FROM catalogotaller WHERE idTaller = ?";
+
 
         try (Connection conn = DataBase.getDataSource().getConnection()) {
             conn.setAutoCommit(false);
 
-            try (PreparedStatement stmtCosto = conn.prepareStatement(sqlDeleteCosto);
-                 PreparedStatement stmtCatalogo = conn.prepareStatement(sqlDeleteCatalogo)) {
+            try (PreparedStatement stmtCosto = conn.prepareStatement(sqlDeleteCosto)) {
 
                 stmtCosto.setInt(1, id);
                 stmtCosto.executeUpdate();
 
-                stmtCatalogo.setInt(1, id);
-                stmtCatalogo.executeUpdate();
+                //stmtCatalogo.setInt(1, id);
+                //stmtCatalogo.executeUpdate();
 
                 conn.commit();
             } catch (SQLException e) {
