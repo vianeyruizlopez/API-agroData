@@ -128,7 +128,7 @@ public class TallerRepositoryImpl implements TallerRepository {
         String sqlCatalogo = "UPDATE catalogotaller SET nombreTaller = ?, descripcion = ?, idEstado = ? WHERE idTaller = ?";
         String sqlCosto = "UPDATE costotaller SET costo = ? WHERE idTaller = ?";
         try (Connection conn = DataBase.getDataSource().getConnection()) {
-            conn.setAutoCommit(false); // Inicia transacción
+            conn.setAutoCommit(false);
 
             try (PreparedStatement stmtCatalogo = conn.prepareStatement(sqlCatalogo);
                  PreparedStatement stmtCosto = conn.prepareStatement(sqlCosto)) {
@@ -163,7 +163,7 @@ public class TallerRepositoryImpl implements TallerRepository {
     @Override
     public void eliminarTaller(int id) {
         String sqlDeleteCosto = "UPDATE catalogotaller set activo=0 WHERE idTaller = ?";
-       // String sqlDeleteCatalogo = "DELETE FROM catalogotaller WHERE idTaller = ?";
+
 
 
         try (Connection conn = DataBase.getDataSource().getConnection()) {
@@ -174,8 +174,7 @@ public class TallerRepositoryImpl implements TallerRepository {
                 stmtCosto.setInt(1, id);
                 stmtCosto.executeUpdate();
 
-                //stmtCatalogo.setInt(1, id);
-                //stmtCatalogo.executeUpdate();
+
 
                 conn.commit();
             } catch (SQLException e) {

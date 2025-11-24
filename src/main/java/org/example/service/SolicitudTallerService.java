@@ -21,9 +21,9 @@ public class SolicitudTallerService {
         solicitudTallerRepository.actualizarEstado(id, nuevoEstado);
     }
 
-    // método para actualizar la imagen del pago
+
     public void subirComprobante(int id, String imagenBase64) {
-        // Estado 4 = En Revisión
+
         solicitudTallerRepository.actualizarImagenPago(id, imagenBase64, 4);
     }
 
@@ -32,7 +32,7 @@ public class SolicitudTallerService {
     }
 
     public void agregarSolicitudTaller(SolicitudTaller solicitud) {
-        // Lógica de negocio: Duración de 1 semana
+
         if (solicitud.getFechaAplicarTaller() != null) {
             LocalDate fechaInicio = solicitud.getFechaAplicarTaller();
             LocalDate fechaFin = fechaInicio.plusDays(7); // Sumar 7 días

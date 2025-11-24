@@ -19,7 +19,7 @@ public class RoutesTaller {
         this.controller = new TallerController(service);
     }
     public void register(Javalin app) {
-        // Middleware para validar token y extraer atributos
+
         Handler validarToken = ctx -> {
             String authHeader = ctx.header("Authorization");
             if (authHeader == null || !authHeader.trim().toLowerCase().startsWith("bearer ")) {
@@ -43,7 +43,7 @@ public class RoutesTaller {
             System.out.println("→ Token validado | usuarioId: " + usuarioId + ", rol: " + rol);
         };
 
-        // Middleware solo para agrónomo (rol = 1)
+
         Handler soloAgronomo = ctx -> {
             validarToken.handle(ctx);
             int rol = ctx.attribute("rol");
@@ -53,10 +53,10 @@ public class RoutesTaller {
         };
 
         // Middleware para todos (GETs)
-        app.before("/talleres/", validarToken); // GET todos
-        app.before("/talleres/{id}", validarToken); // GET por ID
+        app.before("/talleres/", validarToken);
+        app.before("/talleres/{id}", validarToken);
 
-        // Middleware solo para agrónomo en métodos sensibles
+
         app.before("/talleres/", ctx -> {
             if (ctx.method().equals("POST")) soloAgronomo.handle(ctx);
         });
@@ -67,7 +67,7 @@ public class RoutesTaller {
 
         app.before("/catalogotaller/{id}/{estado}", soloAgronomo); // PATCH
 
-        // Rutas
+
         app.get("/talleres/", controller::obtenerTodos);
         app.get("/talleres/{id}", controller::obtenerPorId);
         app.post("/talleres/", controller::agregar);

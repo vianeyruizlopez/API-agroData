@@ -17,9 +17,7 @@ public class ReporteDesempenoRepository {
         System.out.println("→ Buscando reporte de desempeño para idPlan: " + idPlan);
         ReporteDesempeno reporteDesempeno = null;
 
-        // --- ★ CORRECCIÓN SQL ★ ---
-        // Se actualiza la consulta para usar IDs de estado (1=Pendiente, 2=Completada)
-        // y se añade el cálculo de 'tareasAtrasadas'.
+
         String sqlDesempeño = """
             SELECT
                 COUNT(*) AS totalTareas,
@@ -86,7 +84,7 @@ public class ReporteDesempenoRepository {
         return reporteDesempeno;
     }
 
-    // --- (Método 'registrarReporteDesempeño' sin cambios) ---
+
     public void registrarReporteDesempeño(int idPlan, LocalDateTime fechaGeneracion, String observaciones) throws SQLException {
         String sql = "INSERT INTO reportedesempeño (idPlan, fechaGeneracion, observaciones) VALUES (?, ?, ?)";
 
@@ -111,17 +109,17 @@ public class ReporteDesempenoRepository {
         ReporteDesempeno reporte = new ReporteDesempeno();
         reporte.setTotalTareas(rs.getInt("totalTareas"));
         reporte.setTareasCompletadas(rs.getInt("tareasCompletadas"));
-        reporte.setTareasAceptadas(rs.getInt("tareasAceptadas")); // Se mapea (será 0)
+        reporte.setTareasAceptadas(rs.getInt("tareasAceptadas"));
         reporte.setTareasPendientes(rs.getInt("tareasPendientes"));
-        reporte.setTareasAtrasadas(rs.getInt("tareasAtrasadas")); // <-- ★ NUEVO CAMPO MAPEADO ★
-        reporte.setPorcentageCompletadas(rs.getFloat("porcentajeCompletadas")); // <-- ★ CORREGIDO a getFloat ★
+        reporte.setTareasAtrasadas(rs.getInt("tareasAtrasadas"));
+        reporte.setPorcentageCompletadas(rs.getFloat("porcentajeCompletadas"));
 
         System.out.println("→ Mapeo completo: " +
                 "total=" + reporte.getTotalTareas() +
                 ", completadas=" + reporte.getTareasCompletadas() +
                 ", aceptadas=" + reporte.getTareasAceptadas() +
                 ", pendientes=" + reporte.getTareasPendientes() +
-                ", atrasadas=" + reporte.getTareasAtrasadas() + // <-- ★ AÑADIDO A LOG ★
+                ", atrasadas=" + reporte.getTareasAtrasadas() +
                 ", %=" + reporte.getPorcentageCompletadas());
 
         return reporte;

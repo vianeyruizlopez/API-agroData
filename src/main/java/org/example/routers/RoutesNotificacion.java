@@ -56,16 +56,16 @@ public class RoutesNotificacion {
             System.out.println("Rol seteado en ctx.attribute: " + rol);
         };
 
-        // Middleware aplicado antes de acceder a las rutas protegidas
+
         app.before("/notificacionesagricultor", validarToken);
         app.before("/notificacionesagronomo", validarToken);
 
-        // Rutas protegidas
+
         app.get("/notificacionesagricultor", controller::obtenerTodasNotificaciones);
         app.get("/notificacionesagronomo", controller::obtenerNotificaciones);
     }
 
-    // Método auxiliar para trazabilidad de tipos
+
     private String tipo(Object obj) {
         return obj != null ? obj.getClass().getSimpleName() : "null";
     }

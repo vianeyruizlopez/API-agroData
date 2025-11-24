@@ -134,7 +134,7 @@ public class SolicitudAsesoriaController {
         }
     }
 
-    // Métodos auxiliares para trazabilidad y conversión segura
+
     private int extraerRol(Context ctx) {
         Object rolAttr = ctx.attribute("rol");
         return extraerEnteroSeguro(rolAttr);

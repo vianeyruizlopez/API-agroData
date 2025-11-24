@@ -18,7 +18,7 @@ public class RoutesSolicitudTaller {
     }
 
     public void register(Javalin app) {
-        // Middleware para validar token
+
         Handler validarToken = ctx -> {
             String authHeader = ctx.header("Authorization");
             if (authHeader == null || !authHeader.trim().toLowerCase().startsWith("bearer ")) {
@@ -39,14 +39,14 @@ public class RoutesSolicitudTaller {
             ctx.attribute("rol", rol);
         };
 
-        // Middleware OPTIONS (CORS Preflight)
+
         app.before("/solicitudtaller", ctx -> { if (ctx.method().equals("OPTIONS")) { ctx.status(200); return; } validarToken.handle(ctx); });
         app.before("/solicitudtaller/*", ctx -> { if (ctx.method().equals("OPTIONS")) { ctx.status(200); return; } validarToken.handle(ctx); });
         app.before("/getTallerForStatus/*", ctx -> { if (ctx.method().equals("OPTIONS")) { ctx.status(200); return; } validarToken.handle(ctx); });
         app.before("/solicitudesTallerAsesoria", ctx -> { if (ctx.method().equals("OPTIONS")) { ctx.status(200); return; } validarToken.handle(ctx); });
         app.before("/solicitudtaller/misolicitudes", ctx -> { if (ctx.method().equals("OPTIONS")) { ctx.status(200); return; } validarToken.handle(ctx); });
 
-        // Rutas
+
         app.get("/solicitudtaller/misolicitudes", controller::obtenerPorUsuario);
         app.get("/solicitudtaller/{id}", controller::obtenerPorId);
         app.get("/solicitudtaller", controller::obtenerTodas);
@@ -58,7 +58,7 @@ public class RoutesSolicitudTaller {
 
         app.patch("/solicitudtaller/{id}/comprobante", controller::subirComprobante);
 
-        // Ruta genérica
+
         app.patch("/solicitudtaller/{id}/{estado}", controller::actualizarEstado);
     }
 }

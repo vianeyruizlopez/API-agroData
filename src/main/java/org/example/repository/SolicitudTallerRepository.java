@@ -85,7 +85,7 @@ public class SolicitudTallerRepository {
             stmt.setString(5, solicitud.getDireccion());
             stmt.setString(6, solicitud.getComentario());
             stmt.setInt(7, solicitud.getIdEstado());
-            stmt.setString(8, solicitud.getEstadoPagoImagen()); // ← cambiado de Blob a String
+            stmt.setString(8, solicitud.getEstadoPagoImagen());
             stmt.setObject(9, solicitud.getFechaFin());
 
             stmt.executeUpdate();
@@ -102,7 +102,7 @@ public class SolicitudTallerRepository {
     }
     public List<SolicitudTaller> obtenerSolicitudesPorUsuario(int userId) {
         List<SolicitudTaller> lista = new ArrayList<>();
-        // Subconsulta para obtener el nombre del agrónomo (usuario rol 1)
+
         String sql = """
             SELECT s.*, 
                    (SELECT CONCAT(nombre, ' ', apellidoPaterno) FROM usuario WHERE rol = 1 LIMIT 1) as nombreAgronomo
@@ -130,16 +130,16 @@ public class SolicitudTallerRepository {
         s.setIdAgricultor(rs.getInt("idAgricultor"));
         s.setIdTaller(rs.getInt("idTaller"));
 
-        // Mapear nombre del agricultor si viene en la consulta
+
         try {
             s.setNombreAgricultor(rs.getString("nombreCompleto"));
         } catch (SQLException e) { /* ignorar si no está */ }
 
-        // Mapear nombre del agrónomo si viene en la consulta
+
         try {
             String agro = rs.getString("nombreAgronomo");
             s.setNombreAgronomo(agro);
-            s.setImpartio(agro); // Campo auxiliar para compatibilidad
+            s.setImpartio(agro);
         } catch (SQLException e) { /* ignorar */ }
 
         try {

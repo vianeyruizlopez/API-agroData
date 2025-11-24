@@ -10,7 +10,7 @@ import java.util.Date;
 public class JwtUtil {
     private static final String SECRET_KEY = "clave_super_secreta_muy_segura_de_32_bytes";
 
-    // Genera el token JWT con claims seguros
+
     public static String generarToken(Usuario usuario) {
         Key key = new SecretKeySpec(SECRET_KEY.getBytes(), SignatureAlgorithm.HS256.getJcaName());
 
@@ -61,7 +61,7 @@ public class JwtUtil {
 
         return claims;
     }
-    // Convierte cualquier tipo numérico o cadena a entero seguro
+
     public static int extraerEnteroSeguro(Object valor) {
         System.out.println("Intentando extraer entero de: " + valor + " (tipo: " + tipo(valor) + ")");
         if (valor instanceof Integer) {
@@ -80,7 +80,7 @@ public class JwtUtil {
         return -1;
     }
 
-    // Devuelve el tipo de dato como texto para trazabilidad
+
     private static String tipo(Object obj) {
         return obj != null ? obj.getClass().getSimpleName() : "null";
     }

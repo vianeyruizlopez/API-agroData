@@ -15,13 +15,13 @@ public class RoutesUsuario {
         UsuarioService service = new UsuarioService(repository);
         UsuarioController controller = new UsuarioController(service);
 
-        // Rutas públicas
+
         app.post("/registro", controller::registrar);
         app.post("/login", controller::login);
         app.post("/encriptar-password", controller::encriptarPassword);
         app.post("/recuperar-password", controller::recuperarPassword);
 
-        // Middleware JWT
+
         Handler requireToken = ctx -> {
             String authHeader = ctx.header("Authorization");
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -51,7 +51,7 @@ public class RoutesUsuario {
             }
         };
 
-        // Rutas protegidas
+
         app.before("/perfil/*", requireToken);
         app.before("/informacionGeneral", requireToken);
         app.before("/administrarClientes", requireToken);

@@ -66,7 +66,7 @@ public class TareaRepository {
         Connection conn = null;
         try {
             conn = DataBase.getDataSource().getConnection();
-            conn.setAutoCommit(false); // Iniciar transacción
+            conn.setAutoCommit(false);
 
             int newIdTarea = -1;
 
@@ -102,7 +102,7 @@ public class TareaRepository {
                 System.out.println(">>> [DEBUG] Tarea " + newIdTarea + " creada sin vínculo a reporte (idReportePlaga=" + tarea.getIdReportePlaga() + ")");
             }
 
-            conn.commit(); // Confirmar transacción
+            conn.commit();
 
         } catch (SQLException e) {
             System.err.println("Error en la transacción al agregar tarea/vínculo: " + e.getMessage());

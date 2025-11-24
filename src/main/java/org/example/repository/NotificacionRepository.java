@@ -18,7 +18,7 @@ public class NotificacionRepository {
     public List<Notificacion> obtenerNotificacionesAsesorias(String filtroNotificacion) {
         List<Notificacion> notificacionList = new ArrayList<>();
 
-        // Reemplazar "idUsuario" por el nombre correcto de columna en esta tabla
+
         String filtroCorregido = filtroNotificacion.replace("idUsuario", "solicitudasesoria.idAgricultor");
 
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -39,7 +39,7 @@ public class NotificacionRepository {
     public List<Notificacion> obtenerNotificacionesTalleres(String filtroNotificacion) {
         List<Notificacion> notificacionList = new ArrayList<>();
 
-        // Reemplazar "idUsuario" por el nombre correcto de columna en esta tabla
+
         String filtroCorregido = filtroNotificacion.replace("idUsuario", "solicitudtaller.idAgricultor");
 
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -60,7 +60,7 @@ public class NotificacionRepository {
     public List<Notificacion> obtenerNotificacionesTareas(String filtroNotificacion) {
         List<Notificacion> notificacionList = new ArrayList<>();
 
-        // Reemplazar "idUsuario" por el nombre correcto de columna en esta tabla
+
         String filtroCorregido = filtroNotificacion.replace("idUsuario", "sa.idAgricultor");
 
         String baseQuery = "SELECT t.idTarea, ce.nombreEstado,pc.idPlan " +

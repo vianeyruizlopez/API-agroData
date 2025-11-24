@@ -16,7 +16,7 @@ public class SolicitudTallerController {
         this.service = service;
     }
 
-    // Método robusto para extraer el rol como entero seguro
+
     private int obtenerRol(Context ctx) {
         Object rolAttr = ctx.attribute("rol");
         Object idAttr = ctx.attribute("usuarioId");
@@ -41,7 +41,7 @@ public class SolicitudTallerController {
         return -1;
     }
 
-    // Método robusto para extraer el ID de usuario como entero seguro
+
     private int obtenerUsuarioId(Context ctx) {
         Object idAttr = ctx.attribute("usuarioId");
 
@@ -61,7 +61,7 @@ public class SolicitudTallerController {
         return -1;
     }
 
-    // Devuelve el tipo de dato como texto para trazabilidad
+
     private String tipo(Object obj) {
         return obj != null ? obj.getClass().getSimpleName() : "null";
     }
@@ -94,7 +94,7 @@ public class SolicitudTallerController {
     }
 
     public void obtenerPorEstado(Context ctx) {
-        // Ambos roles pueden ver este endpoint
+
         int idEstado = Integer.parseInt(ctx.pathParam("idEstado"));
         List<SolicitudTaller> talleres = service.obtenerTalleresPorStatus(idEstado);
         ctx.json(talleres);
@@ -127,14 +127,7 @@ public class SolicitudTallerController {
 
     public void actualizarEstado(Context ctx) {
         int rol = obtenerRol(ctx);
-        /*  esto lo comento por que debo poder hacer una actualizacion desde el usuario Cliente
-        if (rol != 1) {
-            ctx.status(403).result("Acceso denegado: solo el agrónomo puede actualizar solicitudes");
-            return;
-        }
-        */
 
-        // sustituyo lo anterior por este codigo:
 
         int id = Integer.parseInt(ctx.pathParam("id"));
         int estado = Integer.parseInt(ctx.pathParam("estado"));
@@ -157,7 +150,7 @@ public class SolicitudTallerController {
         }
 
         int id = Integer.parseInt(ctx.pathParam("id"));
-        // Esperamos un JSON { "imagen": "base64..." }
+
         Map body = ctx.bodyAsClass(Map.class);
         String imagen = (String) body.get("imagen");
 
@@ -195,7 +188,7 @@ public class SolicitudTallerController {
     }
 
     public void obtenerPorUsuario(Context ctx) {
-        // Obtiene el ID del usuario del token validado
+
         System.out.println("→ Entrando a obtenerPorUsuario");
         System.out.println("→ ctx.attribute(\"usuarioId\"): " + ctx.attribute("usuarioId"));
         System.out.println("→ ctx.attribute(\"rol\"): " + ctx.attribute("rol"));
@@ -206,7 +199,7 @@ public class SolicitudTallerController {
             return;
         }
 
-        // NOTA: Se asume que el Service filtra la consulta SQL por este userId
+
         List<SolicitudTaller> solicitudes = service.obtenerSolicitudesPorUsuario(userId);
         ctx.json(solicitudes);
     }

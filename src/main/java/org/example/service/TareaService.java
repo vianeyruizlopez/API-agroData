@@ -23,7 +23,7 @@ public class TareaService {
         tareaRepository.actualizarEstado(idTarea, nuevoEstado);
     }
 
-    // --- Metodo para edicion completa ---
+
     public void actualizarTareaCompleta(Tarea tarea) {
         tareaRepository.actualizar(tarea);
     }

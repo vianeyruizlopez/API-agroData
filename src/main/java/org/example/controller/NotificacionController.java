@@ -13,7 +13,7 @@ public class NotificacionController {
         this.notificacionService = notificacionService;
     }
 
-    // Método robusto para extraer el rol como entero seguro
+
     private int obtenerRol(Context ctx) {
         Object rolAttr = ctx.attribute("rol");
         Object idAttr = ctx.attribute("usuarioId");
@@ -38,12 +38,12 @@ public class NotificacionController {
         return -1;
     }
 
-    // Devuelve el tipo de dato como texto para trazabilidad
+
     private String tipo(Object obj) {
         return obj != null ? obj.getClass().getSimpleName() : "null";
     }
 
-    // Solo agrónomo (rol 1) puede ver todas las notificaciones
+
     public void obtenerNotificaciones(Context ctx) {
         int rol = obtenerRol(ctx);
         System.out.println("Rol recibido en controlador (agrónomo): " + rol);
@@ -57,7 +57,7 @@ public class NotificacionController {
         ctx.json(notificaciones);
     }
 
-    // Solo agricultor (rol 2) puede ver sus notificaciones
+
     public void obtenerTodasNotificaciones(Context ctx) {
         int rol = obtenerRol(ctx);
         int usuarioId = ctx.attribute("usuarioId");

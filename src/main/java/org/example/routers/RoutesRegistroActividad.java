@@ -21,7 +21,7 @@ public class RoutesRegistroActividad {
     }
 
     public void register(Javalin app) {
-        // Middleware para validar token
+
         Handler validarToken = ctx -> {
             System.out.println("→ Middleware ejecutado para: " + ctx.path());
 

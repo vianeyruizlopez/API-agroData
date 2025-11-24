@@ -45,7 +45,7 @@ public class SolicitudAsesoriaRepository {
     public List<SolicitudAsesoria> obtenerTodas() {
         List<SolicitudAsesoria> lista = new ArrayList<>();
 
-        // --- ★ MODIFICACIÓN: JOIN con usuario para obtener nombreCompleto ★ ---
+
         String sql = """
             SELECT s.*, r.nombreRiego, CONCAT(u.nombre, ' ', u.apellidoPaterno, ' ', u.apellidoMaterno) AS nombreCompleto
             FROM solicitudasesoria s
@@ -61,7 +61,7 @@ public class SolicitudAsesoriaRepository {
             while (rs.next()) {
                 SolicitudAsesoria solicitud = mapear(rs);
 
-                // --- ★ MODIFICACIÓN: Cargar cultivos para evitar N/A ★ ---
+
                 List<CultivoPorSolicitud> cultivos = obtenerCultivosPorSolicitud(solicitud.getIdSolicitud());
                 solicitud.setCultivos(cultivos);
 
@@ -193,7 +193,7 @@ public class SolicitudAsesoriaRepository {
         try {
             s.setNombreAgricultor(rs.getString("nombreCompleto"));
         } catch (SQLException e) {
-            // Si la columna no existe (casos raros), lo ignoramos o ponemos default
+
             s.setNombreAgricultor("Desconocido");
         }
 

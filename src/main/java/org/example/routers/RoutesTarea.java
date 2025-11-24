@@ -18,7 +18,7 @@ public class RoutesTarea {
     }
 
     public void register(Javalin app) {
-        // Middleware para validar token y extraer atributos
+
         Handler validarToken = ctx -> {
             String authHeader = ctx.header("Authorization");
             if (authHeader == null || !authHeader.trim().toLowerCase().startsWith("bearer ")) {
@@ -42,19 +42,19 @@ public class RoutesTarea {
             System.out.println("→ Token validado | usuarioId: " + usuarioId + ", rol: " + rol);
         };
 
-        // Proteger rutas con token
+
         app.before("/tarea", validarToken);
-        app.before("/tarea/*", validarToken); // Captura /tarea/ y /tarea/id y /tarea/id/estado
+        app.before("/tarea/*", validarToken);
         app.before("/tarea/conreporteplaga", validarToken);
         app.before("/reporteplaga", validarToken);
 
-        // Rutas
+
         app.get("/tarea/conreporteplaga", controller::obtenerConReportePlaga);
         app.post("/reporteplaga", controller::registrarReportePlaga);
         app.get("/tarea/{idTarea}", controller::obtenerPorId);
         app.get("/tarea", controller::obtenerTodas);
         app.post("/tarea", controller::registrar);
-        app.put("/tarea/{idTarea}", controller::actualizarCompleta); // <-- NUEVA RUTA PUT
+        app.put("/tarea/{idTarea}", controller::actualizarCompleta);
         app.patch("/tarea/{id}/{estado}", controller::actualizarEstado);
         app.delete("/tarea/{id}", controller::eliminar);
     }

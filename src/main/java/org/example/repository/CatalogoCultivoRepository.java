@@ -55,4 +55,54 @@ public class CatalogoCultivoRepository {
 
         return cultivo;
     }
+
+    /// //examen////
+
+    public catalogoCultivo obtenerPorNombre(String nombre) {
+        String sql = "SELECT * FROM catalogocultivo WHERE LOWER(nombreCultivo) = LOWER(?);";
+        catalogoCultivo cultivo = null;
+
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, nombre);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    cultivo = new catalogoCultivo();
+                    cultivo.setIdCultivo(rs.getInt("idCultivo"));
+                    cultivo.setNombreCultivo(rs.getString("nombreCultivo"));
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return cultivo;
+    }
+
+
+    public List<catalogoCultivo> obtenerPorCoincidencia(String parcial) {
+        String sql = "SELECT * FROM catalogocultivo WHERE LOWER(nombreCultivo) LIKE LOWER(?);";
+        List<catalogoCultivo> cultivos = new ArrayList<>();
+
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, "%" + parcial + "%");
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    catalogoCultivo cultivo = new catalogoCultivo();
+                    cultivo.setIdCultivo(rs.getInt("idCultivo"));
+                    cultivo.setNombreCultivo(rs.getString("nombreCultivo"));
+                    cultivos.add(cultivo);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return cultivos;
+    }
 }

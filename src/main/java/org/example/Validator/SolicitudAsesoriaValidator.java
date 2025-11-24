@@ -39,6 +39,6 @@ public class SolicitudAsesoriaValidator {
             }
         }
 
-        return null; // null significa que no hay errores
+        return null;
     }
 }

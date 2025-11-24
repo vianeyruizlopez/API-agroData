@@ -27,7 +27,7 @@ public class TareaController {
             return;
         }
 
-        // Agricultor solo puede ver tareas propias (si idUsuario está asignado)
+
         if (rol == 2 && tarea.getIdUsuario() != 0 && tarea.getIdUsuario() != usuarioId) {
             ctx.status(403).result("Acceso denegado: no puedes ver tareas de otros usuarios");
             return;
@@ -53,20 +53,20 @@ public class TareaController {
     public void registrar(Context ctx) {
 
         int rol = ctx.attribute("rol");
-        // 1. Validar que quien llama es un Agrónomo (rol 1)
+
         if (rol != 1) {
             ctx.status(403).result("Acceso denegado: solo agrónomos pueden agregar tareas");
             return;
         }
 
-        // 2. Validar el header 'confirmado'
+
         boolean confirmado = Boolean.parseBoolean(ctx.header("confirmado"));
         if (!confirmado) {
             ctx.status(400).result("Confirmación requerida antes de enviar la solicitud");
             return;
         }
 
-        // 3. Obtener la tarea del body (JSON)
+
         Tarea tarea = ctx.bodyAsClass(Tarea.class);
 
         System.out.println(">>> [DEBUG] Tarea recibida en Controller, idReportePlaga: " + tarea.getIdReportePlaga());
@@ -101,14 +101,14 @@ public class TareaController {
             return;
         }
 
-        // Validar que la tarea exista
+
         Tarea tareaExistente = service.obtenerTareaPorId(idTarea);
         if (tareaExistente == null) {
             ctx.status(404).result("Tarea no encontrada");
             return;
         }
 
-        // Validar campos
+
         String error = SolicitudTareaValidator.validar(tarea);
         if (error != null) {
             ctx.status(400).result(error);
@@ -147,7 +147,7 @@ public class TareaController {
 
     public void registrarReportePlaga(Context ctx) {
         int rol = ctx.attribute("rol");
-        if (rol != 2) { // Cambiado a rol 2 (agricultor)
+        if (rol != 2) {
             ctx.status(403).result("Acceso denegado: solo agricultores pueden registrar reportes de plaga");
             return;
         }

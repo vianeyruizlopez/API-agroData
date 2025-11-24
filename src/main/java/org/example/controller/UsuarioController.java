@@ -92,26 +92,26 @@ public class UsuarioController {
             Usuario usuario = ctx.bodyAsClass(Usuario.class);
             usuario.setIdUsuario(idRuta);
 
-            // 1. Manejar la nueva contraseña
+
             if (usuario.getPassword() != null && !usuario.getPassword().isEmpty()) {
                 String hashed = BCrypt.hashpw(usuario.getPassword(), BCrypt.gensalt());
                 usuario.setPassword(hashed);
             } else {
-                // 2. Si no hay nueva contraseña, obtener la contraseña existente de la BD
-                Optional<Usuario> usuarioExistente = service.obtenerPorId(idRuta); // Llama al service para obtener el hash actual
 
-                // Si el usuario existe, usar su contraseña existente
+                Optional<Usuario> usuarioExistente = service.obtenerPorId(idRuta);
+
+
                 if (usuarioExistente.isPresent()) {
-                    // ASIGNAMOS el hash existente al objeto 'usuario' que será enviado al repositorio
+
                     usuario.setPassword(usuarioExistente.get().getPassword());
                 } else {
-                    // Si por alguna razón no se encuentra (aunque debería estar autenticado)
+
                     ctx.status(404).result("Usuario no encontrado para actualizar");
                     return;
                 }
             }
 
-            service.editarPerfil(usuario); //
+            service.editarPerfil(usuario);
             ctx.status(200).result("Perfil actualizado con ID " + idRuta);
         } catch (IllegalArgumentException e) {
             ctx.status(400).result("Error de validación: " + e.getMessage());
@@ -161,22 +161,22 @@ public class UsuarioController {
 
     public void obtenerInformacionGeneral(Context ctx) {
         try {
-            // Extraer el atributo "rol" desde el contexto
+
             Object rawRol = ctx.attribute("rol");
             String tipoRol = rawRol != null ? rawRol.getClass().getSimpleName() : "null";
             System.out.println("ROL recibido en controlador (raw): " + rawRol + " (tipo: " + tipoRol + ")");
 
-            // Conversión segura a entero
+
             int rol = JwtUtil.extraerEnteroSeguro(rawRol);
             System.out.println("ROL convertido en controlador: " + rol);
 
-            // Validación de permisos
+
             if (rol != 1) {
                 ctx.status(403).result("Acceso denegado: solo el agrónomo puede ver todas las solicitudes");
                 return;
             }
 
-            // Obtener y devolver la información general
+
             List<InformacionGeneral> informacionGeneralList = service.obtenerInformacionGeneral();
             ctx.json(informacionGeneralList);
 
@@ -234,12 +234,12 @@ public class UsuarioController {
         }
     }
     private int extraerUsuarioId(Context ctx) {
-        Object rawId = ctx.attribute("usuarioId"); // atributo que guardaste en el middleware
+        Object rawId = ctx.attribute("usuarioId");
         return JwtUtil.extraerEnteroSeguro(rawId);
     }
 
     private int extraerRol(Context ctx) {
-        Object rawRol = ctx.attribute("rol"); // atributo que guardaste en el middleware
+        Object rawRol = ctx.attribute("rol");
         return JwtUtil.extraerEnteroSeguro(rawRol);
     }
     public void editarClientes(Context ctx) {

@@ -30,7 +30,7 @@ public class EstadoRepositoryImpl implements  EstadoRepository {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace(); // Puedes usar un logger si prefieres
+            e.printStackTrace();
         }
 
         return estados;
@@ -53,7 +53,7 @@ public class EstadoRepositoryImpl implements  EstadoRepository {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace(); // Puedes usar un logger si prefieres
+            e.printStackTrace();
         }
 
         return estado;

@@ -15,6 +15,12 @@ public class RoutesCatalogoCultivo {
     public void register(Javalin app) {
         app.get("/catalogo/cultivos", controller::obtenerTodos);
         app.get("/catalogo/cultivos/{id}", controller::obtenerPorId);
+
+        /// //examen////
+
+        app.get("/api/cultivos/nombre/{nombre}", controller::obtenerPorNombre);
+        app.get("/api/cultivos/buscar", controller::obtenerPorCoincidencia);
+
     }
 
 }

@@ -42,10 +42,7 @@ public class TallerController {
         int rol = extraerRol(ctx);
         System.out.println("→ Entrando a agregar | usuarioId: " + usuarioId + ", rol: " + rol);
 
-        /*if (rol != 1) {
-            ctx.status(403).result("Acceso denegado: solo agrónomos pueden agregar talleres");
-            return;
-        }*/
+
 
         Taller taller = ctx.bodyAsClass(Taller.class);
         service.agregarTaller(taller);
@@ -57,10 +54,7 @@ public class TallerController {
         int rol = extraerRol(ctx);
         System.out.println("→ Entrando a actualizar | usuarioId: " + usuarioId + ", rol: " + rol);
 
-        /*if (rol != 1) {
-            ctx.status(403).result("Acceso denegado: solo agrónomos pueden actualizar talleres");
-            return;
-        }*/
+
 
         int id = Integer.parseInt(ctx.pathParam("id"));
         Taller actualizado = ctx.bodyAsClass(Taller.class);
@@ -73,10 +67,7 @@ public class TallerController {
         int rol = extraerRol(ctx);
         System.out.println("→ Entrando a actualizarEstado | usuarioId: " + usuarioId + ", rol: " + rol);
 
-       /* if (rol != 1) {
-            ctx.status(403).result("Acceso denegado: solo agrónomos pueden actualizar estado de talleres");
-            return;
-        }*/
+
 
         int id = Integer.parseInt(ctx.pathParam("id"));
         int estado = Integer.parseInt(ctx.pathParam("estado"));
@@ -89,17 +80,14 @@ public class TallerController {
         int rol = extraerRol(ctx);
         System.out.println("→ Entrando a eliminar | usuarioId: " + usuarioId + ", rol: " + rol);
 
-        /*if (rol != 1) {
-            ctx.status(403).result("Acceso denegado: solo agrónomos pueden eliminar talleres");
-            return;
-        }*/
+
 
         int id = Integer.parseInt(ctx.pathParam("id"));
         service.eliminarTaller(id);
         ctx.json(Map.of("mensaje", "Taller eliminado", "id", id));
     }
 
-    // Métodos auxiliares para trazabilidad y conversión segura
+
     private int extraerRol(Context ctx) {
         Object rolAttr = ctx.attribute("rol");
         return extraerEnteroSeguro(rolAttr);

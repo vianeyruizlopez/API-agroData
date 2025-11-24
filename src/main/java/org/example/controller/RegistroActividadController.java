@@ -15,7 +15,7 @@ public class RegistroActividadController {
     }
 
     public void obtenerRegistros(Context ctx) {
-        // Ambos roles pueden acceder
+
         Object idAttr = ctx.attribute("usuarioId");
         Object rolAttr = ctx.attribute("rol");
 
@@ -27,7 +27,7 @@ public class RegistroActividadController {
     }
 
     public void agregarRegistros(Context ctx) {
-        // Solo rol 2 (agricultor) puede registrar
+
         Object rolAttr = ctx.attribute("rol");
         int rol = extraerEnteroSeguro(rolAttr);
 
@@ -56,12 +56,12 @@ public class RegistroActividadController {
         ctx.status(201).json(respuesta);
     }
 
-    // Método auxiliar para trazabilidad de tipos
+
     private String tipo(Object obj) {
         return obj != null ? obj.getClass().getSimpleName() : "null";
     }
 
-    // Conversión robusta a entero seguro
+
     private int extraerEnteroSeguro(Object valor) {
         if (valor instanceof Integer) {
             return (Integer) valor;

@@ -10,14 +10,13 @@ public class DataBase {
         if (dataSource == null) {
            Dotenv dotenv = Dotenv.load();
             String host = dotenv.get("DB_HOST");
-           //dotenv.get("DB_HOST");
+
             String dbName = dotenv.get("DB_SCHEMA");
-           //dotenv.get("DB_NAME");
-            //String user="ailyn";
+
             String user = dotenv.get("DB_USER") ;
-            //dotenv.get("DB_USER");
+
             String pass = dotenv.get("DB_PASS");
-            //dotenv.get("DB_PASS");
+
             String url = "jdbc:mysql://" + host + ":3306/" + dbName;
 
             HikariConfig config = new HikariConfig();

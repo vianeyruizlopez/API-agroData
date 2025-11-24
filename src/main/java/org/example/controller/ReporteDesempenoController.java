@@ -86,7 +86,7 @@ public class ReporteDesempenoController {
         return -1;
     }
 
-    // Método auxiliar para trazabilidad de tipos
+
     private String tipo(Object obj) {
         return obj != null ? obj.getClass().getSimpleName() : "null";
     }

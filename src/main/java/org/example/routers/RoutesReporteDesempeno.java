@@ -18,7 +18,7 @@ public class RoutesReporteDesempeno {
     }
 
     public void register(Javalin app) {
-        // Middleware para validar token y rol
+
         Handler validarTokenAgronomo = ctx -> {
             System.out.println("→ Middleware ejecutado para: " + ctx.path());
 
@@ -52,11 +52,11 @@ public class RoutesReporteDesempeno {
             }
         };
 
-        // Protege ambas rutas
+
         app.before("/obtenerReporteDesempeno/{idPlan}", validarTokenAgronomo);
         app.before("/registrarReporteDesempeno", validarTokenAgronomo);
 
-        // Rutas protegidas solo para agrónomo
+
         app.get("/obtenerReporteDesempeno/{idPlan}", controller::obtenerReporte);
         app.post("/registrarReporteDesempeno", controller::registrarReporte);
     }

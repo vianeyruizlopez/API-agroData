@@ -17,7 +17,7 @@ public class RoutesProyectos {
         this.controller = new ProyectosController(servicio);
     }
 
-    // Middleware general para validar token y extraer atributos
+
     private Handler validarToken = ctx -> {
         System.out.println("Middleware ejecutado para: " + ctx.path());
 
@@ -56,7 +56,7 @@ public class RoutesProyectos {
         System.out.println("Rol seteado en ctx.attribute: " + rol);
     };
 
-    // Middleware adicional solo para rol 1 (agrónomo)
+
     private Handler soloAgronomo = ctx -> {
         validarToken.handle(ctx); // primero valida el token
 
@@ -74,17 +74,17 @@ public class RoutesProyectos {
     }
 
     public void register(Javalin app) {
-        // Middleware para GET (ambos roles)
+
         app.before("/obtenerPlanCultivos", validarToken);
 
         app.before("/planes/{idPlan}/estado/{idEstado}", soloAgronomo);
 
-        // Middleware para PUT (solo agrónomo)
+
         app.before("/planes/{idSolicitud}/{idPlan}", soloAgronomo);
 
         app.patch("/planes/{idPlan}/estado/{idEstado}", controller::actualizarEstado);
 
-        // Rutas protegidas
+
         app.get("/obtenerPlanCultivos", controller::obtenerPlanCultivos);
         app.put("/planes/{idSolicitud}/{idPlan}", ctx -> {
             try {

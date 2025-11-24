@@ -23,13 +23,13 @@ public class ProyectosController {
         int rol = extraerEnteroSeguro(rolAttr);
         System.out.println("Rol convertido en controlador: " + rol);
 
-        // No se restringe por rol, ambos pueden acceder
+
         List<PlanCultivo> planCultivosList = proyectosService.obtenerPlanCultivos();
         ctx.json(planCultivosList);
     }
 
     public void actualizarEstado(Context ctx) {
-        // Validación de rol (Solo Agrónomo)
+
         Object rolAttr = ctx.attribute("rol");
         int rol = extraerEnteroSeguro(rolAttr);
 
