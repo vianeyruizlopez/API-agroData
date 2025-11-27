@@ -18,8 +18,8 @@ public class RoutesCatalogoCultivo {
 
         /// //examen////
 
-        app.get("/api/cultivos/nombre/{nombre}", controller::obtenerPorNombre);
-        app.get("/api/cultivos/buscar", controller::obtenerPorCoincidencia);
+        app.get("/cultivos/nombre/{nombre}", controller::obtenerPorNombre);
+        app.get("/cultivos/buscar", controller::obtenerPorCoincidencia);
 
     }
 
