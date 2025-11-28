@@ -145,4 +145,34 @@ public class UsuarioRepository {
         info.setCultivos(rs.getString("cultivos"));
         return info;
     }
+
+    // Agrega estos métodos dentro de la clase UsuarioRepository
+
+    public List<Usuario> obtenerClientes() {
+        List<Usuario> usuarios = new ArrayList<>();
+        // Filtramos por rol = 2 (Agricultores/Clientes)
+        String sql = "SELECT * FROM usuario WHERE rol = 2";
+
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                usuarios.add(mapearUsuario(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return usuarios;
+    }
+
+    public void eliminarUsuario(int id) throws SQLException {
+        String sql = "DELETE FROM usuario WHERE idUsuario = ?";
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        }
+    }
+
 }

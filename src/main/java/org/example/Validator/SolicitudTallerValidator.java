@@ -24,11 +24,11 @@ public class SolicitudTallerValidator {
         if (solicitud.getDireccion() == null || solicitud.getDireccion().isBlank()) {
             return "La dirección es obligatoria";
         }
-
+        /*
         if (solicitud.getComentario() == null || solicitud.getComentario().isBlank()) {
             return "El comentario es obligatorio";
         }
-
+*/
         if (solicitud.getIdEstado() <= 0) {
             return "Debe seleccionar un estado válido";
         }

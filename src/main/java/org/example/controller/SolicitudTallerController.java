@@ -127,26 +127,25 @@ public class SolicitudTallerController {
 
     public void actualizarEstado(Context ctx) {
         int rol = obtenerRol(ctx);
-        /*  esto lo comento por que debo poder hacer una actualizacion desde el usuario Cliente
-        if (rol != 1) {
-            ctx.status(403).result("Acceso denegado: solo el agrónomo puede actualizar solicitudes");
-            return;
-        }
-        */
-
-        // sustituyo lo anterior por este codigo:
-
         int id = Integer.parseInt(ctx.pathParam("id"));
         int estado = Integer.parseInt(ctx.pathParam("estado"));
-        if ( estado == 4  ) {
+
+
+        if (rol == 1 && (estado == 2 || estado == 1)) {
+            estado = 5;
+        }
+        // --------------------
+
+        if (estado == 4) {
             service.actualizarEstadoSolicitudTaller(id, estado);
-            ctx.status(200).result("Estado actualizado correctamente a revision");
-        }else if(rol!=1){
+            ctx.status(200).result("Estado actualizado correctamente a revisión");
+        } else if (rol != 1) {
             ctx.status(403).result("Acceso denegado: solo el agrónomo puede actualizar solicitudes");
             return;
+        } else {
+            service.actualizarEstadoSolicitudTaller(id, estado);
+            ctx.status(200).result("Estado actualizado correctamente");
         }
-        service.actualizarEstadoSolicitudTaller(id, estado);
-        ctx.status(200).result("Estado actualizado correctamente");
     }
 
     public void subirComprobante(Context ctx) {
@@ -205,9 +204,28 @@ public class SolicitudTallerController {
             ctx.status(401).result("Usuario no autenticado. ID de usuario es requerido.");
             return;
         }
-
-        // NOTA: Se asume que el Service filtra la consulta SQL por este userId
+        
         List<SolicitudTaller> solicitudes = service.obtenerSolicitudesPorUsuario(userId);
         ctx.json(solicitudes);
     }
+
+    public void obtenerEstadisticas(Context ctx) {
+        try {
+            int rol = obtenerRol(ctx);
+            if (rol != 1) {
+                ctx.status(403).result("Acceso denegado");
+                return;
+            }
+
+            List<Map<String, Object>> stats = service.obtenerEstadisticasTalleres();
+
+            ctx.json(stats);
+
+        } catch (Exception e) {
+            System.err.println("❌ Error en obtenerEstadisticas:");
+            e.printStackTrace();
+            ctx.status(500).result("Error en el servidor: " + e.getMessage());
+        }
+    }
+
 }

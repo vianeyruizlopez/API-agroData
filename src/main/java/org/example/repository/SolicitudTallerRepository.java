@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SolicitudTallerRepository {
 
@@ -208,4 +210,43 @@ public class SolicitudTallerRepository {
 
         return lista;
     }
+
+public List<Map<String, Object>> obtenerEstadisticas(LocalDateTime fechaInicio, LocalDateTime fechaFin) {
+    List<Map<String, Object>> listaEstadisticas = new ArrayList<>();
+
+    // SQL AJUSTADO:
+    // 1. Cuenta 'total' (todas las solicitudes en el rango)
+    // 2. Cuenta 'completados' (solo estado 5)
+    String sql = """
+            SELECT 
+                ct.nombreTaller, 
+                COUNT(st.idSolicitudTaller) as total,
+                SUM(CASE WHEN st.idEstado = 5 THEN 1 ELSE 0 END) as completados
+            FROM solicitudtaller st
+            JOIN catalogotaller ct ON st.idTaller = ct.idTaller
+            WHERE st.fechaSolicitud BETWEEN ? AND ?
+            GROUP BY ct.nombreTaller
+            ORDER BY total DESC
+        """;
+
+    try (Connection conn = DataBase.getDataSource().getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setObject(1, fechaInicio);
+        stmt.setObject(2, fechaFin);
+
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            Map<String, Object> fila = new HashMap<>();
+            fila.put("nombreTaller", rs.getString("nombreTaller"));
+            fila.put("total", rs.getInt("total"));
+            fila.put("completados", rs.getInt("completados"));
+            listaEstadisticas.add(fila);
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return listaEstadisticas;
+}
 }

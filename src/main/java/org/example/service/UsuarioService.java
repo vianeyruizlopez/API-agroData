@@ -51,4 +51,16 @@ public class UsuarioService {
     public List<InformacionGeneral> obtenerInformacionGeneral() throws SQLException {
         return repository.obtenerInformacionGeneral();
     }
+
+
+    public List<Usuario> obtenerTodosLosClientes() {
+        return repository.obtenerClientes();
+    }
+
+    public void eliminarCliente(int id) throws SQLException {
+        repository.eliminarUsuario(id);
+    }
+    public void actualizarCliente(Usuario usuario) throws SQLException {
+        repository.actualizarPerfil(usuario);
+    }
 }

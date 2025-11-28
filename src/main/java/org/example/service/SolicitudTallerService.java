@@ -6,6 +6,9 @@ import org.example.repository.SolicitudTallerRepository;
 import java.time.LocalDate;
 import java.util.List;
 
+import java.time.LocalDateTime;
+
+import java.util.Map;
 public class SolicitudTallerService {
     private SolicitudTallerRepository solicitudTallerRepository = new SolicitudTallerRepository();
     private SolicitudAsesoriaRepository solicitudAsesoriaRepository = new SolicitudAsesoriaRepository();
@@ -55,5 +58,12 @@ public class SolicitudTallerService {
 
     public List<SolicitudTaller> obtenerSolicitudesPorUsuario(int userId) {
         return solicitudTallerRepository.obtenerSolicitudesPorUsuario(userId);
+    }
+
+    public List<Map<String, Object>> obtenerEstadisticasTalleres() {
+        LocalDateTime fin = LocalDateTime.now();
+        LocalDateTime inicio = fin.minusMonths(1);
+
+        return solicitudTallerRepository.obtenerEstadisticas(inicio, fin);
     }
 }

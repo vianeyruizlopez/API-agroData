@@ -139,23 +139,36 @@ public class UsuarioController {
     public void obtenerPerfil(Context ctx) {
         try {
             int idRuta = Integer.parseInt(ctx.pathParam("id"));
-            // 🚨 CORRECCIÓN 2: Usar el método seguro para extraer el ID del token
-            int idToken = JwtUtil.extraerEnteroSeguro(ctx.attribute("usuarioId"));
 
+            // Extraer ID del token usando el atributo que puso el middleware
+            Object idAttr = ctx.attribute("usuarioId");
+            int idToken = JwtUtil.extraerEnteroSeguro(idAttr);
+
+            System.out.println("→ Solicitando perfil ID: " + idRuta + " | Token ID: " + idToken);
+
+            // Validación de seguridad: El usuario solo puede ver su propio perfil
+            // (Opcional: Si el agrónomo (rol 1) necesita ver perfiles de otros, agrega '|| rol == 1')
             if (idRuta != idToken) {
+                System.out.println("⛔ Acceso denegado: ID ruta (" + idRuta + ") != ID token (" + idToken + ")");
                 ctx.status(403).result("No tienes permiso para ver este perfil");
                 return;
             }
 
             Optional<Usuario> usuarioOpt = service.obtenerPorId(idRuta);
             if (usuarioOpt.isPresent()) {
-                ctx.json(usuarioOpt.get());
+                Usuario u = usuarioOpt.get();
+                // Por seguridad, no devolvemos la contraseña
+                u.setPassword(null);
+                ctx.json(u);
             } else {
+                System.out.println("⚠️ Usuario no encontrado en BD: " + idRuta);
                 ctx.status(404).result("Usuario no encontrado con ID " + idRuta);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             ctx.status(500).result("Error de base de datos: " + e.getMessage());
         } catch (Exception e) {
+            e.printStackTrace();
             ctx.status(500).result("Error interno: " + e.getMessage());
         }
     }
@@ -187,6 +200,81 @@ public class UsuarioController {
         } catch (Exception e) {
             System.out.println("Error inesperado: " + e.getMessage());
             ctx.status(500).result("Error interno: " + e.getMessage());
+        }
+    }
+
+
+    public void obtenerClientes(Context ctx) {
+        Object rolAttr = ctx.attribute("rol");
+        int rol = JwtUtil.extraerEnteroSeguro(rolAttr);
+
+        if (rol != 1) {
+            ctx.status(403).result("Acceso denegado: Solo administradores pueden ver la lista de clientes.");
+            return;
+        }
+
+        List<Usuario> clientes = service.obtenerTodosLosClientes();
+        ctx.json(clientes);
+    }
+
+    public void eliminarCliente(Context ctx) {
+        Object rolAttr = ctx.attribute("rol");
+        int rol = JwtUtil.extraerEnteroSeguro(rolAttr);
+
+        if (rol != 1) {
+            ctx.status(403).result("Acceso denegado.");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(ctx.pathParam("id"));
+            service.eliminarCliente(id);
+            ctx.status(200).result("Cliente eliminado correctamente");
+        } catch (SQLException e) {
+
+            ctx.status(500).result("No se puede eliminar el cliente porque tiene registros asociados (solicitudes, proyectos, etc).");
+        } catch (NumberFormatException e) {
+            ctx.status(400).result("ID inválido");
+        }
+    }
+
+    public void actualizarClienteAdmin(Context ctx) {
+        Object rolAttr = ctx.attribute("rol");
+        int rol = JwtUtil.extraerEnteroSeguro(rolAttr);
+
+        if (rol != 1) {
+            ctx.status(403).result("Acceso denegado.");
+            return;
+        }
+
+        try {
+            int id = Integer.parseInt(ctx.pathParam("id"));
+            Usuario usuarioEntrante = ctx.bodyAsClass(Usuario.class);
+            usuarioEntrante.setIdUsuario(id);
+
+            Optional<Usuario> usuarioActualOpt = service.obtenerPorId(id);
+
+            if (usuarioActualOpt.isPresent()) {
+                Usuario actual = usuarioActualOpt.get();
+
+                if (usuarioEntrante.getPassword() == null || usuarioEntrante.getPassword().isEmpty()) {
+                    usuarioEntrante.setPassword(actual.getPassword());
+                }
+
+                if (usuarioEntrante.getImagenPerfil() == null || usuarioEntrante.getImagenPerfil().isEmpty()) {
+                    usuarioEntrante.setImagenPerfil(actual.getImagenPerfil());
+                }
+
+                usuarioEntrante.setRol(actual.getRol());
+
+                service.editarPerfil(usuarioEntrante);
+                ctx.status(200).result("Cliente actualizado");
+            } else {
+                ctx.status(404).result("Cliente no encontrado");
+            }
+
+        } catch (Exception e) {
+            ctx.status(500).result("Error al actualizar: " + e.getMessage());
         }
     }
 }
