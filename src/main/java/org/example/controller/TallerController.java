@@ -2,14 +2,14 @@ package org.example.controller;
 
 import io.javalin.http.Context;
 import org.example.model.Taller;
-import org.example.service.TallerService;
+import org.example.service.ITallerService;
 
 import java.util.Map;
 
 public class TallerController {
-    private final TallerService service;
+    private final ITallerService service;
 
-    public TallerController(TallerService service) {
+    public TallerController(ITallerService service) {
         this.service = service;
     }
 

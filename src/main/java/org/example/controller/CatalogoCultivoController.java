@@ -3,13 +3,14 @@ package org.example.controller;
 import io.javalin.http.Context;
 import org.example.model.catalogoCultivo;
 import org.example.service.CatalogoCultivoService;
+import org.example.service.ICatalogoCultivoService;
 
 import java.util.List;
 
 public class CatalogoCultivoController {
-    private final CatalogoCultivoService servicio;
+    private final ICatalogoCultivoService servicio;
 
-    public CatalogoCultivoController(CatalogoCultivoService servicio) {
+    public CatalogoCultivoController(ICatalogoCultivoService servicio) {
         this.servicio = servicio;
     }
 

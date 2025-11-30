@@ -3,15 +3,16 @@ package org.example.controller;
 import io.javalin.http.Context;
 import org.example.Validator.SolicitudAsesoriaValidator;
 import org.example.model.SolicitudAsesoria;
+import org.example.service.ISolicitudAsesoriaService;
 import org.example.service.SolicitudAsesoriaService;
 
 import java.util.List;
 import java.util.Map;
 
 public class SolicitudAsesoriaController {
-    private final SolicitudAsesoriaService service;
+    private final ISolicitudAsesoriaService service;
 
-    public SolicitudAsesoriaController(SolicitudAsesoriaService service) {
+    public SolicitudAsesoriaController(ISolicitudAsesoriaService service) {
         this.service = service;
     }
 

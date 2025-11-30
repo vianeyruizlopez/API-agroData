@@ -4,6 +4,7 @@ import io.javalin.http.Context;
 import org.example.model.InformacionGeneral;
 import org.example.model.Usuario;
 import org.example.model.administrarCliente;
+import org.example.service.IUsuarioService;
 import org.example.service.UsuarioService;
 import org.example.util.JwtUtil;
 import org.mindrot.jbcrypt.BCrypt;
@@ -14,9 +15,10 @@ import java.util.Map;
 import java.util.Optional;
 
 public class UsuarioController {
-    private final UsuarioService service;
 
-    public UsuarioController(UsuarioService service) {
+    private final IUsuarioService service;
+
+    public UsuarioController(IUsuarioService service) {
         this.service = service;
     }
 

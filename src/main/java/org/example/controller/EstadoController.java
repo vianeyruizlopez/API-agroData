@@ -2,12 +2,13 @@ package org.example.controller;
 
 import io.javalin.http.Context;
 import org.example.model.Estado;
-import org.example.service.EstadoServiceImpl;
+import org.example.service.EstadoService;
+import org.example.service.IEstadoService;
 
 public class EstadoController {
-    private final EstadoServiceImpl servicio;
+    private final IEstadoService servicio;
 
-    public EstadoController(EstadoServiceImpl servicio) {
+    public EstadoController(IEstadoService servicio) {
         this.servicio = servicio;
     }
 

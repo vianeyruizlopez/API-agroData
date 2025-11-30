@@ -7,16 +7,15 @@ import org.example.repository.SolicitudAsesoriaRepository;
 import org.example.model.CultivoPorSolicitud;
 import java.util.List;
 
-public class SolicitudAsesoriaService {
+public class SolicitudAsesoriaService implements ISolicitudAsesoriaService {
 
-    private SolicitudAsesoriaRepository solicitudAsesoriaRepository = new SolicitudAsesoriaRepository();
+    private final SolicitudAsesoriaRepository solicitudAsesoriaRepository = new SolicitudAsesoriaRepository();
 
-
-    private ProyectosRepository proyectosRepository = new ProyectosRepository();
+    private final ProyectosRepository proyectosRepository = new ProyectosRepository();
 
     private static final int ESTADO_ACEPTADA = 2;
 
-
+    @Override
     public SolicitudAsesoria obtenerSolicitudAsesoriaPorId(int id) {
         SolicitudAsesoria solicitud = solicitudAsesoriaRepository.obtenerPorId(id);
         if (solicitud != null) {
@@ -26,10 +25,12 @@ public class SolicitudAsesoriaService {
         return solicitud;
     }
 
+    @Override
     public List<SolicitudAsesoria> obtenerTodasLasSolicitudes() {
         return solicitudAsesoriaRepository.obtenerTodas();
     }
 
+    @Override
     public void actualizarEstadoSolicitudAsesoria(int id, int nuevoEstado) {
 
         solicitudAsesoriaRepository.actualizarEstado(id, nuevoEstado);
@@ -50,10 +51,12 @@ public class SolicitudAsesoriaService {
         }
     }
 
+    @Override
     public void eliminarSolicitudAsesoria(int id) {
         solicitudAsesoriaRepository.eliminar(id);
     }
 
+    @Override
     public void agregarSolicitudAsesoria(SolicitudAsesoria solicitud) {
         try {
             solicitudAsesoriaRepository.agregar(solicitud);

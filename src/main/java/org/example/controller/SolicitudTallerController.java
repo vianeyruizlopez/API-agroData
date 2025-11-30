@@ -4,15 +4,16 @@ import io.javalin.http.Context;
 import org.example.Validator.SolicitudTallerValidator;
 import org.example.model.SolicitudTaller;
 import org.example.model.Solicitudes;
+import org.example.service.ISolicitudTallerService;
 import org.example.service.SolicitudTallerService;
 
 import java.util.List;
 import java.util.Map;
 
 public class SolicitudTallerController {
-    private final SolicitudTallerService service;
+    private final ISolicitudTallerService service;
 
-    public SolicitudTallerController(SolicitudTallerService service) {
+    public SolicitudTallerController(ISolicitudTallerService service) {
         this.service = service;
     }
 
@@ -203,4 +204,24 @@ public class SolicitudTallerController {
         List<SolicitudTaller> solicitudes = service.obtenerSolicitudesPorUsuario(userId);
         ctx.json(solicitudes);
     }
+
+    public void obtenerEstadisticas(Context ctx) {
+        try {
+            int rol = obtenerRol(ctx);
+            if (rol != 1) {
+                ctx.status(403).result("Acceso denegado");
+                return;
+            }
+
+            List<Map<String, Object>> stats = service.obtenerEstadisticasTalleres();
+
+            ctx.json(stats);
+
+        } catch (Exception e) {
+            System.err.println("❌ Error en obtenerEstadisticas:");
+            e.printStackTrace();
+            ctx.status(500).result("Error en el servidor: " + e.getMessage());
+        }
+    }
+
 }

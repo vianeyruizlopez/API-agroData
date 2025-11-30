@@ -48,6 +48,7 @@ public class RoutesSolicitudTaller {
 
 
         app.get("/solicitudtaller/misolicitudes", controller::obtenerPorUsuario);
+        app.get("/solicitudtaller/estadisticas", controller::obtenerEstadisticas);
         app.get("/solicitudtaller/{id}", controller::obtenerPorId);
         app.get("/solicitudtaller", controller::obtenerTodas);
         app.delete("/solicitudtaller/{id}", controller::eliminar);

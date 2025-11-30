@@ -3,14 +3,15 @@ package org.example.controller;
 import com.google.gson.Gson;
 import io.javalin.http.Context;
 import org.example.model.RegistroActividad;
+import org.example.service.IRegistroActividadService;
 import org.example.service.RegistroActividadService;
 
 import java.util.*;
 
 public class RegistroActividadController {
-    private final RegistroActividadService service;
+    private final IRegistroActividadService service;
 
-    public RegistroActividadController(RegistroActividadService service) {
+    public RegistroActividadController(IRegistroActividadService service) {
         this.service = service;
     }
 

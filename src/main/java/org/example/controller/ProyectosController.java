@@ -4,15 +4,16 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import org.example.model.PlanCultivo;
+import org.example.service.IProyectosService;
 import org.example.service.ProyectosService;
 
 import java.util.List;
 import java.util.Map;
 
 public class ProyectosController {
-    private final ProyectosService proyectosService;
+    private final IProyectosService proyectosService;
 
-    public ProyectosController(ProyectosService proyectosService) {
+    public ProyectosController(IProyectosService proyectosService) {
         this.proyectosService = proyectosService;
     }
 

@@ -2,14 +2,15 @@ package org.example.controller;
 
 import io.javalin.http.Context;
 import org.example.model.Notificacion;
+import org.example.service.INotificacionService;
 import org.example.service.NotificacionService;
 
 import java.util.List;
 
 public class NotificacionController {
-    private final NotificacionService notificacionService;
+    private final INotificacionService notificacionService;
 
-    public NotificacionController(NotificacionService notificacionService) {
+    public NotificacionController(INotificacionService notificacionService) {
         this.notificacionService = notificacionService;
     }
 

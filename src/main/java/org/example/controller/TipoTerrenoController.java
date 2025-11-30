@@ -2,12 +2,13 @@ package org.example.controller;
 
 import io.javalin.http.Context;
 import org.example.model.TipoTerreno;
+import org.example.service.ITipoTerrenoService;
 import org.example.service.TipoTerrenoService;
 
 public class TipoTerrenoController {
-    private final TipoTerrenoService service;
+    private final ITipoTerrenoService service;
 
-    public TipoTerrenoController(TipoTerrenoService service) {
+    public TipoTerrenoController(ITipoTerrenoService service) {
         this.service = service;
     }
 

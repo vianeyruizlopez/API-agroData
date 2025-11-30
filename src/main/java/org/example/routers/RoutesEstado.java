@@ -2,13 +2,13 @@ package org.example.routers;
 
 import io.javalin.Javalin;
 import org.example.controller.EstadoController;
-import org.example.service.EstadoServiceImpl;
+import org.example.service.EstadoService;
 
 public class RoutesEstado {
     private final EstadoController controller;
 
     public RoutesEstado() {
-        EstadoServiceImpl servicio = new EstadoServiceImpl();
+        EstadoService servicio = new EstadoService();
         this.controller = new EstadoController(servicio);
     }
 

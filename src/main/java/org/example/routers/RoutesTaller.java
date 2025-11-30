@@ -7,15 +7,15 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import org.example.controller.TallerController;
 import org.example.repository.TallerRepositoryImpl;
+import org.example.service.ITallerService;
 import org.example.service.TallerService;
-import org.example.service.TallerServiceImpl;
 import org.example.util.JwtUtil;
 
 public class RoutesTaller {
     private final TallerController controller;
 
     public RoutesTaller() {
-        TallerService service = new TallerServiceImpl(new TallerRepositoryImpl());
+        ITallerService service = new TallerService(new TallerRepositoryImpl());
         this.controller = new TallerController(service);
     }
     public void register(Javalin app) {

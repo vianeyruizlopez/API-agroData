@@ -4,15 +4,16 @@ import io.javalin.http.Context;
 import org.example.Validator.SolicitudTareaValidator;
 import org.example.model.ReportePlaga;
 import org.example.model.Tarea;
+import org.example.service.ITareaService;
 import org.example.service.TareaService;
 
 import java.util.List;
 import java.util.Map;
 
 public class TareaController {
-    private final TareaService service;
+    private final ITareaService service;
 
-    public TareaController(TareaService service) {
+    public TareaController(ITareaService service) {
         this.service = service;
     }
 

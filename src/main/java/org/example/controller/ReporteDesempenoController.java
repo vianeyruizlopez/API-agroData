@@ -2,14 +2,15 @@ package org.example.controller;
 
 import io.javalin.http.Context;
 import org.example.model.ReporteDesempeno;
+import org.example.service.IReporteDesempenoService;
 import org.example.service.ReporteDesempenoService;
 
 import java.sql.SQLException;
 
 public class ReporteDesempenoController {
-    private final ReporteDesempenoService service;
+    private final IReporteDesempenoService service;
 
-    public ReporteDesempenoController(ReporteDesempenoService service) {
+    public ReporteDesempenoController(IReporteDesempenoService service) {
         this.service = service;
     }
 
