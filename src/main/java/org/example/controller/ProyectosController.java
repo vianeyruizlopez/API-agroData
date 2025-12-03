@@ -44,8 +44,8 @@ public class ProyectosController {
      *   {
      *     "idPlan": 1,
      *     "idSolicitud": 1,
-     *     "objetivo": "Maximizar la producción de maíz en 10 hectáreas",
-     *     "observaciones": "Terreno con buen drenaje, ideal para maíz",
+     *     "objetivo": "Maximizar la producción de papa en 10 hectáreas",
+     *     "observaciones": "Terreno con buen drenaje, ideal para papa",
      *     "fechaCreacion": "2024-01-15T10:30:00",
      *     "idEstado": 1,
      *     "nombreEstado": "En Planificación"
@@ -117,7 +117,7 @@ public class ProyectosController {
      * Content-Type: application/json
      * 
      * {
-     *   "objetivo": "Maximizar la producción de maíz orgánico en 10 hectáreas",
+     *   "objetivo": "Maximizar la producción de papa orgánico en 10 hectáreas",
      *   "observaciones": "Implementar técnicas de agricultura orgánica certificada"
      * }
      * </pre>

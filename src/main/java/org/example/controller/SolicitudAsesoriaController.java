@@ -87,7 +87,7 @@ public class SolicitudAsesoriaController {
      *       {
      *         "idCultivo": 1,
      *         "nombreCultivo": "Chayote",
-     *         "cantidad": 100
+     *         "cantidad": 1
      *       }
      *     ]
      *   }
@@ -147,7 +147,7 @@ public class SolicitudAsesoriaController {
      *   "cultivos": [
      *     {
      *       "idCultivo": 1,
-     *       "cantidad": 100
+     *       "cantidad": 1
      *     }
      *   ]
      * }

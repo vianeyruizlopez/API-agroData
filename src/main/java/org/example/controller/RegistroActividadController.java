@@ -42,7 +42,7 @@ public class RegistroActividadController {
      *   {
      *     "idRegistro": 1,
      *     "idUsuario": 1,
-     *     "actividad": "Siembra de maíz",
+     *     "actividad": "Siembra de papa",
      *     "fecha": "2024-01-20T08:00:00",
      *     "observaciones": "Siembra realizada en condiciones óptimas"
      *   }
