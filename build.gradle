@@ -30,6 +30,32 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+javadoc {
+    options.encoding = 'UTF-8'
+    options.charSet = 'UTF-8'
+    options.author = true
+    options.version = true
+    options.windowTitle = "AgroData API Documentation"
+    options.docTitle = "AgroData API REST - Documentación"
+    failOnError = false
+}
+
+
+task generateDocs {
+    dependsOn javadoc
+    doLast {
+        println "📚 Documentación generada en: build/docs/javadoc/index.html"
+    }
+}
+
+task openDocs {
+    dependsOn javadoc
+    doLast {
+        exec {
+            commandLine 'cmd', '/c', 'start', 'build/docs/javadoc/index.html'
+        }
+    }
+}
 shadowJar{
     manifest {
         attributes('Main-Class':'org.example.Main')
