@@ -11,10 +11,22 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Repositorio para manejar operaciones de base de datos de tareas.
+ * Incluye CRUD completo y manejo de reportes de plaga.
+ */
 public class TareaRepository {
 
+    /**
+     * Constructor del repositorio de tareas.
+     */
     public TareaRepository() {}
 
+    /**
+     * Obtiene una tarea por su ID.
+     * @param idTarea el ID de la tarea
+     * @return la tarea encontrada o null si no existe
+     */
     public Tarea obtenerPorId(int idTarea) {
 
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -30,6 +42,10 @@ public class TareaRepository {
         return null;
     }
 
+    /**
+     * Obtiene todas las tareas del sistema.
+     * @return lista de todas las tareas
+     */
     public List<Tarea> obtenerTodas() {
 
         List<Tarea> lista = new ArrayList<>();
@@ -45,6 +61,10 @@ public class TareaRepository {
         return lista;
     }
 
+    /**
+     * Agrega una nueva tarea al sistema.
+     * @param tarea la tarea a agregar
+     */
     public void agregar(Tarea tarea) {
         String sqlTarea = """
         INSERT INTO tarea (
@@ -126,6 +146,10 @@ public class TareaRepository {
         }
     }
 
+    /**
+     * Actualiza una tarea existente.
+     * @param tarea la tarea con datos actualizados
+     */
     public void actualizar(Tarea tarea) {
         String sql = """
         UPDATE tarea SET
@@ -153,6 +177,11 @@ public class TareaRepository {
         }
     }
 
+    /**
+     * Actualiza el estado de una tarea.
+     * @param id el ID de la tarea
+     * @param nuevoEstado el nuevo estado
+     */
     public void actualizarEstado(int id, int nuevoEstado) {
         String sql;
         boolean marcarCompletado = (nuevoEstado == 2);
@@ -182,6 +211,10 @@ public class TareaRepository {
         }
     }
 
+    /**
+     * Elimina una tarea del sistema.
+     * @param id el ID de la tarea a eliminar
+     */
     public void eliminar(int id) {
         try (Connection conn = DataBase.getDataSource().getConnection();
              PreparedStatement stmtDep = conn.prepareStatement("DELETE FROM registrotarea WHERE idTarea = ?")) {
@@ -208,6 +241,10 @@ public class TareaRepository {
         }
     }
 
+    /**
+     * Obtiene tareas que tienen reportes de plaga asociados.
+     * @return lista de tareas con reportes de plaga
+     */
     public List<Tarea> obtenerTareasConReportePlaga() {
         List<Tarea> lista = new ArrayList<>();
         String sql = """
@@ -227,6 +264,11 @@ public class TareaRepository {
         return lista;
     }
 
+    /**
+     * Registra un nuevo reporte de plaga.
+     * @param reporte el reporte de plaga a registrar
+     * @throws SQLException si hay error en la base de datos
+     */
     public void registrarReportePlaga(ReportePlaga reporte) throws SQLException {
         String sqlReporte = """
         INSERT INTO reporteplaga (idPlan, fechaReporte, tipoPlaga, descripcion, imagen, idEstado)
@@ -279,6 +321,12 @@ public class TareaRepository {
         }
     }
 
+    /**
+     * Mapea un ResultSet a un objeto Tarea.
+     * @param rs el ResultSet de la consulta
+     * @return la tarea mapeada
+     * @throws SQLException si hay error al leer los datos
+     */
     private Tarea mapear(ResultSet rs) throws SQLException {
         Tarea s = new Tarea();
 

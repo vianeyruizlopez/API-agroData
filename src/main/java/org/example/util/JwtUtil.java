@@ -7,10 +7,20 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 import java.util.Date;
 
+/**
+ * Utilidad para manejar tokens JWT.
+ * Genera y valida tokens para autenticación de usuarios.
+ */
 public class JwtUtil {
     private static final String SECRET_KEY = "clave_super_secreta_muy_segura_de_32_bytes";
 
 
+    /**
+     * Genera un token JWT para un usuario.
+     * El token incluye el ID y rol del usuario y expira en 3 días.
+     * @param usuario el usuario para el cual generar el token
+     * @return el token JWT generado
+     */
     public static String generarToken(Usuario usuario) {
         Key key = new SecretKeySpec(SECRET_KEY.getBytes(), SignatureAlgorithm.HS256.getJcaName());
 
@@ -32,6 +42,12 @@ public class JwtUtil {
         return token;
     }
 
+    /**
+     * Valida un token JWT y extrae la información del usuario.
+     * @param token el token JWT a validar
+     * @return los claims del token si es válido
+     * @throws JwtException si el token es inválido o ha expirado
+     */
     public static Claims validarToken(String token) throws JwtException {
         System.out.println("→ Iniciando validación del token...");
         System.out.println("Token recibido: " + token);
@@ -62,6 +78,12 @@ public class JwtUtil {
         return claims;
     }
 
+    /**
+     * Convierte un objeto a entero de forma segura.
+     * Maneja diferentes tipos de datos que pueden venir del token.
+     * @param valor el valor a convertir
+     * @return el entero convertido o -1 si no se puede convertir
+     */
     public static int extraerEnteroSeguro(Object valor) {
         System.out.println("Intentando extraer entero de: " + valor + " (tipo: " + tipo(valor) + ")");
         if (valor instanceof Integer) {
@@ -81,6 +103,11 @@ public class JwtUtil {
     }
 
 
+    /**
+     * Obtiene el nombre del tipo de un objeto para debugging.
+     * @param obj el objeto del cual obtener el tipo
+     * @return el nombre del tipo o "null" si el objeto es null
+     */
     private static String tipo(Object obj) {
         return obj != null ? obj.getClass().getSimpleName() : "null";
     }

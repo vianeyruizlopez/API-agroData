@@ -7,14 +7,27 @@ import org.example.service.NotificacionService;
 
 import java.util.List;
 
+/**
+ * Controlador para manejar notificaciones del sistema.
+ * Permite a agrónomos y agricultores consultar sus notificaciones.
+ */
 public class NotificacionController {
     private final INotificacionService notificacionService;
 
+    /**
+     * Constructor que recibe el servicio de notificaciones.
+     * @param notificacionService servicio para manejar notificaciones
+     */
     public NotificacionController(INotificacionService notificacionService) {
         this.notificacionService = notificacionService;
     }
 
 
+    /**
+     * Obtiene el rol del usuario desde el contexto.
+     * @param ctx contexto de la petición HTTP
+     * @return el rol del usuario o -1 si hay error
+     */
     private int obtenerRol(Context ctx) {
         Object rolAttr = ctx.attribute("rol");
         Object idAttr = ctx.attribute("usuarioId");
@@ -40,11 +53,47 @@ public class NotificacionController {
     }
 
 
+    /**
+     * Obtiene el nombre del tipo de un objeto.
+     * @param obj el objeto
+     * @return nombre del tipo o "null"
+     */
     private String tipo(Object obj) {
         return obj != null ? obj.getClass().getSimpleName() : "null";
     }
 
 
+    /**
+     * Obtiene notificaciones para agrónomos.
+     * 
+     * <p><strong>Endpoint:</strong> GET /notificacionesagronomo</p>
+     * <p><strong>Acceso:</strong> Solo agrónomos (rol 1)</p>
+     * 
+     * <p><strong>Ejemplo de petición:</strong></p>
+     * <pre>
+     * GET /notificacionesagronomo
+     * Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+     * </pre>
+     * 
+     * <p><strong>Ejemplo de respuesta:</strong></p>
+     * <pre>
+     * HTTP/1.1 200 OK
+     * [
+     *   {
+     *     "idNotificacion": 1,
+     *     "nombreEstado": "Pendiente",
+     *     "tipoNotificacion": "asesoria"
+     *   },
+     *   {
+     *     "idNotificacion": 2,
+     *     "nombreEstado": "Pendiente",
+     *     "tipoNotificacion": "taller"
+     *   }
+     * ]
+     * </pre>
+     * 
+     * @param ctx contexto de la petición HTTP
+     */
     public void obtenerNotificaciones(Context ctx) {
         int rol = obtenerRol(ctx);
         System.out.println("Rol recibido en controlador (agrónomo): " + rol);
@@ -59,6 +108,34 @@ public class NotificacionController {
     }
 
 
+    /**
+     * Obtiene todas las notificaciones para agricultores.
+     * 
+     * <p><strong>Endpoint:</strong> GET /notificacionesagricultor</p>
+     * <p><strong>Acceso:</strong> Solo agricultores (rol 2)</p>
+     * 
+     * <p><strong>Ejemplo de petición:</strong></p>
+     * <pre>
+     * GET /notificacionesagricultor
+     * Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+     * </pre>
+     * 
+     * <p><strong>Ejemplo de respuesta:</strong></p>
+     * <pre>
+     * HTTP/1.1 200 OK
+     * [
+     *   {
+     *     "idNotificacion": 1,
+     *     "titulo": "Nueva tarea asignada",
+     *     "mensaje": "Se te ha asignado la tarea: Preparación del terreno",
+     *     "fechaCreacion": "2024-01-20T08:00:00",
+     *     "leida": false
+     *   }
+     * ]
+     * </pre>
+     * 
+     * @param ctx contexto de la petición HTTP
+     */
     public void obtenerTodasNotificaciones(Context ctx) {
         int rol = obtenerRol(ctx);
         int usuarioId = ctx.attribute("usuarioId");

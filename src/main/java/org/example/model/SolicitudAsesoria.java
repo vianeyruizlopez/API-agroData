@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Clase que representa una solicitud de asesoría agrícola.
+ * Los agricultores envían estas solicitudes para recibir ayuda de agrónomos.
+ */
 public class SolicitudAsesoria {
     private int idSolicitud;
     private int idAgricultor;
@@ -24,24 +28,51 @@ public class SolicitudAsesoria {
     private int idEstado;
     private List<CultivoPorSolicitud> cultivos;
 
+    /**
+     * Obtiene el nombre completo del agricultor.
+     * @return el nombre del agricultor
+     */
     public String getNombreAgricultor() { return nombreAgricultor; }
 
+    /**
+     * Establece el nombre del agricultor.
+     * @param nombreAgricultor el nombre del agricultor
+     */
     public void setNombreAgricultor(String nombreAgricultor) { this.nombreAgricultor = nombreAgricultor; }
 
+    /**
+     * Constructor vacío para crear una solicitud sin datos.
+     */
     public SolicitudAsesoria() {}
 
+    /**
+     * Obtiene el ID de la solicitud.
+     * @return el ID de la solicitud
+     */
     public int getIdSolicitud() {
         return idSolicitud;
     }
 
+    /**
+     * Establece el ID de la solicitud.
+     * @param idSolicitud el ID de la solicitud
+     */
     public void setIdSolicitud(int idSolicitud) {
         this.idSolicitud = idSolicitud;
     }
 
+    /**
+     * Obtiene el ID del agricultor que hizo la solicitud.
+     * @return el ID del agricultor
+     */
     public int getIdAgricultor() {
         return idAgricultor;
     }
 
+    /**
+     * Establece el ID del agricultor.
+     * @param idAgricultor el ID del agricultor
+     */
     public void setIdAgricultor(int idAgricultor) {
         this.idAgricultor = idAgricultor;
     }
@@ -54,6 +85,10 @@ public class SolicitudAsesoria {
         this.fechaSolicitud = fechaSolicitud;
     }
 
+    /**
+     * Verifica si el agricultor usa maquinaria.
+     * @return true si usa maquinaria, false si no
+     */
     public boolean isUsoMaquinaria() {
         return usoMaquinaria;
     }
@@ -102,6 +137,10 @@ public class SolicitudAsesoria {
         this.descripcionPlaga = descripcionPlaga;
     }
 
+    /**
+     * Obtiene la superficie total del terreno en hectáreas.
+     * @return la superficie en hectáreas
+     */
     public float getSuperficieTotal() {
         return superficieTotal;
     }
@@ -134,6 +173,10 @@ public class SolicitudAsesoria {
         this.idEstado = idEstado;
     }
 
+    /**
+     * Obtiene la lista de cultivos incluidos en la solicitud.
+     * @return lista de cultivos con sus cantidades
+     */
     public List<CultivoPorSolicitud> getCultivos() {
         return cultivos;
     }

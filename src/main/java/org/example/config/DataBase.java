@@ -4,8 +4,18 @@ import com.zaxxer.hikari.HikariConfig;
 import javax.sql.DataSource;
 import io.github.cdimascio.dotenv.Dotenv;
 
+/**
+ * Clase que maneja la configuración de la base de datos.
+ * Usa HikariCP para el pool de conexiones y carga la configuración desde variables de entorno.
+ */
 public class DataBase {
     private static HikariDataSource dataSource;
+    /**
+     * Obtiene el DataSource configurado con HikariCP.
+     * Crea la conexión solo una vez usando el patrón Singleton.
+     * Lee la configuración de la base de datos desde el archivo .env
+     * @return el DataSource configurado para conectar a MySQL
+     */
     public static DataSource getDataSource(){
         if (dataSource == null) {
            Dotenv dotenv = Dotenv.load();

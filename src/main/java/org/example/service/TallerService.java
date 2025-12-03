@@ -4,18 +4,36 @@ import org.example.repository.TallerRepositoryImpl;
 
 import java.util.List;
 
+/**
+ * Implementación del servicio para gestionar talleres agrícolas.
+ * Maneja la lógica de negocio y validaciones para la administración de talleres.
+ */
 public class TallerService implements ITallerService {
     private final TallerRepositoryImpl tallerRepository;
 
+    /**
+     * Constructor del servicio de talleres.
+     * @param repo Repositorio de talleres
+     */
     public TallerService(TallerRepositoryImpl repo) {
         this.tallerRepository = repo;
     }
 
+    /**
+     * Obtiene todos los talleres disponibles.
+     * @return Lista de talleres
+     */
     @Override
     public List<Taller> obtenerTaller() {
 
         return tallerRepository.obtenerTaller();
     }
+    /**
+     * Obtiene un taller por su ID con validación de existencia.
+     * @param id ID del taller
+     * @return Taller encontrado
+     * @throws IllegalArgumentException Si el taller no existe
+     */
     @Override
     public Taller obtenerTallerPorId(int id) {
         Taller taller = tallerRepository.obtenerTallerPorId(id);
@@ -24,6 +42,11 @@ public class TallerService implements ITallerService {
         }
         return taller;
     }
+    /**
+     * Agrega un nuevo taller con validaciones de datos.
+     * @param taller Taller a agregar
+     * @throws IllegalArgumentException Si los datos no son válidos
+     */
     @Override
     public void agregarTaller(Taller taller) {
         if (taller.getIdTaller() != 0) {
@@ -40,6 +63,11 @@ public class TallerService implements ITallerService {
         }
         tallerRepository.agregarTaller(taller);
     }
+    /**
+     * Elimina un taller con validación de existencia.
+     * @param id ID del taller a eliminar
+     * @throws IllegalArgumentException Si el taller no existe
+     */
     @Override
     public void eliminarTaller(int id) {
         boolean existe = tallerRepository.obtenerTaller().stream()
@@ -49,10 +77,21 @@ public class TallerService implements ITallerService {
         }
         tallerRepository.eliminarTaller(id);
     }
+    /**
+     * Actualiza el estado de un taller.
+     * @param id ID del taller
+     * @param nuevoEstado Nuevo estado del taller
+     */
     @Override
     public void actualizarEstadoTaller(int id, int nuevoEstado) {
         tallerRepository.actualizarEstado(id, nuevoEstado);
     }
+    /**
+     * Actualiza un taller existente con validación de duplicados.
+     * @param id ID del taller a actualizar
+     * @param tallerActualizar Datos actualizados del taller
+     * @throws IllegalArgumentException Si hay conflicto de IDs
+     */
     @Override
     public void actualizarTaller(int id, Taller tallerActualizar) {
         List<Taller> existentes = tallerRepository.obtenerTaller();

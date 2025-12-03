@@ -6,8 +6,16 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementación del repositorio para gestionar talleres agrícolas.
+ * Maneja las operaciones CRUD en la base de datos para talleres y sus costos.
+ */
 public class TallerRepositoryImpl implements TallerRepository {
 
+    /**
+     * Obtiene todos los talleres activos con su información de costo.
+     * @return Lista de talleres con estado visual calculado
+     */
     @Override
     public List<Taller> obtenerTaller() {
         List<Taller> talleres = new ArrayList<>();
@@ -47,6 +55,11 @@ public class TallerRepositoryImpl implements TallerRepository {
 
         return talleres;
     }
+    /**
+     * Obtiene un taller específico por su ID.
+     * @param id ID del taller
+     * @return Taller encontrado o null si no existe
+     */
     public Taller obtenerTallerPorId(int id) {
         String sql = """
         SELECT c.idTaller, c.nombreTaller, c.descripcion, c.idEstado, t.costo
@@ -88,6 +101,10 @@ public class TallerRepositoryImpl implements TallerRepository {
         return null;
     }
 
+    /**
+     * Agrega un nuevo taller con su costo asociado.
+     * @param taller Taller a agregar
+     */
     @Override
     public void agregarTaller(Taller taller) {
         String sqlCatalogo = "INSERT INTO catalogotaller (nombreTaller, descripcion, idEstado) VALUES (?, ?, ?)";
@@ -123,6 +140,13 @@ public class TallerRepositoryImpl implements TallerRepository {
 
     }
 
+    /**
+     * Actualiza un taller existente y su costo.
+     * @param id ID del taller a actualizar
+     * @param tallerActualizado Datos actualizados del taller
+     * @throws IllegalArgumentException Si el taller no existe
+     * @throws RuntimeException Si hay error en la transacción
+     */
     @Override
     public void actualizarTaller(int id, Taller tallerActualizado) {
         String sqlCatalogo = "UPDATE catalogotaller SET nombreTaller = ?, descripcion = ?, idEstado = ? WHERE idTaller = ?";
@@ -160,6 +184,11 @@ public class TallerRepositoryImpl implements TallerRepository {
 
     }
 
+    /**
+     * Marca un taller como inactivo (eliminación lógica).
+     * @param id ID del taller a eliminar
+     * @throws RuntimeException Si hay error en la transacción
+     */
     @Override
     public void eliminarTaller(int id) {
         String sqlDeleteCosto = "UPDATE catalogotaller set activo=0 WHERE idTaller = ?";
@@ -187,6 +216,11 @@ public class TallerRepositoryImpl implements TallerRepository {
         }
 
     }
+    /**
+     * Actualiza el estado de un taller.
+     * @param id ID del taller
+     * @param nuevoEstado Nuevo estado del taller
+     */
     public void actualizarEstado(int id, int nuevoEstado) {
         String sql = "UPDATE catalogotaller SET idEstado = ? WHERE idTaller = ?";
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -201,6 +235,11 @@ public class TallerRepositoryImpl implements TallerRepository {
         }
     }
 
+    /**
+     * Verifica si existe un taller con el ID especificado.
+     * @param id ID del taller a verificar
+     * @return true si existe, false en caso contrario
+     */
     public boolean existeTallerPorId(int id) {
         String sql = "SELECT 1 FROM catalogotaller WHERE idtaller = ?";
 

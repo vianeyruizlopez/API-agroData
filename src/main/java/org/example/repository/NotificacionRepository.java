@@ -10,11 +10,23 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Repositorio para gestionar las notificaciones del sistema.
+ * Maneja las consultas relacionadas con asesorías, talleres y tareas.
+ */
 public class NotificacionRepository {
 
+    /**
+     * Constructor por defecto del repositorio de notificaciones.
+     */
     public NotificacionRepository() {
     }
 
+    /**
+     * Obtiene las notificaciones relacionadas con asesorías.
+     * @param filtroNotificacion Filtro SQL para aplicar a la consulta
+     * @return Lista de notificaciones de asesorías
+     */
     public List<Notificacion> obtenerNotificacionesAsesorias(String filtroNotificacion) {
         List<Notificacion> notificacionList = new ArrayList<>();
 
@@ -36,6 +48,11 @@ public class NotificacionRepository {
         return notificacionList;
     }
 
+    /**
+     * Obtiene las notificaciones relacionadas con talleres.
+     * @param filtroNotificacion Filtro SQL para aplicar a la consulta
+     * @return Lista de notificaciones de talleres
+     */
     public List<Notificacion> obtenerNotificacionesTalleres(String filtroNotificacion) {
         List<Notificacion> notificacionList = new ArrayList<>();
 
@@ -57,6 +74,11 @@ public class NotificacionRepository {
         return notificacionList;
     }
 
+    /**
+     * Obtiene las notificaciones relacionadas con tareas.
+     * @param filtroNotificacion Filtro SQL para aplicar a la consulta
+     * @return Lista de notificaciones de tareas
+     */
     public List<Notificacion> obtenerNotificacionesTareas(String filtroNotificacion) {
         List<Notificacion> notificacionList = new ArrayList<>();
 
@@ -81,6 +103,12 @@ public class NotificacionRepository {
         return notificacionList;
     }
 
+    /**
+     * Mapea un ResultSet a una notificación de asesoría.
+     * @param rs ResultSet con los datos de la consulta
+     * @return Notificación mapeada
+     * @throws SQLException Si ocurre un error al acceder a los datos
+     */
     private Notificacion mapearAsesoria(ResultSet rs) throws SQLException {
         Notificacion notificacion = new Notificacion();
         notificacion.setIdNotificacion(rs.getInt("idSolicitud"));
@@ -89,6 +117,12 @@ public class NotificacionRepository {
         return notificacion;
     }
 
+    /**
+     * Mapea un ResultSet a una notificación de taller.
+     * @param rs ResultSet con los datos de la consulta
+     * @return Notificación mapeada
+     * @throws SQLException Si ocurre un error al acceder a los datos
+     */
     private Notificacion mapearTaller(ResultSet rs) throws SQLException {
         Notificacion notificacion = new Notificacion();
         notificacion.setIdNotificacion(rs.getInt("idSolicitudTaller"));
@@ -97,6 +131,12 @@ public class NotificacionRepository {
         return notificacion;
     }
 
+    /**
+     * Mapea un ResultSet a una notificación de tarea.
+     * @param rs ResultSet con los datos de la consulta
+     * @return Notificación mapeada
+     * @throws SQLException Si ocurre un error al acceder a los datos
+     */
     private Notificacion mapearTarea(ResultSet rs) throws SQLException {
         Notificacion notificacion = new Notificacion();
         notificacion.setIdNotificacion(rs.getInt("idTarea"));

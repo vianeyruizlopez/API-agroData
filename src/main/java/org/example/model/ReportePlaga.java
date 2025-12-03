@@ -3,6 +3,10 @@ package org.example.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 
+/**
+ * Clase que representa un reporte de plaga en los cultivos.
+ * Los agricultores reportan plagas con imágenes y descripciones.
+ */
 public class ReportePlaga {
     private int idReportePlaga;
     private int idPlan;
@@ -16,8 +20,15 @@ public class ReportePlaga {
     private int idEstado;
     private int idTarea;
 
+    /**
+     * Constructor vacío para crear un reporte de plaga sin datos.
+     */
     public ReportePlaga() {}
 
+    /**
+     * Obtiene el ID del reporte de plaga.
+     * @return el ID del reporte
+     */
     public int getIdReportePlaga() {
         return idReportePlaga;
     }
@@ -34,6 +45,10 @@ public class ReportePlaga {
         this.idPlan = idPlan;
     }
 
+    /**
+     * Obtiene la fecha del reporte de plaga.
+     * @return la fecha y hora del reporte
+     */
     public LocalDateTime getFechaReporte() {
         return fechaReporte;
     }
@@ -42,6 +57,10 @@ public class ReportePlaga {
         this.fechaReporte = fechaReporte;
     }
 
+    /**
+     * Obtiene el tipo de plaga reportada.
+     * @return el tipo de plaga
+     */
     public String getTipoPlaga() {
         return tipoPlaga;
     }
@@ -58,6 +77,10 @@ public class ReportePlaga {
         this.descripcion = descripcion;
     }
 
+    /**
+     * Obtiene la imagen de la plaga.
+     * @return la imagen en formato base64 o URL
+     */
     public String getImagen() {
         return imagen;
     }
@@ -82,6 +105,10 @@ public class ReportePlaga {
         this.idTarea = idTarea;
     }
 
+    /**
+     * Convierte el reporte de plaga a texto.
+     * @return cadena con la información del reporte
+     */
     @Override
     public String toString() {
         return "ReportePlaga{" +

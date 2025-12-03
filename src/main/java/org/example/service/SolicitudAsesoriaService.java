@@ -7,6 +7,10 @@ import org.example.repository.SolicitudAsesoriaRepository;
 import org.example.model.CultivoPorSolicitud;
 import java.util.List;
 
+/**
+ * Servicio que implementa la lógica de negocio para solicitudes de asesoría.
+ * Maneja la creación, consulta y actualización de solicitudes.
+ */
 public class SolicitudAsesoriaService implements ISolicitudAsesoriaService {
 
     private final SolicitudAsesoriaRepository solicitudAsesoriaRepository = new SolicitudAsesoriaRepository();
@@ -15,6 +19,11 @@ public class SolicitudAsesoriaService implements ISolicitudAsesoriaService {
 
     private static final int ESTADO_ACEPTADA = 2;
 
+    /**
+     * Obtiene una solicitud por ID incluyendo sus cultivos asociados.
+     * @param id el ID de la solicitud
+     * @return la solicitud con sus cultivos o null si no existe
+     */
     @Override
     public SolicitudAsesoria obtenerSolicitudAsesoriaPorId(int id) {
         SolicitudAsesoria solicitud = solicitudAsesoriaRepository.obtenerPorId(id);
@@ -25,11 +34,20 @@ public class SolicitudAsesoriaService implements ISolicitudAsesoriaService {
         return solicitud;
     }
 
+    /**
+     * Obtiene todas las solicitudes de asesoría del sistema.
+     * @return lista de todas las solicitudes
+     */
     @Override
     public List<SolicitudAsesoria> obtenerTodasLasSolicitudes() {
         return solicitudAsesoriaRepository.obtenerTodas();
     }
 
+    /**
+     * Actualiza el estado de una solicitud y genera plan de cultivo si es aceptada.
+     * @param id el ID de la solicitud
+     * @param nuevoEstado el nuevo estado (2 = aceptada genera plan automáticamente)
+     */
     @Override
     public void actualizarEstadoSolicitudAsesoria(int id, int nuevoEstado) {
 
@@ -51,11 +69,19 @@ public class SolicitudAsesoriaService implements ISolicitudAsesoriaService {
         }
     }
 
+    /**
+     * Elimina una solicitud de asesoría del sistema.
+     * @param id el ID de la solicitud a eliminar
+     */
     @Override
     public void eliminarSolicitudAsesoria(int id) {
         solicitudAsesoriaRepository.eliminar(id);
     }
 
+    /**
+     * Agrega una nueva solicitud incluyendo sus cultivos asociados.
+     * @param solicitud la solicitud a agregar con sus cultivos
+     */
     @Override
     public void agregarSolicitudAsesoria(SolicitudAsesoria solicitud) {
         try {

@@ -9,14 +9,26 @@ import org.example.controller.SolicitudAsesoriaController;
 import org.example.service.SolicitudAsesoriaService;
 import org.example.util.JwtUtil;
 
+/**
+ * Configurador de rutas para solicitudes de asesoría.
+ * Define las rutas HTTP y middlewares de autenticación para solicitudes.
+ */
 public class RoutesSolicitudAsesoria {
     private final SolicitudAsesoriaController controller;
 
+    /**
+     * Constructor que inicializa el servicio y controlador de solicitudes.
+     */
     public RoutesSolicitudAsesoria() {
         SolicitudAsesoriaService service = new SolicitudAsesoriaService();
         this.controller = new SolicitudAsesoriaController(service);
     }
 
+    /**
+     * Registra todas las rutas de solicitudes de asesoría en la aplicación.
+     * Incluye middlewares de autenticación y autorización por rol.
+     * @param app la instancia de Javalin donde registrar las rutas
+     */
     public void register(Javalin app) {
 
         Handler validarToken = ctx -> {

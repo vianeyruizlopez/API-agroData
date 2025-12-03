@@ -9,9 +9,16 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import org.example.util.JwtUtil;
 
+/**
+ * Configurador de rutas para proyectos y planes de cultivo.
+ * Define rutas para consultar y actualizar planes de cultivo.
+ */
 public class RoutesProyectos {
     private final ProyectosController controller;
 
+    /**
+     * Constructor que inicializa el servicio y controlador de proyectos.
+     */
     public RoutesProyectos() {
         ProyectosService servicio = new ProyectosService();
         this.controller = new ProyectosController(servicio);
@@ -69,10 +76,19 @@ public class RoutesProyectos {
         }
     };
 
+    /**
+     * Obtiene el nombre del tipo de un objeto.
+     * @param obj el objeto
+     * @return nombre del tipo o "null"
+     */
     private String tipo(Object obj) {
         return obj != null ? obj.getClass().getSimpleName() : "null";
     }
 
+    /**
+     * Registra todas las rutas de proyectos y planes de cultivo.
+     * @param app la instancia de Javalin donde registrar las rutas
+     */
     public void register(Javalin app) {
 
         app.before("/obtenerPlanCultivos", validarToken);

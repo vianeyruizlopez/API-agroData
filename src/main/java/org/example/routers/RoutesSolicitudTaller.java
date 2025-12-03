@@ -9,14 +9,25 @@ import org.example.controller.SolicitudTallerController;
 import org.example.service.SolicitudTallerService;
 import org.example.util.JwtUtil;
 
+/**
+ * Configurador de rutas para solicitudes de talleres.
+ * Permite a agricultores solicitar talleres y a agrónomos gestionarlas.
+ */
 public class RoutesSolicitudTaller {
     private final SolicitudTallerController controller;
 
+    /**
+     * Constructor que inicializa el servicio y controlador de solicitudes.
+     */
     public RoutesSolicitudTaller() {
         SolicitudTallerService service = new SolicitudTallerService();
         this.controller = new SolicitudTallerController(service);
     }
 
+    /**
+     * Registra todas las rutas de solicitudes de talleres.
+     * @param app la instancia de Javalin donde registrar las rutas
+     */
     public void register(Javalin app) {
 
         Handler validarToken = ctx -> {

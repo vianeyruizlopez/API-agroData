@@ -9,14 +9,26 @@ import org.example.controller.TareaController;
 import org.example.service.TareaService;
 import org.example.util.JwtUtil;
 
+/**
+ * Configurador de rutas para tareas agrícolas.
+ * Define las rutas HTTP para manejo de tareas y reportes de plaga.
+ */
 public class RoutesTarea {
     private final TareaController controller;
 
+    /**
+     * Constructor que inicializa el servicio y controlador de tareas.
+     */
     public RoutesTarea() {
         TareaService service = new TareaService();
         this.controller = new TareaController(service);
     }
 
+    /**
+     * Registra todas las rutas de tareas en la aplicación.
+     * Incluye rutas para tareas y reportes de plaga con autenticación.
+     * @param app la instancia de Javalin donde registrar las rutas
+     */
     public void register(Javalin app) {
 
         Handler validarToken = ctx -> {

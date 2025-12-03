@@ -9,13 +9,26 @@ import org.example.service.SolicitudAsesoriaService;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controlador que maneja las peticiones HTTP relacionadas con solicitudes de asesoría.
+ * Los agricultores crean solicitudes y los agrónomos las gestionan.
+ */
 public class SolicitudAsesoriaController {
     private final ISolicitudAsesoriaService service;
 
+    /**
+     * Constructor que recibe el servicio de solicitudes de asesoría.
+     * @param service el servicio para manejar la lógica de solicitudes
+     */
     public SolicitudAsesoriaController(ISolicitudAsesoriaService service) {
         this.service = service;
     }
 
+    /**
+     * Obtiene una solicitud de asesoría por su ID.
+     * Solo accesible para agrónomos.
+     * @param ctx el contexto de la petición HTTP
+     */
     public void obtenerPorId(Context ctx) {
         try {
             int rol = extraerRol(ctx);
@@ -40,6 +53,56 @@ public class SolicitudAsesoriaController {
         }
     }
 
+    /**
+     * Obtiene todas las solicitudes de asesoría.
+     * 
+     * <p><strong>Endpoint:</strong> GET /solicitudasesoria</p>
+     * <p><strong>Acceso:</strong> Solo agrónomos (rol 1)</p>
+     * 
+     * <p><strong>Ejemplo de petición:</strong></p>
+     * <pre>
+     * GET /solicitudasesoria
+     * Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+     * </pre>
+     * 
+     * <p><strong>Ejemplo de respuesta:</strong></p>
+     * <pre>
+     * HTTP/1.1 200 OK
+     * [
+     *   {
+     *     "idSolicitud": 1,
+     *     "idAgricultor": 1,
+     *     "nombreAgricultor": "Juan Pérez García",
+     *     "fechaSolicitud": "2024-01-15T10:30:00",
+     *     "usoMaquinaria": true,
+     *     "nombreMaquinaria": "Tractor John Deere",
+     *     "tipoRiego": 1,
+     *     "nombreRiego": "Goteo",
+     *     "tienePlaga": false,
+     *     "superficieTotal": 10.5,
+     *     "direccionTerreno": "Parcela 123, Sector Norte",
+     *     "motivoAsesoria": "Optimización de cultivo de chayote",
+     *     "idEstado": 1,
+     *     "cultivos": [
+     *       {
+     *         "idCultivo": 1,
+     *         "nombreCultivo": "Chayote",
+     *         "cantidad": 100
+     *       }
+     *     ]
+     *   }
+     * ]
+     * </pre>
+     * 
+     * <p><strong>Respuestas:</strong></p>
+     * <ul>
+     *   <li>200 OK: Lista de solicitudes</li>
+     *   <li>403 Forbidden: Solo agrónomos pueden ver solicitudes</li>
+     *   <li>500 Internal Server Error: Error interno</li>
+     * </ul>
+     * 
+     * @param ctx el contexto de la petición HTTP
+     */
     public void obtenerTodas(Context ctx) {
         try {
             int rol = extraerRol(ctx);
@@ -58,6 +121,48 @@ public class SolicitudAsesoriaController {
         }
     }
 
+    /**
+     * Registra una nueva solicitud de asesoría.
+     * 
+     * <p><strong>Endpoint:</strong> POST /solicitudasesoria</p>
+     * <p><strong>Acceso:</strong> Solo agricultores (rol 2)</p>
+     * <p><strong>Headers requeridos:</strong> Authorization, confirmado: true</p>
+     * 
+     * <p><strong>Ejemplo de petición:</strong></p>
+     * <pre>
+     * POST /solicitudasesoria
+     * Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+     * confirmado: true
+     * Content-Type: application/json
+     * 
+     * {
+     *   "idAgricultor": 1,
+     *   "usoMaquinaria": true,
+     *   "nombreMaquinaria": "Tractor John Deere",
+     *   "tipoRiego": 1,
+     *   "tienePlaga": false,
+     *   "superficieTotal": 10.5,
+     *   "direccionTerreno": "Parcela 123, Sector Norte",
+     *   "motivoAsesoria": "Optimización de cultivo de maíz",
+     *   "cultivos": [
+     *     {
+     *       "idCultivo": 1,
+     *       "cantidad": 100
+     *     }
+     *   ]
+     * }
+     * </pre>
+     * 
+     * <p><strong>Respuestas:</strong></p>
+     * <ul>
+     *   <li>201 Created: Solicitud creada exitosamente</li>
+     *   <li>400 Bad Request: Error de validación o falta confirmación</li>
+     *   <li>403 Forbidden: Solo agricultores pueden crear solicitudes</li>
+     *   <li>500 Internal Server Error: Error interno</li>
+     * </ul>
+     * 
+     * @param ctx el contexto de la petición HTTP
+     */
     public void registrar(Context ctx) {
         try {
             int rol = extraerRol(ctx);
@@ -96,6 +201,36 @@ public class SolicitudAsesoriaController {
         }
     }
 
+    /**
+     * Actualiza el estado de una solicitud de asesoría.
+     * 
+     * <p><strong>Endpoint:</strong> PATCH /solicitudasesoria/{id}/{estado}</p>
+     * <p><strong>Acceso:</strong> Solo agrónomos (rol 1)</p>
+     * 
+     * <p><strong>Estados disponibles:</strong></p>
+     * <ul>
+     *   <li>1: Pendiente</li>
+     *   <li>2: Aceptada</li>
+     *   <li>3: Rechazada</li>
+     *   <li>4: En revisión</li>
+     *   <li>5: Completado</li>
+     * </ul>
+     * 
+     * <p><strong>Ejemplo de petición:</strong></p>
+     * <pre>
+     * PATCH /solicitudasesoria/1/2
+     * Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+     * </pre>
+     * 
+     * <p><strong>Respuestas:</strong></p>
+     * <ul>
+     *   <li>200 OK: "Estado actualizado correctamente"</li>
+     *   <li>403 Forbidden: Solo agrónomos pueden actualizar</li>
+     *   <li>500 Internal Server Error: Error interno</li>
+     * </ul>
+     * 
+     * @param ctx el contexto de la petición HTTP
+     */
     public void actualizarEstado(Context ctx) {
         try {
             int rol = extraerRol(ctx);
@@ -116,6 +251,11 @@ public class SolicitudAsesoriaController {
         }
     }
 
+    /**
+     * Elimina una solicitud de asesoría.
+     * Solo accesible para agrónomos.
+     * @param ctx el contexto de la petición HTTP
+     */
     public void eliminar(Context ctx) {
         try {
             int rol = extraerRol(ctx);
@@ -136,16 +276,31 @@ public class SolicitudAsesoriaController {
     }
 
 
+    /**
+     * Extrae el rol del usuario del contexto.
+     * @param ctx el contexto de la petición
+     * @return el rol del usuario
+     */
     private int extraerRol(Context ctx) {
         Object rolAttr = ctx.attribute("rol");
         return extraerEnteroSeguro(rolAttr);
     }
 
+    /**
+     * Extrae el ID del usuario del contexto.
+     * @param ctx el contexto de la petición
+     * @return el ID del usuario
+     */
     private int extraerUsuarioId(Context ctx) {
         Object idAttr = ctx.attribute("usuarioId");
         return extraerEnteroSeguro(idAttr);
     }
 
+    /**
+     * Convierte un objeto a entero de forma segura.
+     * @param valor el valor a convertir
+     * @return el entero convertido o -1 si no se puede
+     */
     private int extraerEnteroSeguro(Object valor) {
         if (valor instanceof Integer) {
             return (Integer) valor;
@@ -163,6 +318,11 @@ public class SolicitudAsesoriaController {
         return -1;
     }
 
+    /**
+     * Obtiene el nombre del tipo de un objeto.
+     * @param obj el objeto
+     * @return el nombre del tipo
+     */
     private String tipo(Object obj) {
         return obj != null ? obj.getClass().getSimpleName() : "null";
     }

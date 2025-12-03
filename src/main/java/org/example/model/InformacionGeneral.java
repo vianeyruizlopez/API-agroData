@@ -1,5 +1,9 @@
 package org.example.model;
 
+/**
+ * Clase que contiene información general de usuarios para el dashboard.
+ * Incluye datos personales y estadísticas de cultivos.
+ */
 public class InformacionGeneral {
     private int idUsuario;
     private String nombre;
@@ -11,9 +15,16 @@ public class InformacionGeneral {
     private float superficieTotal ;
     private String cultivos;
 
+    /**
+     * Constructor vacío para crear información general sin datos.
+     */
     public InformacionGeneral() {
     }
 
+    /**
+     * Obtiene el ID del usuario.
+     * @return el ID del usuario
+     */
     public int getIdUsuario() {
         return idUsuario;
     }
@@ -70,6 +81,10 @@ public class InformacionGeneral {
         this.direcciones = direcciones;
     }
 
+    /**
+     * Obtiene la superficie total de cultivos en hectáreas.
+     * @return la superficie total
+     */
     public float getSuperficieTotal() {
         return superficieTotal;
     }
@@ -78,6 +93,10 @@ public class InformacionGeneral {
         this.superficieTotal = superficieTotal;
     }
 
+    /**
+     * Obtiene la lista de cultivos como cadena.
+     * @return los cultivos del usuario
+     */
     public String getCultivos() {
         return cultivos;
     }
@@ -86,6 +105,10 @@ public class InformacionGeneral {
         this.cultivos = cultivos;
     }
 
+    /**
+     * Convierte la información general a texto.
+     * @return cadena con toda la información del usuario
+     */
     @Override
     public String toString() {
         return "InformacionGeneral{" +

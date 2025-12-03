@@ -1,7 +1,16 @@
 package org.example.Validator;
 import org.example.model.SolicitudTaller;
 
+/**
+ * Validador para solicitudes de taller.
+ * Verifica que todos los campos obligatorios estén presentes y sean válidos.
+ */
 public class SolicitudTallerValidator {
+    /**
+     * Valida una solicitud de taller verificando todos los campos obligatorios.
+     * @param solicitud la solicitud de taller a validar
+     * @return null si es válida, o un mensaje de error si hay problemas
+     */
     public static String validar(SolicitudTaller solicitud) {
         if (solicitud == null) {
             return "La solicitud está vacía";

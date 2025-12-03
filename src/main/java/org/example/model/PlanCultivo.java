@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Clase que representa un plan de cultivo generado por un agrónomo.
+ * Contiene toda la información del plan incluyendo fechas, cultivos y progreso.
+ */
 public class PlanCultivo {
     private int idPlan;
     private int idSolicitud;
@@ -31,8 +35,15 @@ public class PlanCultivo {
     private List<CultivoPorSolicitud> cultivoPorSolicitud;
     private List<ReportePlaga> reportePlagas;
 
+    /**
+     * Constructor vacío para crear un plan de cultivo sin datos.
+     */
     public PlanCultivo() {}
 
+    /**
+     * Obtiene el ID del plan de cultivo.
+     * @return el ID del plan
+     */
     public int getIdPlan() {
         return idPlan;
     }
@@ -113,6 +124,10 @@ public class PlanCultivo {
         this.fechaInicio = fechaInicio;
     }
 
+    /**
+     * Obtiene la superficie total del terreno en hectáreas.
+     * @return la superficie total
+     */
     public float getSuperficieTotal() {
         return superficieTotal;
     }
@@ -153,6 +168,10 @@ public class PlanCultivo {
         this.totalTareasCompletas = totalTareasCompletas;
     }
 
+    /**
+     * Obtiene el porcentaje de avance del plan.
+     * @return el porcentaje de avance (0-100)
+     */
     public float getPorcentajeAvance() {
         return porcentajeAvance;
     }
@@ -161,6 +180,10 @@ public class PlanCultivo {
         this.porcentajeAvance = porcentajeAvance;
     }
 
+    /**
+     * Obtiene la lista de cultivos del plan.
+     * @return lista de cultivos asociados al plan
+     */
     public List<CultivoPorSolicitud> getCultivoPorSolicitud() {
         return cultivoPorSolicitud;
     }
@@ -169,6 +192,10 @@ public class PlanCultivo {
         this.cultivoPorSolicitud = cultivoPorSolicitud;
     }
 
+    /**
+     * Obtiene la lista de reportes de plaga del plan.
+     * @return lista de reportes de plaga
+     */
     public List<ReportePlaga> getReportePlagas() {
         return reportePlagas;
     }
@@ -177,6 +204,10 @@ public class PlanCultivo {
         this.reportePlagas = reportePlagas;
     }
 
+    /**
+     * Convierte el plan de cultivo a una representación de texto.
+     * @return cadena con toda la información del plan
+     */
     @Override
     public String toString() {
         return "PlanCultivo{" +

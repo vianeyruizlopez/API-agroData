@@ -9,7 +9,16 @@ import io.javalin.http.UnauthorizedResponse;
 import io.jsonwebtoken.Claims;
 import org.example.util.JwtUtil;
 
+/**
+ * Configurador de rutas para usuarios.
+ * Define todas las rutas HTTP relacionadas con usuarios y autenticación.
+ */
 public class RoutesUsuario {
+    /**
+     * Registra todas las rutas de usuario en la aplicación Javalin.
+     * Incluye rutas públicas (registro, login) y protegidas (perfil, administración).
+     * @param app la instancia de Javalin donde registrar las rutas
+     */
     public void register(Javalin app) {
         UsuarioRepository repository = new UsuarioRepository();
         UsuarioService service = new UsuarioService(repository);

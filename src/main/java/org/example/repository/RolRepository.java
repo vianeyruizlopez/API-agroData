@@ -7,7 +7,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Repositorio para gestionar los roles de usuario del sistema.
+ * Maneja las consultas relacionadas con el catálogo de roles.
+ */
 public class RolRepository {
+    /**
+     * Obtiene un rol por su ID.
+     * @param idRol ID del rol a buscar
+     * @return Objeto Rol encontrado o null si no existe
+     */
     public Rol obtenerPorId(int idRol) {
         Rol rol = null;
         String sql = "SELECT * FROM catalogorol WHERE idRol = ?";

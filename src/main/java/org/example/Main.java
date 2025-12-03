@@ -7,6 +7,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+/**
+ * Clase principal que inicia la aplicación AgroData API.
+ * Configura el servidor Javalin, CORS y registra todas las rutas.
+ */
 public class Main {
 
 
@@ -42,6 +46,11 @@ public class Main {
             Pattern.compile("https://127\\.0\\.0\\.1(:\\d+)?")
     };
 
+    /**
+     * Método principal que inicia el servidor en el puerto 7000.
+     * Configura CORS para permitir conexiones desde diferentes orígenes.
+     * @param args argumentos de línea de comandos
+     */
     public static void main(String[] args) {
         Javalin app = Javalin.create().start("0.0.0.0", 7000);
 
@@ -70,6 +79,11 @@ public class Main {
         System.out.println(" CORS configurado para AWS y desarrollo local (cualquier puerto)");
     }
 
+    /**
+     * Determina qué origen está permitido para las peticiones CORS.
+     * @param origin el origen de la petición HTTP
+     * @return el origen permitido para CORS
+     */
     private static String determineAllowedOrigin(String origin) {
         if (origin == null || origin.trim().isEmpty()) {
             return getDefaultOrigin();
@@ -105,6 +119,10 @@ public class Main {
         return getDefaultOrigin();
     }
 
+    /**
+     * Obtiene el origen por defecto según el entorno.
+     * @return origen por defecto para desarrollo o producción
+     */
     private static String getDefaultOrigin() {
         String env = System.getenv("NODE_ENV");
         if ("production".equals(env)) {
@@ -113,6 +131,10 @@ public class Main {
         return "http://localhost:3000";
     }
 
+    /**
+     * Registra todas las rutas de la aplicación.
+     * @param app instancia de Javalin donde registrar las rutas
+     */
     private static void registerRoutes(Javalin app) {
         new RoutesCatalogoCultivo().register(app);
         new RoutesEstado().register(app);

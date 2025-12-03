@@ -10,7 +10,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Repositorio para gestionar los tipos de terreno (riego).
+ * Maneja las consultas del catálogo de tipos de riego disponibles.
+ */
 public class TipoTerrenoRepository {
+    /**
+     * Obtiene todos los tipos de riego disponibles.
+     * @return Lista de tipos de terreno (riego)
+     */
     public List<TipoTerreno> obtener() {
         List<TipoTerreno> tipoTerreno = new ArrayList<>();
 
@@ -33,6 +41,11 @@ public class TipoTerrenoRepository {
 
         return tipoTerreno;
     }
+    /**
+     * Obtiene un tipo de riego por su ID.
+     * @param id ID del tipo de riego
+     * @return Tipo de terreno encontrado o null si no existe
+     */
     public TipoTerreno obtenerPorId(int id) {
         String sql = "SELECT * FROM catalogoriego WHERE idRiego = ?;";
         TipoTerreno terreno = null;

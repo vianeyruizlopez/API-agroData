@@ -2,6 +2,10 @@ package org.example.model;
 
 import java.time.LocalDateTime;
 
+/**
+ * Clase que representa un reporte de desempeño de un plan de cultivo.
+ * Contiene estadísticas sobre el progreso y cumplimiento de tareas.
+ */
 public class ReporteDesempeno {
     int idReporte;
     int idPlan;
@@ -11,12 +15,23 @@ public class ReporteDesempeno {
     int tareasCompletadas;
     int tareasAceptadas;
     int tareasPendientes;
-    int tareasAtrasadas; // <-- ★ NUEVO CAMPO ★
+    /**
+     * Número de tareas atrasadas en el plan.
+     * Campo importante para evaluar el desempeño.
+     */
+    int tareasAtrasadas;
     float porcentageCompletadas;
 
+    /**
+     * Constructor vacío para crear un reporte sin datos.
+     */
     public ReporteDesempeno() {
     }
 
+    /**
+     * Obtiene el ID del reporte.
+     * @return el ID del reporte
+     */
     public int getIdReporte() {
         return idReporte;
     }
@@ -33,6 +48,10 @@ public class ReporteDesempeno {
         this.idPlan = idPlan;
     }
 
+    /**
+     * Obtiene la fecha de generación del reporte.
+     * @return la fecha y hora de generación
+     */
     public LocalDateTime getFechaGeneracion() {
         return fechaGeneracion;
     }
@@ -81,16 +100,26 @@ public class ReporteDesempeno {
         this.tareasPendientes = tareasPendientes;
     }
 
-    // --- ★ GETTER Y SETTER PARA 'tareasAtrasadas' ★ ---
+    /**
+     * Obtiene el número de tareas atrasadas.
+     * @return el número de tareas atrasadas
+     */
     public int getTareasAtrasadas() {
         return tareasAtrasadas;
     }
 
+    /**
+     * Establece el número de tareas atrasadas.
+     * @param tareasAtrasadas el número de tareas atrasadas
+     */
     public void setTareasAtrasadas(int tareasAtrasadas) {
         this.tareasAtrasadas = tareasAtrasadas;
     }
-    // --- ★ FIN DE GETTER Y SETTER ★ ---
 
+    /**
+     * Obtiene el porcentaje de tareas completadas.
+     * @return el porcentaje de completado (0-100)
+     */
     public float getPorcentageCompletadas() {
         return porcentageCompletadas;
     }
@@ -99,6 +128,10 @@ public class ReporteDesempeno {
         this.porcentageCompletadas = porcentageCompletadas;
     }
 
+    /**
+     * Convierte el reporte a una representación de texto.
+     * @return cadena con toda la información del reporte
+     */
     @Override
     public String toString() {
         return "ReporteDesempeno{" +

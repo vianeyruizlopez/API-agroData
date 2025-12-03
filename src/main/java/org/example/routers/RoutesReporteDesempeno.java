@@ -9,14 +9,25 @@ import org.example.controller.ReporteDesempenoController;
 import org.example.service.ReporteDesempenoService;
 import org.example.util.JwtUtil;
 
+/**
+ * Configurador de rutas para reportes de desempeño.
+ * Solo accesible para agrónomos.
+ */
 public class RoutesReporteDesempeno {
     private final ReporteDesempenoController controller;
 
+    /**
+     * Constructor que inicializa el servicio y controlador de reportes.
+     */
     public RoutesReporteDesempeno() {
         ReporteDesempenoService service = new ReporteDesempenoService();
         this.controller = new ReporteDesempenoController(service);
     }
 
+    /**
+     * Registra todas las rutas de reportes de desempeño.
+     * @param app la instancia de Javalin donde registrar las rutas
+     */
     public void register(Javalin app) {
 
         Handler validarTokenAgronomo = ctx -> {

@@ -10,8 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repositorio para manejar operaciones de base de datos de usuarios.
+ * Incluye CRUD completo y consultas especializadas.
+ */
 public class UsuarioRepository {
 
+    /**
+     * Registra un nuevo usuario en la base de datos.
+     * @param usuario el usuario a registrar
+     * @throws SQLException si hay error en la base de datos
+     */
     public void registrarUsuario(Usuario usuario) throws SQLException {
         String sql = "INSERT INTO usuario (nombre, apellidoPaterno, apellidoMaterno, telefono, correo, contraseña, imagenPerfil, rol) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -28,6 +37,12 @@ public class UsuarioRepository {
         }
     }
 
+    /**
+     * Verifica si un correo ya existe en la base de datos.
+     * @param correo el correo a verificar
+     * @return true si existe, false si no
+     * @throws SQLException si hay error en la base de datos
+     */
     public boolean correoExiste(String correo) throws SQLException {
         String sql = "SELECT COUNT(*) FROM usuario WHERE correo = ?";
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -38,6 +53,12 @@ public class UsuarioRepository {
         }
     }
 
+    /**
+     * Obtiene un usuario por su correo electrónico.
+     * @param correo el correo del usuario
+     * @return Optional con el usuario o vacío si no existe
+     * @throws SQLException si hay error en la base de datos
+     */
     public Optional<Usuario> obtenerPorCorreo(String correo) throws SQLException {
         String sql = "SELECT * FROM usuario WHERE correo = ?";
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -51,6 +72,12 @@ public class UsuarioRepository {
         return Optional.empty();
     }
 
+    /**
+     * Obtiene un usuario por su ID.
+     * @param id el ID del usuario
+     * @return Optional con el usuario o vacío si no existe
+     * @throws SQLException si hay error en la base de datos
+     */
     public Optional<Usuario> obtenerPorId(int id) throws SQLException {
         String sql = "SELECT * FROM usuario WHERE idUsuario = ?";
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -64,6 +91,11 @@ public class UsuarioRepository {
         return Optional.empty();
     }
 
+    /**
+     * Actualiza los datos del perfil de un usuario.
+     * @param usuario el usuario con datos actualizados
+     * @throws SQLException si hay error en la base de datos
+     */
     public void actualizarPerfil(Usuario usuario) throws SQLException {
         String sql = "UPDATE usuario SET nombre=?, apellidoPaterno=?, apellidoMaterno=?, imagenPerfil=?, telefono=?, correo=?, contraseña=?, rol=? WHERE idUsuario=?";
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -85,6 +117,12 @@ public class UsuarioRepository {
         }
     }
 
+    /**
+     * Actualiza la contraseña de un usuario.
+     * @param correo el correo del usuario
+     * @param nuevaPasswordEncriptada la nueva contraseña encriptada
+     * @throws SQLException si hay error en la base de datos
+     */
     public void actualizarPassword(String correo, String nuevaPasswordEncriptada) throws SQLException {
         String sql = "UPDATE usuario SET contraseña = ? WHERE correo = ?";
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -95,6 +133,11 @@ public class UsuarioRepository {
         }
     }
 
+    /**
+     * Obtiene información general de usuarios para el dashboard.
+     * @return lista con información consolidada de usuarios
+     * @throws SQLException si hay error en la base de datos
+     */
     public List<InformacionGeneral> obtenerInformacionGeneral() throws SQLException {
         List<InformacionGeneral> informacionGeneralList = new ArrayList<>();
         String sql = "SELECT " +
@@ -119,6 +162,12 @@ public class UsuarioRepository {
         return informacionGeneralList;
     }
 
+    /**
+     * Mapea un ResultSet a un objeto Usuario.
+     * @param rs el ResultSet de la consulta
+     * @return el usuario mapeado
+     * @throws SQLException si hay error al leer los datos
+     */
     private Usuario mapearUsuario(ResultSet rs) throws SQLException {
         Usuario u = new Usuario();
         u.setIdUsuario(rs.getInt("idUsuario"));
@@ -133,6 +182,12 @@ public class UsuarioRepository {
         return u;
     }
 
+    /**
+     * Mapea un ResultSet a un objeto InformacionGeneral.
+     * @param rs el ResultSet de la consulta
+     * @return la información general mapeada
+     * @throws SQLException si hay error al leer los datos
+     */
     private InformacionGeneral mapearInformacionGeneral(ResultSet rs) throws SQLException {
         InformacionGeneral info = new InformacionGeneral();
         info.setIdUsuario(rs.getInt("idUsuario"));
@@ -146,6 +201,11 @@ public class UsuarioRepository {
         info.setCultivos(rs.getString("cultivos"));
         return info;
     }
+    /**
+     * Obtiene todos los clientes (usuarios con rol 2).
+     * @return lista de todos los clientes
+     * @throws SQLException si hay error en la base de datos
+     */
     public List<administrarCliente> verTodosClientes() throws SQLException {
         List<administrarCliente> clientes = new ArrayList<>();
         String sql = "SELECT idUsuario, imagenPerfil, nombre, apellidoPaterno, apellidoMaterno, telefono, correo FROM usuario WHERE rol = 2";
@@ -160,6 +220,12 @@ public class UsuarioRepository {
         System.out.println(sql);
         return clientes;
     }
+    /**
+     * Mapea un ResultSet a un objeto administrarCliente.
+     * @param rs el ResultSet de la consulta
+     * @return el cliente mapeado
+     * @throws SQLException si hay error al leer los datos
+     */
     private administrarCliente mapearClientePublico(ResultSet rs) throws SQLException {
         administrarCliente u = new administrarCliente();
         u.setIdUsuario(rs.getInt("idUsuario"));
@@ -171,6 +237,12 @@ public class UsuarioRepository {
         u.setImagenPerfil(rs.getString("imagenPerfil"));
         return u;
     }
+    /**
+     * Elimina un cliente por su ID.
+     * @param id el ID del cliente a eliminar
+     * @return true si se eliminó, false si no existía
+     * @throws SQLException si hay error en la base de datos
+     */
     public boolean eliminarClientePorId(int id) throws SQLException {
         String sql = "DELETE FROM usuario WHERE rol = 2 and idUsuario = ?";
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -180,6 +252,11 @@ public class UsuarioRepository {
             return filas > 0;
         }
     }
+    /**
+     * Actualiza los datos de un cliente.
+     * @param usuario el cliente con datos actualizados
+     * @throws SQLException si hay error en la base de datos
+     */
     public void editarClientes(administrarCliente usuario) throws SQLException {
         String sql = "UPDATE usuario SET nombre=?, apellidoPaterno=?, apellidoMaterno=?, imagenPerfil=?, telefono=?, correo=? WHERE idUsuario=?";
         try (Connection conn = DataBase.getDataSource().getConnection();

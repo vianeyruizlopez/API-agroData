@@ -2,8 +2,17 @@ package org.example.Validator;
 
 import org.example.model.Tarea;
 
+/**
+ * Validador para tareas agrícolas.
+ * Verifica que las tareas tengan todos los campos obligatorios y fechas válidas.
+ */
 public class SolicitudTareaValidator {
 
+    /**
+     * Valida una tarea verificando todos los campos obligatorios.
+     * @param tarea la tarea a validar
+     * @return null si es válida, o un mensaje de error si hay problemas
+     */
     public static String validar(Tarea tarea) {
         if (tarea == null) {
             return "La tarea está vacía";

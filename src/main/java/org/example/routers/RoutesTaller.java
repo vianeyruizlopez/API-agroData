@@ -11,13 +11,24 @@ import org.example.service.ITallerService;
 import org.example.service.TallerService;
 import org.example.util.JwtUtil;
 
+/**
+ * Configurador de rutas para talleres.
+ * Define rutas CRUD para talleres agrícolas.
+ */
 public class RoutesTaller {
     private final TallerController controller;
 
+    /**
+     * Constructor que inicializa repositorio, servicio y controlador.
+     */
     public RoutesTaller() {
         ITallerService service = new TallerService(new TallerRepositoryImpl());
         this.controller = new TallerController(service);
     }
+    /**
+     * Registra todas las rutas de talleres con autenticación.
+     * @param app la instancia de Javalin donde registrar las rutas
+     */
     public void register(Javalin app) {
 
         Handler validarToken = ctx -> {

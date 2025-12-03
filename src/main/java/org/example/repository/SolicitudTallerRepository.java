@@ -11,10 +11,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Repositorio para gestionar las solicitudes de talleres agrícolas.
+ * Maneja las operaciones CRUD relacionadas con solicitudes de participación en talleres.
+ */
 public class SolicitudTallerRepository {
 
+    /**
+     * Constructor por defecto del repositorio de solicitudes de taller.
+     */
     public SolicitudTallerRepository() {}
 
+    /**
+     * Obtiene una solicitud de taller por su ID.
+     * @param id ID de la solicitud
+     * @return Solicitud de taller encontrada o null si no existe
+     */
     public SolicitudTaller obtenerPorId(int id) {
         String sql = "SELECT * FROM solicitudtaller WHERE idSolicitudTaller = ?";
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -32,6 +44,10 @@ public class SolicitudTallerRepository {
         return null;
     }
 
+    /**
+     * Obtiene todas las solicitudes de taller activas.
+     * @return Lista de solicitudes de taller con información del agricultor y taller
+     */
     public List<SolicitudTaller> obtenerTodas() {
         List<SolicitudTaller> lista = new ArrayList<>();
         String sql = """
@@ -59,6 +75,10 @@ public class SolicitudTallerRepository {
         return lista;
     }
 
+    /**
+     * Agrega una nueva solicitud de taller a la base de datos.
+     * @param solicitud Solicitud de taller a insertar
+     */
     public void agregar(SolicitudTaller solicitud) {
         String sql = """
             INSERT INTO solicitudtaller (
@@ -102,6 +122,11 @@ public class SolicitudTallerRepository {
             e.printStackTrace();
         }
     }
+    /**
+     * Obtiene las solicitudes de taller de un usuario específico.
+     * @param userId ID del usuario agricultor
+     * @return Lista de solicitudes del usuario
+     */
     public List<SolicitudTaller> obtenerSolicitudesPorUsuario(int userId) {
         List<SolicitudTaller> lista = new ArrayList<>();
 
@@ -126,6 +151,12 @@ public class SolicitudTallerRepository {
         return lista;
     }
 
+    /**
+     * Mapea un ResultSet a un objeto SolicitudTaller.
+     * @param rs ResultSet con los datos de la solicitud
+     * @return Objeto SolicitudTaller mapeado
+     * @throws SQLException Si ocurre un error al acceder a los datos
+     */
     private SolicitudTaller mapear(ResultSet rs) throws SQLException {
         SolicitudTaller s = new SolicitudTaller();
         s.setIdSolicitudTaller(rs.getInt("idSolicitudTaller"));
@@ -162,6 +193,10 @@ public class SolicitudTallerRepository {
         return s;
     }
 
+    /**
+     * Elimina una solicitud de taller de la base de datos.
+     * @param id ID de la solicitud a eliminar
+     */
     public void eliminar(int id) {
         try (Connection conn = DataBase.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement("DELETE FROM solicitudtaller WHERE idSolicitudTaller = ?")) {
@@ -172,6 +207,12 @@ public class SolicitudTallerRepository {
         }
     }
 
+    /**
+     * Actualiza la imagen de comprobante de pago y el estado de la solicitud.
+     * @param id ID de la solicitud
+     * @param imagen Imagen en base64 del comprobante
+     * @param nuevoEstado Nuevo estado de la solicitud
+     */
     public void actualizarImagenPago(int id, String imagen, int nuevoEstado) {
         String sql = "UPDATE solicitudtaller SET estadoPagoImagen = ?, idEstado = ? WHERE idSolicitudTaller = ?";
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -187,6 +228,11 @@ public class SolicitudTallerRepository {
         }
     }
 
+    /**
+     * Actualiza el estado de una solicitud de taller.
+     * @param id ID de la solicitud
+     * @param nuevoEstado Nuevo estado de la solicitud
+     */
     public void actualizarEstado(int id, int nuevoEstado) {
         String sql = "UPDATE solicitudtaller SET idEstado = ? WHERE idSolicitudTaller = ?";
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -199,6 +245,11 @@ public class SolicitudTallerRepository {
         }
     }
 
+    /**
+     * Obtiene las solicitudes de taller filtradas por estado.
+     * @param idEstado ID del estado a filtrar
+     * @return Lista de solicitudes con el estado especificado
+     */
     public List<SolicitudTaller> obtenerTalleresPorStatus(int idEstado) {
         List<SolicitudTaller> lista = new ArrayList<>();
         String sql = """
@@ -222,6 +273,12 @@ public class SolicitudTallerRepository {
 
         return lista;
     }
+    /**
+     * Obtiene estadísticas de talleres en un rango de fechas.
+     * @param fechaInicio Fecha de inicio del rango
+     * @param fechaFin Fecha de fin del rango
+     * @return Lista de mapas con estadísticas por taller
+     */
     public List<Map<String, Object>> obtenerEstadisticas(LocalDateTime fechaInicio, LocalDateTime fechaFin) {
         List<Map<String, Object>> listaEstadisticas = new ArrayList<>();
 

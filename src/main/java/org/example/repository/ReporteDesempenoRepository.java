@@ -9,10 +9,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
+/**
+ * Repositorio para gestionar los reportes de desempeño de planes de cultivo.
+ * Maneja las consultas y registros relacionados con el seguimiento de tareas.
+ */
 public class ReporteDesempenoRepository {
 
+    /**
+     * Constructor por defecto del repositorio de reportes de desempeño.
+     */
     public ReporteDesempenoRepository() {}
 
+    /**
+     * Obtiene el reporte de desempeño para un plan de cultivo específico.
+     * @param idPlan ID del plan de cultivo
+     * @return Reporte de desempeño con estadísticas de tareas
+     */
     public ReporteDesempeno obtenerReporteDesempeñoPorIdPlan(int idPlan) {
         System.out.println("→ Buscando reporte de desempeño para idPlan: " + idPlan);
         ReporteDesempeno reporteDesempeno = null;
@@ -85,6 +97,13 @@ public class ReporteDesempenoRepository {
     }
 
 
+    /**
+     * Registra un nuevo reporte de desempeño en la base de datos.
+     * @param idPlan ID del plan de cultivo
+     * @param fechaGeneracion Fecha de generación del reporte
+     * @param observaciones Observaciones del reporte
+     * @throws SQLException Si ocurre un error en la inserción
+     */
     public void registrarReporteDesempeño(int idPlan, LocalDateTime fechaGeneracion, String observaciones) throws SQLException {
         String sql = "INSERT INTO reportedesempeño (idPlan, fechaGeneracion, observaciones) VALUES (?, ?, ?)";
 
@@ -105,6 +124,12 @@ public class ReporteDesempenoRepository {
     }
 
 
+    /**
+     * Mapea un ResultSet a un objeto ReporteDesempeno.
+     * @param rs ResultSet con los datos del reporte
+     * @return Objeto ReporteDesempeno mapeado
+     * @throws SQLException Si ocurre un error al acceder a los datos
+     */
     private ReporteDesempeno mapearReporteDesempeño(ResultSet rs) throws SQLException {
         ReporteDesempeno reporte = new ReporteDesempeno();
         reporte.setTotalTareas(rs.getInt("totalTareas"));
