@@ -114,7 +114,7 @@ Content-Type: application/json
 
 ## Endpoints de la API
 
-### 🔐 Autenticación y Usuarios
+###  Autenticación y Usuarios
 
 #### Registro de Usuario
 ```http
@@ -213,7 +213,7 @@ HTTP/1.1 200 OK
 Contraseña encriptada: $2a$10$JvqsjtaMf3kgQE2MwD29YujXp69PgrSwS1f6fIeGq6iMeZWzaoRZe
 ```
 
-### 📋 Solicitudes de Asesoría
+###  Solicitudes de Asesoría
 
 #### Crear Solicitud (Solo Agricultores)
 ```http
@@ -292,7 +292,7 @@ DELETE /solicitudasesoria/{id}
 Authorization: Bearer <token>
 ```
 
-### 🎯 Tareas
+###  Tareas
 
 #### Crear Tarea (Solo Agrónomos)
 ```http
@@ -371,7 +371,7 @@ DELETE /tarea/{id}
 Authorization: Bearer <token>
 ```
 
-### 🐛 Reportes de Plaga
+###  Reportes de Plaga
 
 #### Registrar Reporte de Plaga (Solo Agricultores)
 ```http
@@ -394,7 +394,7 @@ GET /tarea/conreporteplaga
 Authorization: Bearer <token>
 ```
 
-### 🎓 Talleres
+###  Talleres
 
 #### Obtener Todos los Talleres
 ```http
@@ -471,7 +471,7 @@ DELETE /talleres/{id}
 Authorization: Bearer <token>
 ```
 
-### 🎓 Solicitudes de Taller
+###  Solicitudes de Taller
 
 #### Crear Solicitud de Taller (Solo Agricultores)
 ```http
@@ -556,7 +556,7 @@ GET /solicitudesTallerAsesoria
 Authorization: Bearer <token>
 ```
 
-### 📊 Proyectos y Planes de Cultivo
+###  Proyectos y Planes de Cultivo
 
 #### Obtener Planes de Cultivo
 ```http
@@ -597,7 +597,7 @@ Content-Type: application/json
 }
 ```
 
-### 🔔 Notificaciones
+###  Notificaciones
 
 #### Obtener Notificaciones del Agrónomo (Solo Agrónomos)
 ```http
@@ -625,7 +625,7 @@ Authorization: Bearer <token>
 ]
 ```
 
-### 📊 Catálogos
+###  Catálogos
 
 #### Obtener Catálogo de Cultivos
 ```http
@@ -716,7 +716,7 @@ GET /catalogo/tipoterreno
 GET /catalogo/tipoterreno/{id}
 ```
 
-### 📝 Registro de Actividades
+###  Registro de Actividades
 
 #### Obtener Registros de Actividad
 ```http
@@ -753,7 +753,7 @@ Content-Type: application/json
 ]
 ```
 
-### 📈 Reportes de Desempeño
+###  Reportes de Desempeño
 
 #### Obtener Reporte de Desempeño (Solo Agrónomos)
 ```http
@@ -785,7 +785,7 @@ Content-Type: application/json
 }
 ```
 
-### 📈 Información General (Solo Agrónomos)
+###  Información General (Solo Agrónomos)
 
 #### Obtener Dashboard de Información General
 ```http
@@ -827,7 +827,7 @@ DELETE /tarea/{id}
 Authorization: Bearer <token>
 ```
 
-### 🐛 Reportes de Plaga
+###  Reportes de Plaga
 
 #### Registrar Reporte de Plaga (Solo Agricultores)
 ```http
@@ -850,7 +850,7 @@ GET /tarea/conreporteplaga
 Authorization: Bearer <token>
 ```
 
-### 🎓 Talleres
+###  Talleres
 
 #### Obtener Todos los Talleres
 ```http
@@ -927,7 +927,7 @@ DELETE /talleres/{id}
 Authorization: Bearer <token>
 ```
 
-### 📊 Proyectos y Planes de Cultivo
+###  Proyectos y Planes de Cultivo
 
 #### Obtener Planes de Cultivo
 ```http
@@ -968,7 +968,7 @@ Content-Type: application/json
 }
 ```
 
-### 🔔 Notificaciones
+###  Notificaciones
 
 #### Obtener Notificaciones del Agrónomo (Solo Agrónomos)
 ```http
@@ -996,7 +996,7 @@ Authorization: Bearer <token>
 ]
 ```
 
-### 🎓 Solicitudes de Taller
+###  Solicitudes de Taller
 
 #### Crear Solicitud de Taller (Solo Agricultores)
 ```http
@@ -1087,7 +1087,7 @@ Authorization: Bearer <token>
 ]
 ```
 
-### 📊 Catálogos
+###  Catálogos
 
 #### Obtener Catálogo de Cultivos
 ```http
@@ -1178,7 +1178,7 @@ GET /catalogo/tipoterreno
 GET /catalogo/tipoterreno/{id}
 ```
 
-### 📝 Registro de Actividades
+###  Registro de Actividades
 
 #### Obtener Registros de Actividad
 ```http
@@ -1215,7 +1215,7 @@ Content-Type: application/json
 ]
 ```
 
-### 📈 Reportes de Desempeño
+###  Reportes de Desempeño
 
 #### Obtener Reporte de Desempeño (Solo Agrónomos)
 ```http
@@ -1247,7 +1247,7 @@ Content-Type: application/json
 }
 ```
 
-### 📈 Información General (Solo Agrónomos)
+###  Información General (Solo Agrónomos)
 
 #### Obtener Dashboard de Información General
 ```http
