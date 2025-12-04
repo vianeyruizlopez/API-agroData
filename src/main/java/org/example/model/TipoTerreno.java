@@ -5,7 +5,10 @@ package org.example.model;
  * Define los diferentes sistemas de riego disponibles.
  */
 public class TipoTerreno {
+    /** Identificador único del tipo de riego. */
     private int idRiego;
+
+    /** Nombre del sistema de riego (ej. Goteo, Aspersión, Temporal). */
     private String nombreRiego;
 
     /**

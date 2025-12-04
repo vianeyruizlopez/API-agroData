@@ -5,7 +5,15 @@ package org.example.model;
  * Contiene la información básica de los tipos de cultivos disponibles.
  */
 public class catalogoCultivo {
+
+    /**
+     * Identificador único del cultivo dentro del catálogo.
+     */
     private int idCultivo;
+
+    /**
+     * Nombre del cultivo (ejemplo: Chayote, Papa, Calabaza).
+     */
     private String nombreCultivo;
 
     /**
@@ -30,7 +38,6 @@ public class catalogoCultivo {
     public void setIdCultivo(int idCultivo) {
         this.idCultivo = idCultivo;
     }
-
 
     /**
      * Obtiene el nombre del cultivo.

@@ -5,8 +5,21 @@ package org.example.model;
  * Las notificaciones informan a los usuarios sobre cambios de estado.
  */
 public class Notificacion {
+
+    /**
+     * Identificador único de la notificación dentro del sistema.
+     */
     int idNotificacion;
+
+    /**
+     * Tipo de notificación (ejemplo: alerta, aviso, confirmación).
+     */
     String tipoNotificacion;
+
+    /**
+     * Nombre del estado asociado a la notificación.
+     * Indica el estado del proceso o entidad que generó la notificación.
+     */
     String nombreEstado;
 
     /**
@@ -28,7 +41,10 @@ public class Notificacion {
     public int getIdNotificacion() {
         return idNotificacion;
     }
-
+    /**
+     * Establece el ID de la notificación.
+     * @param idNotificacion el identificador único de la notificación
+     */
     public void setIdNotificacion(int idNotificacion) {
         this.idNotificacion = idNotificacion;
     }
@@ -41,6 +57,10 @@ public class Notificacion {
         return tipoNotificacion;
     }
 
+    /**
+     * Establece el tipo de notificación.
+     * @param tipoNotificacion el tipo de notificación (ejemplo: alerta, aviso, confirmación)
+     */
     public void setTipoNotificacion(String tipoNotificacion) {
         this.tipoNotificacion = tipoNotificacion;
     }

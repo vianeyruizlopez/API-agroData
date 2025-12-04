@@ -5,7 +5,15 @@ package org.example.model;
  * Los estados se usan para solicitudes, tareas y talleres.
  */
 public class Estado {
+
+    /**
+     * Identificador único del estado dentro del sistema.
+     */
     private int idEstado;
+
+    /**
+     * Nombre del estado (ejemplo: pendiente, aceptada, rechazada, etc.).
+     */
     private String nombreEstado;
 
     /**
@@ -13,6 +21,7 @@ public class Estado {
      */
     public Estado() {
     }
+
     /**
      * Constructor que crea un estado con ID y nombre.
      * @param idEstado el ID del estado

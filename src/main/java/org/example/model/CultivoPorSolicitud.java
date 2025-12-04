@@ -5,8 +5,20 @@ package org.example.model;
  * Vincula cultivos específicos con solicitudes y sus cantidades.
  */
 public class CultivoPorSolicitud {
+
+    /**
+     * Identificador único de la solicitud a la que está asociado el cultivo.
+     */
     int idSolicitud;
+
+    /**
+     * Identificador único del cultivo dentro del catálogo.
+     */
     int idCultivo;
+
+    /**
+     * Nombre del cultivo asociado a la solicitud (ejemplo: maíz, frijol, calabaza).
+     */
     String nombreCultivo;
 
     /**

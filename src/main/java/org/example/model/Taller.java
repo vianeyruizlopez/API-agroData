@@ -5,10 +5,19 @@ package org.example.model;
  * Los talleres tienen costo, descripción y estado.
  */
 public class Taller {
+    /** Identificador único del taller. */
     private int idTaller;
+
+    /** Estado actual del taller (ej. próximo, en curso, completado). */
     private int idEstado;
+
+    /** Nombre del taller agrícola. */
     private String nombreTaller;
+
+    /** Costo del taller expresado en pesos. */
     private float costo;
+
+    /** Descripción detallada del taller. */
     private String descripcion;
 
     /**
@@ -40,22 +49,42 @@ public class Taller {
         return idTaller;
     }
 
+    /**
+     * Establece el ID del taller.
+     * @param idTaller identificador único del taller
+     */
     public void setIdTaller(int idTaller) {
         this.idTaller = idTaller;
     }
 
+    /**
+     * Obtiene el estado actual del taller.
+     * @return el estado del taller
+     */
     public int getIdEstado() {
         return idEstado;
     }
 
+    /**
+     * Establece el estado actual del taller.
+     * @param idEstado estado del taller
+     */
     public void setIdEstado(int idEstado) {
         this.idEstado = idEstado;
     }
 
+    /**
+     * Obtiene el nombre del taller.
+     * @return el nombre del taller
+     */
     public String getNombreTaller() {
         return nombreTaller;
     }
 
+    /**
+     * Establece el nombre del taller.
+     * @param nombreTaller nombre del taller
+     */
     public void setNombreTaller(String nombreTaller) {
         this.nombreTaller = nombreTaller;
     }
@@ -78,10 +107,18 @@ public class Taller {
         this.costo = costo;
     }
 
+    /**
+     * Obtiene la descripción del taller.
+     * @return descripción del taller
+     */
     public String getDescripcion() {
         return descripcion;
     }
 
+    /**
+     * Establece la descripción del taller.
+     * @param descripcion descripción del taller
+     */
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }

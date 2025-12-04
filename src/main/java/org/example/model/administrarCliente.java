@@ -5,12 +5,40 @@ package org.example.model;
  * Contiene información personal como nombre, teléfono y correo.
  */
 public class administrarCliente {
+
+    /**
+     * Identificador único del usuario en el sistema.
+     */
     private int idUsuario;
+
+    /**
+     * Nombre de pila del cliente.
+     */
     private String nombre;
+
+    /**
+     * Apellido paterno del cliente.
+     */
     private String apellidoPaterno;
+
+    /**
+     * Apellido materno del cliente.
+     */
     private String apellidoMaterno;
+
+    /**
+     * Número de teléfono de contacto del cliente.
+     */
     private String telefono;
+
+    /**
+     * Dirección de correo electrónico del cliente.
+     */
     private String correo;
+
+    /**
+     * Imagen de perfil asociada al cliente (puede ser URL o ruta local).
+     */
     private String imagenPerfil;
 
     /**

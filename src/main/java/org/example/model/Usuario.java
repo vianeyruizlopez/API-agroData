@@ -6,7 +6,10 @@ package org.example.model;
  * Puede ser agrónomo (rol 1) o agricultor (rol 2).
  */
 public class Usuario extends administrarCliente {
+    /** Contraseña del usuario (debe almacenarse en formato encriptado). */
     private String password;
+
+    /** Rol del usuario dentro del sistema (1 = agrónomo, 2 = agricultor). */
     private int rol;
 
     /**

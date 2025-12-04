@@ -5,7 +5,15 @@ package org.example.model;
  * Define los permisos y accesos de agrónomos y agricultores.
  */
 public class Rol {
+
+    /**
+     * Identificador único del rol dentro del sistema.
+     */
     private int idRol;
+
+    /**
+     * Nombre del rol (ejemplo: Agrónomo o Agricultor).
+     */
     private String nombreRol;
 
     /**
@@ -13,6 +21,7 @@ public class Rol {
      */
     public Rol() {
     }
+
     /**
      * Constructor que crea un rol con ID y nombre.
      * @param idRol el ID del rol
@@ -22,7 +31,6 @@ public class Rol {
         this.idRol = idRol;
         this.nombreRol = nombreRol;
     }
-
 
     /**
      * Obtiene el ID del rol.

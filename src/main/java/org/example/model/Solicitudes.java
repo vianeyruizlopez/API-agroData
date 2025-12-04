@@ -7,7 +7,15 @@ import java.util.List;
  * Contiene listas de solicitudes de asesoría y talleres.
  */
 public class Solicitudes {
+
+    /**
+     * Lista de solicitudes de asesoría realizadas por agricultores.
+     */
     List<SolicitudAsesoria> solicitudAsesorias;
+
+    /**
+     * Lista de solicitudes de talleres registrados en el sistema.
+     */
     List<SolicitudTaller> solicitudTalleres;
 
     /**

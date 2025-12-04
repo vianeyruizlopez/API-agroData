@@ -5,52 +5,73 @@ package org.example.model;
  * Los agricultores registran sus actividades con imágenes y descripciones.
  */
 public class RegistroActividad {
+
+    /**
+     * Identificador único del registro de actividad.
+     */
     int idRegistro;
+
+    /**
+     * Identificador de la tarea asociada al registro.
+     */
     int idTarea;
+
+    /**
+     * Imagen relacionada con la actividad (formato base64 o URL).
+     */
     String imagen;
+
+    /**
+     * Descripción textual de la actividad realizada.
+     */
     String descripcion;
 
-     /**
-      * Establece el ID del registro de actividad.
-      * @param idRegistro el ID del registro
-      */
-     public void setIdRegistro(int idRegistro) {
-         this.idRegistro = idRegistro;
-     }
-     /**
-      * Obtiene el ID del registro de actividad.
-      * @return el ID del registro
-      */
-     public int getIdRegistro() {
+    /**
+     * Establece el ID del registro de actividad.
+     * @param idRegistro el ID del registro
+     */
+    public void setIdRegistro(int idRegistro) {
+        this.idRegistro = idRegistro;
+    }
+
+    /**
+     * Obtiene el ID del registro de actividad.
+     * @return el ID del registro
+     */
+    public int getIdRegistro() {
         return idRegistro;
     }
+
     /**
      * Establece el ID de la tarea asociada.
      * @param idTarea el ID de la tarea
      */
     public void setIdTarea(int idTarea) {
-         this.idTarea = idTarea;
-     }
+        this.idTarea = idTarea;
+    }
+
     /**
      * Obtiene el ID de la tarea asociada.
      * @return el ID de la tarea
      */
     public int getIdTarea() {
-        return idTarea;}
+        return idTarea;
+    }
 
     /**
      * Obtiene la imagen de la actividad.
      * @return la imagen en formato base64 o URL
      */
     public String getImagen() {
-         return imagen;
+        return imagen;
     }
+
     /**
      * Establece la imagen de la actividad.
      * @param imagen la imagen en formato base64 o URL
      */
     public void setImagen(String imagen) {
-         this.imagen = imagen;
+        this.imagen = imagen;
     }
 
     /**
@@ -58,7 +79,7 @@ public class RegistroActividad {
      * @return la descripción de la actividad
      */
     public String getDescripcion() {
-         return descripcion;
+        return descripcion;
     }
 
     /**
