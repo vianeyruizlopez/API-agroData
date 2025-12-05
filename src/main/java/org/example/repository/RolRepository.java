@@ -13,9 +13,16 @@ import java.sql.SQLException;
  */
 public class RolRepository {
     /**
+     * Constructor vacío para crear un repositorio de roles sin inicializar datos.
+     */
+    public RolRepository() {
+    }
+
+    /**
      * Obtiene un rol por su ID.
      * @param idRol ID del rol a buscar
      * @return Objeto Rol encontrado o null si no existe
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public Rol obtenerPorId(int idRol) {
         Rol rol = null;

@@ -26,6 +26,7 @@ public class ProyectosRepository {
     /**
      * Obtiene todos los planes de cultivo con información completa.
      * @return Lista de planes de cultivo con datos del agricultor y estadísticas
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public List<PlanCultivo> obtenerPlanCultivos() {
         List<PlanCultivo> planCultivoList = new ArrayList<>();
@@ -73,6 +74,7 @@ public class ProyectosRepository {
      * Obtiene los cultivos asociados a una solicitud específica.
      * @param idSolicitud ID de la solicitud
      * @return Lista de cultivos por solicitud
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public List<CultivoPorSolicitud> obtenerCultivosPorSolicitud(int idSolicitud) {
         List<CultivoPorSolicitud> cultivoPorSolicitudList = new ArrayList<>();
@@ -93,6 +95,7 @@ public class ProyectosRepository {
      * Obtiene los reportes de plaga asociados a un plan específico.
      * @param idPlan ID del plan de cultivo
      * @return Lista de reportes de plaga
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public List<ReportePlaga> obtenerReportePlagas(int idPlan) {
         List<ReportePlaga> reportePlagaList = new ArrayList<>();
@@ -114,6 +117,7 @@ public class ProyectosRepository {
      * @param idEstado Estado de las tareas completadas
      * @param idPlan ID del plan de cultivo
      * @return Array con [totalTareas, tareasCompletas]
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public int[] contarRegistros(int idEstado, int idPlan) {
         int[] registros = new int[2];
@@ -317,10 +321,10 @@ public class ProyectosRepository {
                 stmt.setString(3, "Plan generado automáticamente. Por favor, complete los detalles.");
 
                 stmt.executeUpdate();
-                System.out.println("✅ Plan de cultivo generado automáticamente para la solicitud: " + idSolicitud);
+                System.out.println(" Plan de cultivo generado automáticamente para la solicitud: " + idSolicitud);
 
             } catch (SQLException e) {
-                System.err.println("❌ Error al crear plan de cultivo automático:");
+                System.err.println(" Error al crear plan de cultivo automático:");
                 e.printStackTrace();
                 throw new RuntimeException("Error al crear el plan de cultivo", e);
             }

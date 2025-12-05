@@ -24,6 +24,7 @@ public class ReporteDesempenoRepository {
      * Obtiene el reporte de desempeño para un plan de cultivo específico.
      * @param idPlan ID del plan de cultivo
      * @return Reporte de desempeño con estadísticas de tareas
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public ReporteDesempeno obtenerReporteDesempeñoPorIdPlan(int idPlan) {
         System.out.println("→ Buscando reporte de desempeño para idPlan: " + idPlan);

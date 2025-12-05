@@ -26,6 +26,7 @@ public class TareaRepository {
      * Obtiene una tarea por su ID.
      * @param idTarea el ID de la tarea
      * @return la tarea encontrada o null si no existe
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public Tarea obtenerPorId(int idTarea) {
 
@@ -45,6 +46,7 @@ public class TareaRepository {
     /**
      * Obtiene todas las tareas del sistema.
      * @return lista de todas las tareas
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public List<Tarea> obtenerTodas() {
 
@@ -64,6 +66,7 @@ public class TareaRepository {
     /**
      * Agrega una nueva tarea al sistema.
      * @param tarea la tarea a agregar
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public void agregar(Tarea tarea) {
         String sqlTarea = """
@@ -149,6 +152,7 @@ public class TareaRepository {
     /**
      * Actualiza una tarea existente.
      * @param tarea la tarea con datos actualizados
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public void actualizar(Tarea tarea) {
         String sql = """
@@ -181,6 +185,7 @@ public class TareaRepository {
      * Actualiza el estado de una tarea.
      * @param id el ID de la tarea
      * @param nuevoEstado el nuevo estado
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public void actualizarEstado(int id, int nuevoEstado) {
         String sql;
@@ -214,6 +219,7 @@ public class TareaRepository {
     /**
      * Elimina una tarea del sistema.
      * @param id el ID de la tarea a eliminar
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public void eliminar(int id) {
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -244,6 +250,7 @@ public class TareaRepository {
     /**
      * Obtiene tareas que tienen reportes de plaga asociados.
      * @return lista de tareas con reportes de plaga
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public List<Tarea> obtenerTareasConReportePlaga() {
         List<Tarea> lista = new ArrayList<>();

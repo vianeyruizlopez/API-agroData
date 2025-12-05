@@ -17,8 +17,14 @@ import java.util.List;
  */
 public class EstadoRepositoryImpl implements  EstadoRepository {
     /**
+     * Constructor vacío para crear un repositorio de estados sin inicializar datos.
+     */
+    public EstadoRepositoryImpl() {
+    }
+    /**
      * Obtiene todos los estados del catálogo.
      * @return lista de todos los estados disponibles
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     @Override
     public List<Estado> obtenerEstados() {
@@ -48,6 +54,7 @@ public class EstadoRepositoryImpl implements  EstadoRepository {
      * Obtiene un estado por su ID.
      * @param id el ID del estado
      * @return el estado encontrado o null si no existe
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public Estado obtenerPorId(int id) {
         String sql = "SELECT * FROM catalogoestado WHERE idEstado = ?;";

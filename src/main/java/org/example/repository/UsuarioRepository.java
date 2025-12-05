@@ -17,6 +17,12 @@ import java.util.Optional;
 public class UsuarioRepository {
 
     /**
+     * Constructor vacío para crear un repositorio de usuarios sin inicializar datos.
+     */
+    public UsuarioRepository() {
+    }
+
+    /**
      * Registra un nuevo usuario en la base de datos.
      * @param usuario el usuario a registrar
      * @throws SQLException si hay error en la base de datos

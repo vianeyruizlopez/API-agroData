@@ -9,6 +9,12 @@ import org.example.model.Tarea;
 public class SolicitudTareaValidator {
 
     /**
+     * Constructor vacío para crear un validador de tareas sin inicializar datos.
+     */
+    public SolicitudTareaValidator() {
+    }
+
+    /**
      * Valida una tarea verificando todos los campos obligatorios.
      * @param tarea la tarea a validar
      * @return null si es válida, o un mensaje de error si hay problemas

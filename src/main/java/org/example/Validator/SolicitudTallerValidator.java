@@ -7,6 +7,12 @@ import org.example.model.SolicitudTaller;
  */
 public class SolicitudTallerValidator {
     /**
+     * Constructor vacío para crear un validador de solicitudes de taller sin inicializar datos.
+     */
+    public SolicitudTallerValidator() {
+    }
+
+    /**
      * Valida una solicitud de taller verificando todos los campos obligatorios.
      * @param solicitud la solicitud de taller a validar
      * @return null si es válida, o un mensaje de error si hay problemas

@@ -8,6 +8,11 @@ import org.example.model.SolicitudAsesoria;
  */
 public class SolicitudAsesoriaValidator {
     /**
+     * Constructor vacío para crear un validador de solicitudes de asesoría sin inicializar datos.
+     */
+    public SolicitudAsesoriaValidator() {
+    }
+    /**
      * Valida una solicitud de asesoría verificando todos los campos obligatorios.
      * @param solicitud la solicitud a validar
      * @return null si es válida, o un mensaje de error si hay problemas

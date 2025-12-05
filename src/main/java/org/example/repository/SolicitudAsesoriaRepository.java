@@ -24,6 +24,7 @@ public class SolicitudAsesoriaRepository {
      * Obtiene una solicitud de asesoría por su ID.
      * @param id ID de la solicitud
      * @return Solicitud de asesoría encontrada o null si no existe
+     *@throws SQLException si ocurre un error al consultar la base de datos
      */
     public SolicitudAsesoria obtenerPorId(int id) {
         String sql = """
@@ -57,6 +58,7 @@ public class SolicitudAsesoriaRepository {
     /**
      * Obtiene todas las solicitudes de asesoría pendientes.
      * @return Lista de solicitudes de asesoría con cultivos asociados
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public List<SolicitudAsesoria> obtenerTodas() {
         List<SolicitudAsesoria> lista = new ArrayList<>();
@@ -95,6 +97,7 @@ public class SolicitudAsesoriaRepository {
     /**
      * Agrega una nueva solicitud de asesoría a la base de datos.
      * @param solicitud Solicitud de asesoría a insertar
+     *@throws SQLException si ocurre un error al consultar la base de datos
      */
     public void agregar(SolicitudAsesoria solicitud) {
         String sql = """
@@ -147,6 +150,7 @@ public class SolicitudAsesoriaRepository {
      * Agrega los cultivos asociados a una solicitud de asesoría.
      * @param idSolicitud ID de la solicitud
      * @param cultivos Lista de cultivos a asociar
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public void agregarCultivosPorSolicitud(int idSolicitud, List<CultivoPorSolicitud> cultivos) {
         String sql = "INSERT INTO cultivoporsolicitud (idSolicitud, idCultivo) VALUES (?, ?)";
@@ -167,6 +171,7 @@ public class SolicitudAsesoriaRepository {
      * Actualiza el estado de una solicitud de asesoría.
      * @param id ID de la solicitud
      * @param nuevoEstado Nuevo estado de la solicitud
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public void actualizarEstado(int id, int nuevoEstado) {
         String sql = "UPDATE solicitudasesoria SET idEstado = ? WHERE idSolicitud = ?";
@@ -183,6 +188,7 @@ public class SolicitudAsesoriaRepository {
     /**
      * Elimina una solicitud de asesoría de la base de datos.
      * @param id ID de la solicitud a eliminar
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public void eliminar(int id) {
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -198,6 +204,7 @@ public class SolicitudAsesoriaRepository {
      * Obtiene los cultivos asociados a una solicitud específica.
      * @param idSolicitud ID de la solicitud
      * @return Lista de cultivos por solicitud
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public List<CultivoPorSolicitud> obtenerCultivosPorSolicitud(int idSolicitud) {
         List<CultivoPorSolicitud> lista = new ArrayList<>();

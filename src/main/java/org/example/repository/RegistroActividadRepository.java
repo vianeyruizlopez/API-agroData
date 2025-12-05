@@ -24,6 +24,7 @@ public class RegistroActividadRepository {
     /**
      * Obtiene todos los registros de actividades de la base de datos.
      * @return Lista de registros de actividad
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public List<RegistroActividad> obtenerRegistroActividad() {
         List<RegistroActividad> actividades = new ArrayList<>();
@@ -51,6 +52,7 @@ public class RegistroActividadRepository {
     /**
      * Agrega un nuevo registro de actividad a la base de datos.
      * @param registroActividad Registro de actividad a insertar
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public void agregarActividad(RegistroActividad registroActividad) {
         String sql = "INSERT INTO registrotarea (idTarea, imagen, comentario) VALUES (?, ?, ?)";

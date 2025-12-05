@@ -16,8 +16,15 @@ import java.util.List;
  */
 public class CatalogoCultivoRepository {
     /**
+     * Constructor vacío para crear un repositorio de catálogo de cultivos sin inicializar datos.
+     */
+    public CatalogoCultivoRepository() {
+    }
+
+    /**
      * Obtiene todos los cultivos del catálogo.
      * @return lista de todos los cultivos disponibles
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public List<catalogoCultivo> obtener() {
         List<catalogoCultivo> cultivos = new ArrayList<>();
@@ -45,6 +52,7 @@ public class CatalogoCultivoRepository {
      * Obtiene un cultivo por su ID.
      * @param id el ID del cultivo
      * @return el cultivo encontrado o null si no existe
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public catalogoCultivo obtenerPorId(int id) {
         String sql = "SELECT * FROM catalogocultivo WHERE idCultivo = ?;";
@@ -73,6 +81,7 @@ public class CatalogoCultivoRepository {
      * Obtiene un cultivo por su nombre exacto.
      * @param nombre el nombre del cultivo
      * @return el cultivo encontrado o null si no existe
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public catalogoCultivo obtenerPorNombre(String nombre) {
         String sql = "SELECT * FROM catalogocultivo WHERE LOWER(nombreCultivo) = LOWER(?);";
@@ -102,6 +111,7 @@ public class CatalogoCultivoRepository {
      * Busca cultivos que contengan el término de búsqueda.
      * @param parcial término de búsqueda parcial
      * @return lista de cultivos que coinciden con la búsqueda
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public List<catalogoCultivo> obtenerPorCoincidencia(String parcial) {
         String sql = "SELECT * FROM catalogocultivo WHERE LOWER(nombreCultivo) LIKE LOWER(?);";

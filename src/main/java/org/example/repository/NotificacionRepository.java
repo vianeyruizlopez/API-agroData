@@ -26,6 +26,7 @@ public class NotificacionRepository {
      * Obtiene las notificaciones relacionadas con asesorías.
      * @param filtroNotificacion Filtro SQL para aplicar a la consulta
      * @return Lista de notificaciones de asesorías
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public List<Notificacion> obtenerNotificacionesAsesorias(String filtroNotificacion) {
         List<Notificacion> notificacionList = new ArrayList<>();
@@ -52,6 +53,7 @@ public class NotificacionRepository {
      * Obtiene las notificaciones relacionadas con talleres.
      * @param filtroNotificacion Filtro SQL para aplicar a la consulta
      * @return Lista de notificaciones de talleres
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public List<Notificacion> obtenerNotificacionesTalleres(String filtroNotificacion) {
         List<Notificacion> notificacionList = new ArrayList<>();
@@ -78,6 +80,7 @@ public class NotificacionRepository {
      * Obtiene las notificaciones relacionadas con tareas.
      * @param filtroNotificacion Filtro SQL para aplicar a la consulta
      * @return Lista de notificaciones de tareas
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public List<Notificacion> obtenerNotificacionesTareas(String filtroNotificacion) {
         List<Notificacion> notificacionList = new ArrayList<>();

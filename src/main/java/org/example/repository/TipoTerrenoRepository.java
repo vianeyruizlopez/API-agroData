@@ -16,8 +16,15 @@ import java.util.List;
  */
 public class TipoTerrenoRepository {
     /**
+     * Constructor vacío para crear un repositorio de tipos de terreno sin inicializar datos.
+     */
+    public TipoTerrenoRepository() {
+    }
+
+    /**
      * Obtiene todos los tipos de riego disponibles.
      * @return Lista de tipos de terreno (riego)
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public List<TipoTerreno> obtener() {
         List<TipoTerreno> tipoTerreno = new ArrayList<>();
@@ -45,6 +52,7 @@ public class TipoTerrenoRepository {
      * Obtiene un tipo de riego por su ID.
      * @param id ID del tipo de riego
      * @return Tipo de terreno encontrado o null si no existe
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public TipoTerreno obtenerPorId(int id) {
         String sql = "SELECT * FROM catalogoriego WHERE idRiego = ?;";

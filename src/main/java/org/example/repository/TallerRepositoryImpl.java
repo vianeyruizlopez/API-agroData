@@ -11,10 +11,15 @@ import java.util.List;
  * Maneja las operaciones CRUD en la base de datos para talleres y sus costos.
  */
 public class TallerRepositoryImpl implements TallerRepository {
-
+    /**
+     * Constructor vacío para crear un repositorio de talleres sin inicializar datos.
+     */
+    public TallerRepositoryImpl() {
+    }
     /**
      * Obtiene todos los talleres activos con su información de costo.
      * @return Lista de talleres con estado visual calculado
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     @Override
     public List<Taller> obtenerTaller() {
@@ -59,6 +64,7 @@ public class TallerRepositoryImpl implements TallerRepository {
      * Obtiene un taller específico por su ID.
      * @param id ID del taller
      * @return Taller encontrado o null si no existe
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public Taller obtenerTallerPorId(int id) {
         String sql = """
@@ -104,6 +110,7 @@ public class TallerRepositoryImpl implements TallerRepository {
     /**
      * Agrega un nuevo taller con su costo asociado.
      * @param taller Taller a agregar
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     @Override
     public void agregarTaller(Taller taller) {
@@ -220,6 +227,7 @@ public class TallerRepositoryImpl implements TallerRepository {
      * Actualiza el estado de un taller.
      * @param id ID del taller
      * @param nuevoEstado Nuevo estado del taller
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public void actualizarEstado(int id, int nuevoEstado) {
         String sql = "UPDATE catalogotaller SET idEstado = ? WHERE idTaller = ?";
@@ -239,6 +247,7 @@ public class TallerRepositoryImpl implements TallerRepository {
      * Verifica si existe un taller con el ID especificado.
      * @param id ID del taller a verificar
      * @return true si existe, false en caso contrario
+     * @throws SQLException si ocurre un error al consultar la base de datos
      */
     public boolean existeTallerPorId(int id) {
         String sql = "SELECT 1 FROM catalogotaller WHERE idtaller = ?";

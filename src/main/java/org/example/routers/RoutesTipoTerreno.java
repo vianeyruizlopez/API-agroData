@@ -10,6 +10,12 @@ import org.example.service.TipoTerrenoService;
  */
 public class RoutesTipoTerreno {
     /**
+     * Constructor vacío para crear un configurador de rutas de tipos de terreno sin inicializar datos.
+     */
+    public RoutesTipoTerreno() {
+    }
+
+    /**
      * Registra todas las rutas de tipos de terreno.
      * @param app la instancia de Javalin donde registrar las rutas
      */

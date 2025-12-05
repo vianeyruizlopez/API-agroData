@@ -15,6 +15,11 @@ import org.example.util.JwtUtil;
  */
 public class RoutesUsuario {
     /**
+     * Constructor vacío para crear un configurador de rutas de usuarios sin inicializar datos.
+     */
+    public RoutesUsuario() {
+    }
+    /**
      * Registra todas las rutas de usuario en la aplicación Javalin.
      * Incluye rutas públicas (registro, login) y protegidas (perfil, administración).
      * @param app la instancia de Javalin donde registrar las rutas
