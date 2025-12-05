@@ -73,6 +73,10 @@ public class Notificacion {
         return nombreEstado;
     }
 
+    /**
+     * Establece el nombre del estado asociado a la notificación.
+     * @param nombreEstado el nombre del estado que se desea asignar
+     */
     public void setNombreEstado(String nombreEstado) {
         this.nombreEstado = nombreEstado;
     }

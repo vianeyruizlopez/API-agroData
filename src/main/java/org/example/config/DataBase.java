@@ -9,7 +9,21 @@ import io.github.cdimascio.dotenv.Dotenv;
  * Usa HikariCP para el pool de conexiones y carga la configuración desde variables de entorno.
  */
 public class DataBase {
+    /**
+     * Fuente de datos compartida para toda la aplicación.
+     * <p>
+     * Se inicializa una sola vez y se reutiliza en cada llamada.
+     */
     private static HikariDataSource dataSource;
+    /**
+     * Constructor privado vacío.
+     * <p>
+     * Se declara para evitar que la clase sea instanciada,
+     * ya que todos sus métodos son estáticos.
+     */
+    private DataBase() {
+    }
+
     /**
      * Obtiene el DataSource configurado con HikariCP.
      * Crea la conexión solo una vez usando el patrón Singleton.

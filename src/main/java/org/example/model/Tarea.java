@@ -41,6 +41,12 @@ public class Tarea {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaCompletado;
 
+    /**
+     * Constructor vacío para crear una tarea sin datos.
+     */
+    public Tarea() {
+    }
+
     // --- Getters y Setters ---
 
     /**

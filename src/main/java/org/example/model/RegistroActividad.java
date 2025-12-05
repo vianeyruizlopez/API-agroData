@@ -25,7 +25,11 @@ public class RegistroActividad {
      * Descripción textual de la actividad realizada.
      */
     String descripcion;
-
+    /**
+     * Constructor vacío para crear un registro de actividades sin datos.
+     */
+    public RegistroActividad() {
+    }
     /**
      * Establece el ID del registro de actividad.
      * @param idRegistro el ID del registro
