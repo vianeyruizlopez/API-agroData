@@ -6,19 +6,30 @@ import io.javalin.http.UnauthorizedResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import org.example.controller.ReporteDesempenoController;
-import org.example.service.ReporteDesempeñoService;
+import org.example.service.ReporteDesempenoService;
 import org.example.util.JwtUtil;
 
+/**
+ * Configurador de rutas para reportes de desempeño.
+ * Solo accesible para agrónomos.
+ */
 public class RoutesReporteDesempeno {
     private final ReporteDesempenoController controller;
 
+    /**
+     * Constructor que inicializa el servicio y controlador de reportes.
+     */
     public RoutesReporteDesempeno() {
-        ReporteDesempeñoService service = new ReporteDesempeñoService();
+        ReporteDesempenoService service = new ReporteDesempenoService();
         this.controller = new ReporteDesempenoController(service);
     }
 
+    /**
+     * Registra todas las rutas de reportes de desempeño.
+     * @param app la instancia de Javalin donde registrar las rutas
+     */
     public void register(Javalin app) {
-        // Middleware para validar token y rol
+
         Handler validarTokenAgronomo = ctx -> {
             System.out.println("→ Middleware ejecutado para: " + ctx.path());
 
@@ -52,11 +63,11 @@ public class RoutesReporteDesempeno {
             }
         };
 
-        // Protege ambas rutas
+
         app.before("/obtenerReporteDesempeno/{idPlan}", validarTokenAgronomo);
         app.before("/registrarReporteDesempeno", validarTokenAgronomo);
 
-        // Rutas protegidas solo para agrónomo
+
         app.get("/obtenerReporteDesempeno/{idPlan}", controller::obtenerReporte);
         app.post("/registrarReporteDesempeno", controller::registrarReporte);
     }

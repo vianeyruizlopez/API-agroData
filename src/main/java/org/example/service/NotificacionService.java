@@ -6,11 +6,22 @@ import org.example.repository.NotificacionRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotificacionService {
-    private NotificacionRepository notificacionRepository =  new NotificacionRepository();
+/**
+ * Servicio que implementa la lógica de negocio para notificaciones.
+ * Consolida notificaciones de asesorías, talleres y tareas.
+ */
+public class NotificacionService implements INotificacionService{
+    private final NotificacionRepository notificacionRepository =  new NotificacionRepository();
+    /**
+     * Constructor del servicio de notificaciones.
+     */
     public NotificacionService() {
     }
-
+    /**
+     * Obtiene notificaciones pendientes para agrónomos.
+     * @return lista consolidada de notificaciones pendientes
+     */
+    @Override
     public List<Notificacion> getNotificaciones() {
         List<Notificacion> notificacionList = new ArrayList<>();
         String filtroNotificaciones = "where nombreEstado = 'Pendiente'";
@@ -19,6 +30,12 @@ public class NotificacionService {
         notificacionList.addAll(notificacionRepository.obtenerNotificacionesTareas(filtroNotificaciones));
         return notificacionList;
     }
+    /**
+     * Obtiene todas las notificaciones de un usuario específico.
+     * @param usuarioId el ID del usuario
+     * @return lista consolidada de notificaciones del usuario
+     */
+    @Override
     public List<Notificacion> getTodasNotificaciones(int usuarioId) {
         String filtro = "WHERE idUsuario = " + usuarioId;
 

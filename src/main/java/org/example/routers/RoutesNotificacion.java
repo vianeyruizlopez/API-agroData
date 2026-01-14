@@ -9,14 +9,25 @@ import org.example.controller.NotificacionController;
 import org.example.service.NotificacionService;
 import org.example.util.JwtUtil;
 
+/**
+ * Configurador de rutas para notificaciones.
+ * Define rutas para consultar notificaciones de agrónomos y agricultores.
+ */
 public class RoutesNotificacion {
     private final NotificacionController controller;
 
+    /**
+     * Constructor que inicializa el servicio y controlador de notificaciones.
+     */
     public RoutesNotificacion() {
         NotificacionService servicio = new NotificacionService();
         this.controller = new NotificacionController(servicio);
     }
 
+    /**
+     * Registra todas las rutas de notificaciones.
+     * @param app la instancia de Javalin donde registrar las rutas
+     */
     public void register(Javalin app) {
         Handler validarToken = ctx -> {
             System.out.println("Middleware ejecutado para: " + ctx.path());
@@ -56,16 +67,21 @@ public class RoutesNotificacion {
             System.out.println("Rol seteado en ctx.attribute: " + rol);
         };
 
-        // Middleware aplicado antes de acceder a las rutas protegidas
+
         app.before("/notificacionesagricultor", validarToken);
         app.before("/notificacionesagronomo", validarToken);
 
-        // Rutas protegidas
+
         app.get("/notificacionesagricultor", controller::obtenerTodasNotificaciones);
         app.get("/notificacionesagronomo", controller::obtenerNotificaciones);
     }
 
-    // Método auxiliar para trazabilidad de tipos
+
+    /**
+     * Obtiene el nombre del tipo de un objeto.
+     * @param obj el objeto
+     * @return nombre del tipo o "null"
+     */
     private String tipo(Object obj) {
         return obj != null ? obj.getClass().getSimpleName() : "null";
     }

@@ -6,12 +6,26 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Repositorio para gestionar el registro de actividades agrícolas.
+ * Maneja las operaciones de consulta e inserción de registros de tareas.
+ */
 public class RegistroActividadRepository {
     private final DataSource dataSource;
+    
+    /**
+     * Constructor del repositorio de registro de actividades.
+     * @param dataSource Fuente de datos para las conexiones a la base de datos
+     */
     public RegistroActividadRepository(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
+    /**
+     * Obtiene todos los registros de actividades de la base de datos.
+     * @return Lista de registros de actividad
+     * @throws SQLException si ocurre un error al consultar la base de datos
+     */
     public List<RegistroActividad> obtenerRegistroActividad() {
         List<RegistroActividad> actividades = new ArrayList<>();
         String sql = "SELECT idRegistro, idTarea, imagen, comentario FROM registrotarea";
@@ -35,6 +49,11 @@ public class RegistroActividadRepository {
         return actividades;
     }
 
+    /**
+     * Agrega un nuevo registro de actividad a la base de datos.
+     * @param registroActividad Registro de actividad a insertar
+     * @throws SQLException si ocurre un error al consultar la base de datos
+     */
     public void agregarActividad(RegistroActividad registroActividad) {
         String sql = "INSERT INTO registrotarea (idTarea, imagen, comentario) VALUES (?, ?, ?)";
         try (Connection conn = dataSource.getConnection();

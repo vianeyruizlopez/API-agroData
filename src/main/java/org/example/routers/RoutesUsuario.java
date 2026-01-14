@@ -9,19 +9,33 @@ import io.javalin.http.UnauthorizedResponse;
 import io.jsonwebtoken.Claims;
 import org.example.util.JwtUtil;
 
+/**
+ * Configurador de rutas para usuarios.
+ * Define todas las rutas HTTP relacionadas con usuarios y autenticación.
+ */
 public class RoutesUsuario {
+    /**
+     * Constructor vacío para crear un configurador de rutas de usuarios sin inicializar datos.
+     */
+    public RoutesUsuario() {
+    }
+    /**
+     * Registra todas las rutas de usuario en la aplicación Javalin.
+     * Incluye rutas públicas (registro, login) y protegidas (perfil, administración).
+     * @param app la instancia de Javalin donde registrar las rutas
+     */
     public void register(Javalin app) {
         UsuarioRepository repository = new UsuarioRepository();
         UsuarioService service = new UsuarioService(repository);
         UsuarioController controller = new UsuarioController(service);
 
-        // Rutas públicas
+
         app.post("/registro", controller::registrar);
         app.post("/login", controller::login);
         app.post("/encriptar-password", controller::encriptarPassword);
         app.post("/recuperar-password", controller::recuperarPassword);
 
-        // Middleware JWT
+
         Handler requireToken = ctx -> {
             String authHeader = ctx.header("Authorization");
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -51,12 +65,19 @@ public class RoutesUsuario {
             }
         };
 
-        // Rutas protegidas
+
         app.before("/perfil/*", requireToken);
         app.before("/informacionGeneral", requireToken);
+        app.before("/administrarClientes", requireToken);
+        app.before("/administrarClientes/*", requireToken);
+
 
         app.put("/perfil/{id}", controller::editarPerfil);
         app.get("/perfil/{id}", controller::obtenerPerfil);
         app.get("/informacionGeneral", controller::obtenerInformacionGeneral);
+        app.get("/administrarClientes", controller::verTodosClientes);
+        app.delete("/administrarClientes/{id}", controller::eliminarClientes);
+        app.put("/administrarClientes/{id}", controller::editarClientes);
+
     }
 }

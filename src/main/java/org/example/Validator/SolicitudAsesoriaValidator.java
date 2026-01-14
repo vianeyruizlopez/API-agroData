@@ -2,7 +2,21 @@ package org.example.Validator;
 
 import org.example.model.SolicitudAsesoria;
 
+/**
+ * Validador para solicitudes de asesoría agrícola.
+ * Verifica que todos los campos obligatorios estén presentes y sean válidos.
+ */
 public class SolicitudAsesoriaValidator {
+    /**
+     * Constructor vacío para crear un validador de solicitudes de asesoría sin inicializar datos.
+     */
+    public SolicitudAsesoriaValidator() {
+    }
+    /**
+     * Valida una solicitud de asesoría verificando todos los campos obligatorios.
+     * @param solicitud la solicitud a validar
+     * @return null si es válida, o un mensaje de error si hay problemas
+     */
     public static String validar(SolicitudAsesoria solicitud) {
         if (solicitud == null) {
             return "La solicitud está vacía";
@@ -39,6 +53,6 @@ public class SolicitudAsesoriaValidator {
             }
         }
 
-        return null; // null significa que no hay errores
+        return null;
     }
 }

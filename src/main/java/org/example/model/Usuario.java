@@ -1,46 +1,52 @@
 package org.example.model;
 
-public class Usuario {
-    private int idUsuario;
-    private String nombre;
-    private String apellidoPaterno;
-    private String apellidoMaterno;
-    private String telefono;
-    private String correo;
+/**
+ * Clase que representa un usuario del sistema AgroData.
+ * Extiende de administrarCliente y agrega password y rol.
+ * Puede ser agrónomo (rol 1) o agricultor (rol 2).
+ */
+public class Usuario extends administrarCliente {
+    /** Contraseña del usuario (debe almacenarse en formato encriptado). */
     private String password;
-    private String imagenPerfil;
+
+    /** Rol del usuario dentro del sistema (1 = agrónomo, 2 = agricultor). */
     private int rol;
 
-    public Usuario() {}
-
-    public int getIdUsuario() { return idUsuario; }
-    public void setIdUsuario(int idUsuario) { this.idUsuario = idUsuario; }
-
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-
-    public String getApellidoPaterno() { return apellidoPaterno; }
-    public void setApellidoPaterno(String apellidoPaterno) { this.apellidoPaterno = apellidoPaterno; }
-
-    public String getApellidoMaterno() { return apellidoMaterno; }
-    public void setApellidoMaterno(String apellidoMaterno) { this.apellidoMaterno = apellidoMaterno; }
-
-    public String getTelefono() {
-        return telefono;
-    }
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
+    /**
+     * Constructor vacío para crear un usuario sin datos.
+     */
+    public Usuario() {
     }
 
-    public String getCorreo() { return correo; }
-    public void setCorreo(String correo) { this.correo = correo; }
+    /**
+     * Obtiene la contraseña del usuario.
+     * @return la contraseña encriptada
+     */
+    public String getPassword() {
+        return password;
+    }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    /**
+     * Establece la contraseña del usuario.
+     * @param password la contraseña a establecer
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-    public String getImagenPerfil() { return imagenPerfil; }
-    public void setImagenPerfil(String imagenPerfil) { this.imagenPerfil = imagenPerfil; }
+    /**
+     * Obtiene el rol del usuario.
+     * @return 1 para agrónomo, 2 para agricultor
+     */
+    public int getRol() {
+        return rol;
+    }
 
-    public int getRol() { return rol; }
-    public void setRol(int rol) { this.rol = rol; }
+    /**
+     * Establece el rol del usuario.
+     * @param rol 1 para agrónomo, 2 para agricultor
+     */
+    public void setRol(int rol) {
+        this.rol = rol;
+    }
 }

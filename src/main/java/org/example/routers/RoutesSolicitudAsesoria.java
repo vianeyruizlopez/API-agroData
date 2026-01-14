@@ -9,16 +9,28 @@ import org.example.controller.SolicitudAsesoriaController;
 import org.example.service.SolicitudAsesoriaService;
 import org.example.util.JwtUtil;
 
+/**
+ * Configurador de rutas para solicitudes de asesoría.
+ * Define las rutas HTTP y middlewares de autenticación para solicitudes.
+ */
 public class RoutesSolicitudAsesoria {
     private final SolicitudAsesoriaController controller;
 
+    /**
+     * Constructor que inicializa el servicio y controlador de solicitudes.
+     */
     public RoutesSolicitudAsesoria() {
         SolicitudAsesoriaService service = new SolicitudAsesoriaService();
         this.controller = new SolicitudAsesoriaController(service);
     }
 
+    /**
+     * Registra todas las rutas de solicitudes de asesoría en la aplicación.
+     * Incluye middlewares de autenticación y autorización por rol.
+     * @param app la instancia de Javalin donde registrar las rutas
+     */
     public void register(Javalin app) {
-        // Middleware para validar token y extraer atributos
+
         Handler validarToken = ctx -> {
             String authHeader = ctx.header("Authorization");
             if (authHeader == null || !authHeader.trim().toLowerCase().startsWith("bearer ")) {
@@ -40,7 +52,7 @@ public class RoutesSolicitudAsesoria {
             ctx.attribute("rol", rol);
         };
 
-        // Middleware solo para agrónomo (rol = 1)
+
         Handler soloAgronomo = ctx -> {
             validarToken.handle(ctx);
             int rol = ctx.attribute("rol");
@@ -49,7 +61,7 @@ public class RoutesSolicitudAsesoria {
             }
         };
 
-        // Middleware solo para agricultor (rol = 2)
+
         Handler soloAgricultor = ctx -> {
             validarToken.handle(ctx);
             int rol = ctx.attribute("rol");
@@ -58,7 +70,7 @@ public class RoutesSolicitudAsesoria {
             }
         };
 
-        // Aplicar middleware según método HTTP
+
         app.before("/solicitudasesoria", ctx -> {
             validarToken.handle(ctx);
             if (ctx.method().equals("POST")) {
@@ -68,10 +80,10 @@ public class RoutesSolicitudAsesoria {
             }
         });
 
-        app.before("/solicitudasesoria/{id}", soloAgronomo); // GET por ID, DELETE
-        app.before("/solicitudasesoria/{id}/{estado}", soloAgronomo); // PATCH
+        app.before("/solicitudasesoria/{id}", soloAgronomo);
+        app.before("/solicitudasesoria/{id}/{estado}", soloAgronomo);
 
-        // Rutas protegidas
+
         app.get("/solicitudasesoria/{id}", controller::obtenerPorId);
         app.get("/solicitudasesoria", controller::obtenerTodas);
         app.post("/solicitudasesoria", controller::registrar);

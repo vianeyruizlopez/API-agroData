@@ -11,17 +11,28 @@ import org.example.repository.RegistroActividadRepository;
 import org.example.service.RegistroActividadService;
 import org.example.util.JwtUtil;
 
+/**
+ * Configurador de rutas para registro de actividades.
+ * Define rutas para consultar y agregar registros de actividades agrícolas.
+ */
 public class RoutesRegistroActividad {
     private final RegistroActividadController controller;
 
+    /**
+     * Constructor que inicializa repositorio, servicio y controlador.
+     */
     public RoutesRegistroActividad() {
         RegistroActividadRepository repo = new RegistroActividadRepository(DataBase.getDataSource());
         RegistroActividadService service = new RegistroActividadService(repo);
         this.controller = new RegistroActividadController(service);
     }
 
+    /**
+     * Registra todas las rutas de registro de actividades.
+     * @param app la instancia de Javalin donde registrar las rutas
+     */
     public void register(Javalin app) {
-        // Middleware para validar token
+
         Handler validarToken = ctx -> {
             System.out.println("→ Middleware ejecutado para: " + ctx.path());
 
@@ -51,13 +62,10 @@ public class RoutesRegistroActividad {
             System.out.println("→ rol seteado: " + rol);
         };
 
-        // Protege ambas rutas
         app.before("/registroactividades/", validarToken);
 
-        // GET → ambos roles
         app.get("/registroactividades/", controller::obtenerRegistros);
 
-        // POST → solo agricultor (rol 2)
         app.post("/registroactividades/", controller::agregarRegistros);
     }
 }

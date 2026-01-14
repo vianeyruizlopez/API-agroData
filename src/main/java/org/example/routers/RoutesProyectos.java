@@ -9,15 +9,22 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import org.example.util.JwtUtil;
 
+/**
+ * Configurador de rutas para proyectos y planes de cultivo.
+ * Define rutas para consultar y actualizar planes de cultivo.
+ */
 public class RoutesProyectos {
     private final ProyectosController controller;
 
+    /**
+     * Constructor que inicializa el servicio y controlador de proyectos.
+     */
     public RoutesProyectos() {
         ProyectosService servicio = new ProyectosService();
         this.controller = new ProyectosController(servicio);
     }
 
-    // Middleware general para validar token y extraer atributos
+
     private Handler validarToken = ctx -> {
         System.out.println("Middleware ejecutado para: " + ctx.path());
 
@@ -56,7 +63,7 @@ public class RoutesProyectos {
         System.out.println("Rol seteado en ctx.attribute: " + rol);
     };
 
-    // Middleware adicional solo para rol 1 (agrónomo)
+
     private Handler soloAgronomo = ctx -> {
         validarToken.handle(ctx); // primero valida el token
 
@@ -69,18 +76,31 @@ public class RoutesProyectos {
         }
     };
 
+    /**
+     * Obtiene el nombre del tipo de un objeto.
+     * @param obj el objeto
+     * @return nombre del tipo o "null"
+     */
     private String tipo(Object obj) {
         return obj != null ? obj.getClass().getSimpleName() : "null";
     }
 
+    /**
+     * Registra todas las rutas de proyectos y planes de cultivo.
+     * @param app la instancia de Javalin donde registrar las rutas
+     */
     public void register(Javalin app) {
-        // Middleware para GET (ambos roles)
+
         app.before("/obtenerPlanCultivos", validarToken);
 
-        // Middleware para PUT (solo agrónomo)
+        app.before("/planes/{idPlan}/estado/{idEstado}", soloAgronomo);
+
+
         app.before("/planes/{idSolicitud}/{idPlan}", soloAgronomo);
 
-        // Rutas protegidas
+        app.patch("/planes/{idPlan}/estado/{idEstado}", controller::actualizarEstado);
+
+
         app.get("/obtenerPlanCultivos", controller::obtenerPlanCultivos);
         app.put("/planes/{idSolicitud}/{idPlan}", ctx -> {
             try {

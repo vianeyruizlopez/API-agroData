@@ -11,7 +11,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Implementación del repositorio de estados.
+ * Maneja operaciones de base de datos para el catálogo de estados.
+ */
 public class EstadoRepositoryImpl implements  EstadoRepository {
+    /**
+     * Constructor vacío para crear un repositorio de estados sin inicializar datos.
+     */
+    public EstadoRepositoryImpl() {
+    }
+    /**
+     * Obtiene todos los estados del catálogo.
+     * @return lista de todos los estados disponibles
+     * @throws SQLException si ocurre un error al consultar la base de datos
+     */
     @Override
     public List<Estado> obtenerEstados() {
         List<Estado> estados = new ArrayList<>();
@@ -30,12 +44,18 @@ public class EstadoRepositoryImpl implements  EstadoRepository {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace(); // Puedes usar un logger si prefieres
+            e.printStackTrace();
         }
 
         return estados;
 
     }
+    /**
+     * Obtiene un estado por su ID.
+     * @param id el ID del estado
+     * @return el estado encontrado o null si no existe
+     * @throws SQLException si ocurre un error al consultar la base de datos
+     */
     public Estado obtenerPorId(int id) {
         String sql = "SELECT * FROM catalogoestado WHERE idEstado = ?;";
         Estado estado = null;
@@ -53,7 +73,7 @@ public class EstadoRepositoryImpl implements  EstadoRepository {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace(); // Puedes usar un logger si prefieres
+            e.printStackTrace();
         }
 
         return estado;

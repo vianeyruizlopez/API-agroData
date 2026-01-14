@@ -7,19 +7,30 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import org.example.controller.TallerController;
 import org.example.repository.TallerRepositoryImpl;
+import org.example.service.ITallerService;
 import org.example.service.TallerService;
-import org.example.service.TallerServiceImpl;
 import org.example.util.JwtUtil;
 
+/**
+ * Configurador de rutas para talleres.
+ * Define rutas CRUD para talleres agrícolas.
+ */
 public class RoutesTaller {
     private final TallerController controller;
 
+    /**
+     * Constructor que inicializa repositorio, servicio y controlador.
+     */
     public RoutesTaller() {
-        TallerService service = new TallerServiceImpl(new TallerRepositoryImpl());
+        ITallerService service = new TallerService(new TallerRepositoryImpl());
         this.controller = new TallerController(service);
     }
+    /**
+     * Registra todas las rutas de talleres con autenticación.
+     * @param app la instancia de Javalin donde registrar las rutas
+     */
     public void register(Javalin app) {
-        // Middleware para validar token y extraer atributos
+
         Handler validarToken = ctx -> {
             String authHeader = ctx.header("Authorization");
             if (authHeader == null || !authHeader.trim().toLowerCase().startsWith("bearer ")) {
@@ -43,7 +54,7 @@ public class RoutesTaller {
             System.out.println("→ Token validado | usuarioId: " + usuarioId + ", rol: " + rol);
         };
 
-        // Middleware solo para agrónomo (rol = 1)
+
         Handler soloAgronomo = ctx -> {
             validarToken.handle(ctx);
             int rol = ctx.attribute("rol");
@@ -53,10 +64,10 @@ public class RoutesTaller {
         };
 
         // Middleware para todos (GETs)
-        app.before("/talleres/", validarToken); // GET todos
-        app.before("/talleres/{id}", validarToken); // GET por ID
+        app.before("/talleres/", validarToken);
+        app.before("/talleres/{id}", validarToken);
 
-        // Middleware solo para agrónomo en métodos sensibles
+
         app.before("/talleres/", ctx -> {
             if (ctx.method().equals("POST")) soloAgronomo.handle(ctx);
         });
@@ -67,7 +78,7 @@ public class RoutesTaller {
 
         app.before("/catalogotaller/{id}/{estado}", soloAgronomo); // PATCH
 
-        // Rutas
+
         app.get("/talleres/", controller::obtenerTodos);
         app.get("/talleres/{id}", controller::obtenerPorId);
         app.post("/talleres/", controller::agregar);

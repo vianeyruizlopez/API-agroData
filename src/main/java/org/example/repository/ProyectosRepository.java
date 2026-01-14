@@ -11,11 +11,23 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Repositorio para gestionar proyectos y planes de cultivo.
+ * Maneja las operaciones CRUD relacionadas con planes de cultivo, reportes de plaga y cultivos por solicitud.
+ */
 public class ProyectosRepository {
 
+    /**
+     * Constructor por defecto del repositorio de proyectos.
+     */
     public ProyectosRepository() {
     }
 
+    /**
+     * Obtiene todos los planes de cultivo con información completa.
+     * @return Lista de planes de cultivo con datos del agricultor y estadísticas
+     * @throws SQLException si ocurre un error al consultar la base de datos
+     */
     public List<PlanCultivo> obtenerPlanCultivos() {
         List<PlanCultivo> planCultivoList = new ArrayList<>();
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -32,6 +44,38 @@ public class ProyectosRepository {
         return planCultivoList;
     }
 
+    /**
+     * Actualiza el estado de un plan de cultivo.
+     * @param idPlan ID del plan a actualizar
+     * @param nuevoEstado Nuevo estado del plan
+     * @throws RuntimeException Si no se encuentra el plan o hay error en la actualización
+     */
+    public void actualizarEstadoPlan(int idPlan, int nuevoEstado) {
+        String sql = "UPDATE plandecultivo SET idEstado = ? WHERE idPlan = ?";
+        try (Connection conn = DataBase.getDataSource().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, nuevoEstado);
+            stmt.setInt(2, idPlan);
+
+            int filas = stmt.executeUpdate();
+            if (filas == 0) {
+                throw new SQLException("No se encontró el plan con ID: " + idPlan);
+            }
+            System.out.println("✅ Estado del Plan " + idPlan + " actualizado a " + nuevoEstado);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al actualizar estado del plan", e);
+        }
+    }
+
+    /**
+     * Obtiene los cultivos asociados a una solicitud específica.
+     * @param idSolicitud ID de la solicitud
+     * @return Lista de cultivos por solicitud
+     * @throws SQLException si ocurre un error al consultar la base de datos
+     */
     public List<CultivoPorSolicitud> obtenerCultivosPorSolicitud(int idSolicitud) {
         List<CultivoPorSolicitud> cultivoPorSolicitudList = new ArrayList<>();
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -47,6 +91,12 @@ public class ProyectosRepository {
         return cultivoPorSolicitudList;
     }
 
+    /**
+     * Obtiene los reportes de plaga asociados a un plan específico.
+     * @param idPlan ID del plan de cultivo
+     * @return Lista de reportes de plaga
+     * @throws SQLException si ocurre un error al consultar la base de datos
+     */
     public List<ReportePlaga> obtenerReportePlagas(int idPlan) {
         List<ReportePlaga> reportePlagaList = new ArrayList<>();
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -62,6 +112,13 @@ public class ProyectosRepository {
         return reportePlagaList;
     }
 
+    /**
+     * Cuenta el total de tareas y tareas completadas para un plan.
+     * @param idEstado Estado de las tareas completadas
+     * @param idPlan ID del plan de cultivo
+     * @return Array con [totalTareas, tareasCompletas]
+     * @throws SQLException si ocurre un error al consultar la base de datos
+     */
     public int[] contarRegistros(int idEstado, int idPlan) {
         int[] registros = new int[2];
         String sql = "SELECT \n" +
@@ -86,6 +143,14 @@ public class ProyectosRepository {
         return registros;
     }
 
+    /**
+     * Actualiza el objetivo y observaciones de un plan de cultivo.
+     * @param idSolicitud ID de la solicitud de asesoría
+     * @param objetivo Nuevo objetivo del plan
+     * @param idPlan ID del plan de cultivo
+     * @param observaciones Nuevas observaciones del plan
+     * @throws RuntimeException Si hay error en la transacción
+     */
     public void actualizarObjetivoYObservaciones(int idSolicitud, String objetivo, int idPlan, String observaciones) {
         String sqlObjetivo = "UPDATE solicitudasesoria SET motivoAsesoria = ? WHERE idSolicitud = ?";
         String sqlObservaciones = "UPDATE plandecultivo SET observaciones = ? WHERE idPlan = ? AND idSolicitud = ?";
@@ -138,6 +203,12 @@ public class ProyectosRepository {
         }
     }
 
+    /**
+     * Mapea un ResultSet a un objeto ReportePlaga.
+     * @param rs ResultSet con los datos del reporte
+     * @return Objeto ReportePlaga mapeado
+     * @throws SQLException Si ocurre un error al acceder a los datos
+     */
     private ReportePlaga mapearReportePlaga(ResultSet rs) throws SQLException {
         ReportePlaga reportePlaga = new ReportePlaga();
         reportePlaga.setIdReportePlaga(rs.getInt("idReportePlaga"));
@@ -152,10 +223,16 @@ public class ProyectosRepository {
         reportePlaga.setDescripcion(rs.getString("descripcion"));
         reportePlaga.setImagen(rs.getString("imagen"));
         reportePlaga.setIdEstado(rs.getInt("idEstado"));
-        reportePlaga.setIdTarea(rs.getInt("idTarea"));
+        //reportePlaga.setIdTarea(rs.getInt("idTarea"));
         return reportePlaga;
     }
 
+    /**
+     * Mapea un ResultSet a un objeto CultivoPorSolicitud.
+     * @param rs ResultSet con los datos del cultivo
+     * @return Objeto CultivoPorSolicitud mapeado
+     * @throws SQLException Si ocurre un error al acceder a los datos
+     */
     private CultivoPorSolicitud mapearCultivoPorSolicitud(ResultSet rs) throws SQLException {
         CultivoPorSolicitud cultivoPorSolicitud = new CultivoPorSolicitud();
         cultivoPorSolicitud.setIdSolicitud(rs.getInt("idSolicitud"));
@@ -164,6 +241,12 @@ public class ProyectosRepository {
         return  cultivoPorSolicitud;
     }
 
+    /**
+     * Mapea un ResultSet a un objeto PlanCultivo completo.
+     * @param rs ResultSet con los datos del plan
+     * @return Objeto PlanCultivo mapeado con cultivos y reportes
+     * @throws SQLException Si ocurre un error al acceder a los datos
+     */
     private PlanCultivo mapearPlanCultivo(ResultSet rs) throws SQLException {
         PlanCultivo planCultivo = new PlanCultivo();
         planCultivo.setIdPlan(rs.getInt("idPlan"));
@@ -197,6 +280,11 @@ public class ProyectosRepository {
         planCultivo.setReportePlagas(obtenerReportePlagas(rs.getInt("idPlan")));
         return planCultivo;
     }
+    /**
+     * Registra un nuevo reporte de plaga en la base de datos.
+     * @param reporte Objeto ReportePlaga a registrar
+     * @throws SQLException Si ocurre un error en la inserción
+     */
     public void registrarReportePlaga(ReportePlaga reporte) throws SQLException {
         String sql = "INSERT INTO reporteplaga (idPlan, fechaReporte, tipoPlaga, descripcion, imagen, idEstado, idTarea) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DataBase.getDataSource().getConnection();
@@ -217,27 +305,27 @@ public class ProyectosRepository {
         }
     }
 
+        /**
+         * Crea automáticamente un plan de cultivo desde una solicitud de asesoría.
+         * @param idSolicitud ID de la solicitud de asesoría
+         * @throws RuntimeException Si hay error al crear el plan
+         */
         public void crearPlanCultivoDesdeSolicitud(int idSolicitud) {
-            // Este plan se crea con valores mínimos.
-            // Se asume que el idEstado 1 es 'Pendiente' o 'Activo' para el plan.
-            // La fecha de inicio es hoy (CURDATE()).
             String sql = "INSERT INTO plandecultivo (idSolicitud, idEstado, fechaInicio, observaciones) VALUES (?, ?, CURDATE(), ?)";
 
             try (Connection conn = DataBase.getDataSource().getConnection();
                  PreparedStatement stmt = conn.prepareStatement(sql)) {
 
                 stmt.setInt(1, idSolicitud);
-                // Asumimos estado 1 (p.ej. "Activo" o "Pendiente de Llenar") para el NUEVO plan
                 stmt.setInt(2, 1);
                 stmt.setString(3, "Plan generado automáticamente. Por favor, complete los detalles.");
 
                 stmt.executeUpdate();
-                System.out.println("✅ Plan de cultivo generado automáticamente para la solicitud: " + idSolicitud);
+                System.out.println(" Plan de cultivo generado automáticamente para la solicitud: " + idSolicitud);
 
             } catch (SQLException e) {
-                System.err.println("❌ Error al crear plan de cultivo automático:");
+                System.err.println(" Error al crear plan de cultivo automático:");
                 e.printStackTrace();
-                // Relanzamos la excepción para que el Service se entere
                 throw new RuntimeException("Error al crear el plan de cultivo", e);
             }
         }

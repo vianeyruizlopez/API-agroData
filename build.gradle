@@ -30,6 +30,17 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+javadoc {
+    options.encoding = 'UTF-8'
+    options.charSet = 'UTF-8'
+    options.author = true
+    options.version = true
+    options.windowTitle = "AgroData API - Documentación"
+    options.docTitle = "AgroData API - Sistema de Gestión Agrícola"
+    options.addStringOption('Xdoclint:none', '-quiet')
+    failOnError = false
+    classpath = configurations.compileClasspath
+}
 shadowJar{
     manifest {
         attributes('Main-Class':'org.example.Main')
