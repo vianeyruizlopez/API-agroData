@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
+/// /solo probando que todo este en mi nuevo git
 
 /**
  * Clase principal que inicia la aplicación AgroData API.
